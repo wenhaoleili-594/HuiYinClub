@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>回音 · 俱乐部名册</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%232b2318'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23b0823f' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23b0823f'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@500;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<style>
+:root{
+  --paper:#efe6d2;
+  --paper-deep:#e5d9bf;
+  --card:#f7f0e0;
+  --card-deep:#efe3c9;
+  --ink:#2b2318;
+  --ink-soft:#5a4c38;
+  --ink-mute:#8a7657;
+  --line:#b9a47c;
+  --line-soft:#d6c7a5;
+  --gold:#b0823f;
+  --gold-deep:#8a642b;
+  --green:#5f6f52;
+  --green-deep:#46553a;
+  --dipl:#b2453b;
+  --hr:#4a6f9b;
+  --gvg:#b06a24;
+  --pve:#4f7a58;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Noto Sans SC",system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(176,130,63,.14), transparent 60%),
+    radial-gradient(900px 500px at -10% 30%, rgba(95,111,82,.12), transparent 55%),
+    var(--paper);
+  color:var(--ink);
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+section{padding:56px 0}
+.serif{font-family:"Noto Serif SC",serif}
+.kicker{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:12px;letter-spacing:.32em;color:var(--gold-deep);
+  font-weight:500;text-transform:uppercase;margin-bottom:14px;
+}
+.kicker::before,.kicker::after{content:"";height:1px;width:34px;background:var(--line)}
+h2{
+  font-family:"Noto Serif SC",serif;
+  font-size:clamp(26px,3.4vw,38px);
+  font-weight:700;color:var(--ink);line-height:1.25;
+}
+.lead{color:var(--ink-soft);margin-top:12px;max-width:60ch;font-weight:300}
+.hero{
+  position:relative;padding:84px 0 64px;overflow:hidden;
+  border-bottom:3px double var(--line);
+}
+.hero::after{
+  content:"";position:absolute;left:0;right:0;bottom:-2px;height:6px;
+  background:repeating-linear-gradient(90deg,var(--gold) 0 14px,transparent 14px 22px);
+  opacity:.35;
+}
+.hero-badge{
+  display:inline-block;padding:6px 16px;border:1px solid var(--gold);
+  color:var(--gold-deep);font-size:12px;letter-spacing:.4em;
+  margin-bottom:26px;border-radius:2px;background:rgba(176,130,63,.08);
+}
+.hero h1{
+  font-family:"Noto Serif SC",serif;
+  font-size:clamp(44px,8vw,88px);
+  font-weight:900;line-height:1.02;letter-spacing:.02em;
+}
+.hero h1 .amp{color:var(--gold-deep)}
+.hero-sub{
+  margin-top:22px;font-size:clamp(15px,2vw,19px);color:var(--ink-soft);
+  max-width:56ch;font-weight:300;
+}
+.hero-cols{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:18px;margin-top:44px;
+}
+.stat{
+  background:var(--card);border:1px solid var(--line-soft);
+  border-left:3px solid var(--gold);padding:18px 20px;
+  box-shadow:0 1px 0 rgba(90,76,56,.06);
+}
+.stat .num{font-family:"Noto Serif SC",serif;font-size:clamp(26px,3vw,34px);font-weight:700;color:var(--ink)}
+.stat .lbl{font-size:12px;letter-spacing:.14em;color:var(--ink-mute);margin-top:4px}
+.frame{border:1px solid var(--line-soft);border-top:3px solid var(--gold);background:var(--card);padding:26px}
+.frame-title{
+  font-family:"Noto Serif SC",serif;font-size:19px;font-weight:700;
+  color:var(--ink);margin-bottom:6px;
+}
+.overview-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:26px;align-items:stretch}
+.chart-card{position:relative;min-height:380px}
+#chart{width:100%;height:340px}
+.path-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px}
+.path-table th,.path-table td{padding:8px 10px;text-align:center;border-bottom:1px solid var(--line-soft)}
+.path-table th{font-size:12px;color:var(--ink-mute);letter-spacing:.06em;font-weight:500}
+.path-table td:first-child{text-align:left}
+.path-table .cnt{font-family:"Noto Serif SC",serif;font-weight:700}
+.tag{display:inline-block;padding:1px 8px;font-size:11px;border-radius:2px;border:1px solid var(--line)}
+.tag.dipl{color:var(--dipl);border-color:var(--dipl)}
+.tag.hr{color:var(--hr);border-color:var(--hr)}
+.tag.gvg{color:var(--gvg);border-color:var(--gvg)}
+.tag.pve{color:var(--pve);border-color:var(--pve)}
+.tag.green{color:var(--green-deep);border-color:var(--green-deep)}
+.tag.yellow{color:var(--gold-deep);border-color:var(--gold-deep)}
+.tag.red{color:var(--gvg);border-color:var(--gvg)}
+.tag.blue{color:var(--hr);border-color:var(--hr)}
+.hot{color:var(--gold-deep);font-weight:500}
+.note{font-size:12px;color:var(--ink-mute);margin-top:14px;line-height:1.8}
+.attr{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-soft)}
+.attr i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.i-dipl{background:var(--dipl)}.i-hr{background:var(--hr)}.i-gvg{background:var(--gvg)}.i-pve{background:var(--pve)}
+.org{display:flex;flex-direction:column;align-items:center}
+.org-row{display:flex;justify-content:center;flex-wrap:wrap;gap:16px}
+.org-branch{display:flex;justify-content:center;flex-wrap:wrap;gap:14px;margin-top:16px;width:100%}
+.org-box{
+  background:var(--card);border:1px solid var(--line-soft);
+  padding:12px 16px;min-width:150px;max-width:230px;text-align:center;
+  position:relative;
+}
+.org-box.captain{border-top:3px solid var(--gold);background:var(--card-deep)}
+.org-box.vice{border-top:3px solid var(--gold-deep)}
+.org-box .t{font-family:"Noto Serif SC",serif;font-weight:700;font-size:15px}
+.org-box .d{font-size:12px;color:var(--ink-soft);margin-top:4px;line-height:1.5}
+.org-box .badge{display:inline-block;margin-top:6px;font-size:10px;padding:1px 6px;border-radius:2px;border:1px solid var(--line);color:var(--ink-mute)}
+.org-box .badge.green{color:var(--green-deep);border-color:var(--green-deep)}
+.org-box .badge.yellow{color:var(--gold-deep);border-color:var(--gold-deep)}
+.org-box .badge.red{color:var(--gvg);border-color:var(--gvg)}
+.org-box .badge.blue{color:var(--hr);border-color:var(--hr)}
+.org-duties{font-size:12px;color:var(--ink-mute);margin-top:10px;text-align:center;max-width:700px;line-height:1.8}
+.org-caption{font-size:12px;color:var(--ink-mute);margin-top:18px;text-align:center}
+.legend{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;margin-top:18px}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:18px}
+.toolbar input,.toolbar select{
+  padding:8px 12px;border:1px solid var(--line);background:var(--card);
+  font-family:inherit;font-size:14px;color:var(--ink);border-radius:2px;
+}
+.toolbar input{flex:1;min-width:200px}
+.toolbar .cnt-chip{font-size:13px;color:var(--ink-mute);margin-left:auto}
+table.list{width:100%;border-collapse:collapse;font-size:13.5px;table-layout:fixed}
+table.list col.c1{width:28%}
+table.list col.c2{width:18%}
+table.list col.c3{width:18%}
+table.list col.c4{width:18%}
+table.list col.c5{width:18%}
+table.list thead th{
+  background:var(--card-deep);border-bottom:2px solid var(--line);
+  padding:10px 12px;text-align:left;font-size:12px;color:var(--ink-soft);
+  letter-spacing:.06em;font-weight:500;white-space:nowrap;
+}
+table.list tbody td{padding:9px 12px;border-bottom:1px solid var(--line-soft);vertical-align:middle}
+table.list tbody tr:nth-child(even){background:rgba(239,227,201,.35)}
+table.list tr:hover{background:rgba(176,130,63,.10)}
+.gname{font-weight:500}
+.pill{display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;border:1px solid var(--line-soft)}
+.pill.done{color:var(--pve);border-color:var(--pve)}
+.pill.leave{color:var(--gvg);border-color:var(--gvg)}
+.pill.abs{color:var(--dipl);border-color:var(--dipl)}
+.pill.role{background:var(--gold);color:#fff;border-color:var(--gold)}
+.empty{text-align:center;color:var(--ink-mute);padding:30px 0;font-size:14px}
+.pager{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.pager button{
+  padding:6px 12px;border:1px solid var(--line);background:var(--card);
+  font-family:inherit;font-size:13px;color:var(--ink);cursor:pointer;border-radius:2px;
+}
+.pager button.on{background:var(--gold);border-color:var(--gold);color:#fff}
+.pager button:hover:not(:disabled){border-color:var(--gold-deep)}
+.pager button:disabled{opacity:.4;cursor:default}
+
+/*管理员面板样式*/
+.admin-panel{margin-top:40px;padding:20px;background:#e5d9bf;border-radius:8px;border:1px solid #b9a47c;display:none;}
+.admin-panel.show{display:block;}
+.admin-login{margin-top:40px;padding:16px;background:#efe3c9;border-radius:8px;border:1px dashed #b0823f;}
+.admin-btn{background:#815c38;color:#fff;border:none;padding:8px 14px;border-radius:4px;margin:4px;cursor:pointer;}
+.admin-btn:hover{background:#9b7042;}
+.admin-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px;}
+.admin-table th,.admin-table td{border:1px solid #b9a47c;padding:6px 8px;}
+.admin-table input,.admin-table select{width:100%;background:#f7f0e0;border:1px solid #b9a47c;color:#2b2318;padding:4px}
+
+footer{border-top:3px double var(--line);padding:34px 0 46px;text-align:center;color:var(--ink-mute);font-size:13px}
+footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-deep);letter-spacing:.3em;margin-bottom:8px}
+@media (max-width:880px){
+  .overview-grid{grid-template-columns:1fr}
+  section{padding:44px 0}
+  .hero{padding:64px 0 48px}
+}
+@media (max-width:560px){
+  .org-row{flex-direction:column;align-items:center}
+  .org-box{width:100%;max-width:340px}
+  table.list{font-size:12.5px}
+  table.list thead th,table.list tbody td{padding:8px 8px}
+  .toolbar input,.toolbar select{font-size:16px}
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <span class="hero-badge">白银城 · CRIMSON ECHO</span>
+    <h1>回音<span class="amp">俱乐部</span></h1>
+    <p class="hero-sub">非凡之路上，总有一群人不合时宜地守在一起。<br>这是《回音》的成员名册、管理架构，敬每一位仍在聆听的同行者。</p>
+    <div class="hero-cols">
+      <div class="stat"><div class="num">69</div><div class="lbl">在册成员</div></div>
+      <div class="stat"><div class="num">6,877,367</div><div class="lbl">俱乐部战力</div></div>
+      <div class="stat"><div class="num">99,672</div><div class="lbl">平均战力</div></div>
+      <div class="stat"><div class="num">6</div><div class="lbl">职业途径</div></div>
+    </div>
+  </div>
+</header>
+
+<section id="overview">
+  <div class="wrap">
+    <span class="kicker">名册概览</span>
+    <h2>成员概览</h2>
+    <p class="lead">下方为当前在册成员的职业分布，以及各途径的战力要求。</p>
+    <div class="overview-grid" style="margin-top:30px">
+      <div class="frame chart-card">
+        <div class="frame-title">各途径成员数量</div>
+        <div id="chart"></div>
+        <p class="note">数据口径：名单表在册 69 人，按途径分组统计。</p>
+      </div>
+      <div class="frame">
+        <div class="frame-title">现有成员数量及招新参考</div>
+        <table class="path-table">
+          <thead>
+            <tr>
+              <th>途径</th>
+              <th>人数</th>
+              <th>战力要求</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>战士</td><td class="cnt">13</td><td>106,000</td></tr>
+            <tr><td>观众</td><td class="cnt">12</td><td>100,000</td></tr>
+            <tr><td>歌颂</td><td class="cnt">9</td><td>90,000</td></tr>
+            <tr><td>窥秘</td><td class="cnt">23</td><td class="hot">不招</td></tr>
+            <tr><td>占卜</td><td class="cnt">3</td><td>90,000</td></tr>
+            <tr><td>学徒</td><td class="cnt">9</td><td>114,000</td></tr>
+            <tr><td><b>合计</b></td><td class="cnt"><b>69</b></td><td class="hot">急招 T0 · 歌颂 3 人</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="structure" style="background:var(--card-deep)">
+  <div class="wrap">
+    <span class="kicker">组织架构</span>
+    <h2>管理架构</h2>
+    <p class="lead">建立长效稳定的管理体系，避免因管理人员变动导致俱乐部无法运转。</p>
+    <div class="org" style="margin-top:30px">
+      <div class="org-row">
+        <div class="org-box captain">
+          <div class="t">会长</div>
+          <div class="d">小小的蕾蕾</div>
+          <div>
+            <span class="badge green">管理体系调整</span>
+            <span class="badge green">管理人员任免</span>
+            <span class="badge yellow">外联与敌对</span>
+            <span class="badge red">GVG指挥</span>
+            <span class="badge blue">PVE指挥</span>
+          </div>
+        </div>
+      </div>
+      <div class="org-branch" style="margin-top:14px">
+        <div class="org-box vice">
+          <div class="t">外交官</div>
+          <div class="d">玛莉塞拉</div>
+          <div>
+            <span class="badge green">内部成员管理</span>
+            <span class="badge yellow">俱乐部形象管理</span>
+            <span class="badge red">GVG指挥</span>
+            <span class="badge blue">PVE指挥</span>
+          </div>
+        </div>
+      </div>
+      <div class="org-branch">
+        <div class="org-box">
+          <div class="t">理事（GVG）</div>
+          <div class="d">暂缺</div>
+          <div><span class="badge red">GVG战术</span></div>
+        </div>
+        <div class="org-box">
+          <div class="t">理事（途径攻略）</div>
+          <div class="d">蓝岸桉</div>
+          <div><span class="badge blue">技能·封印物</span></div>
+        </div>
+        <div class="org-box">
+          <div class="t">理事（数据）</div>
+          <div class="d">记封</div>
+          <div><span class="badge green">成员统计</span></div>
+        </div>
+      </div>
+      <div class="org-branch">
+        <div class="org-box">
+          <div class="t">俱乐部之星 1</div>
+          <div class="d">超级龙猫侠</div>
+          <div>
+            <span class="badge green">入会拉新</span>
+            <span class="badge green">出席·请假记录</span>
+          </div>
+        </div>
+        <div class="org-box">
+          <div class="t">俱乐部之星 2</div>
+          <div class="d">狐糯糯</div>
+          <div>
+            <span class="badge green">成员清出</span>
+            <span class="badge green">出席·请假记录</span>
+          </div>
+        </div>
+        <div class="org-box">
+          <div class="t">战指</div>
+          <div class="d">小小的蕾蕾（代理）</div>
+          <div><span class="badge red">GVG指挥组长</span></div>
+        </div>
+        <div class="org-box">
+          <div class="t">战研</div>
+          <div class="d">暂缺</div>
+          <div><span class="badge red">GVG战术讨论组长</span></div>
+        </div>
+        <div class="org-box">
+          <div class="t">副指</div>
+          <div class="d">啊鋮</div>
+          <div><span class="badge blue">PVE指挥组长</span></div>
+        </div>
+        <div class="org-box">
+          <div class="t">途径</div>
+          <div class="d">蓝岸桉（代理）</div>
+          <div><span class="badge blue">途径攻略组长</span></div>
+        </div>
+      </div>
+      <div class="legend">
+        <span class="attr"><i class="i-dipl"></i>外交</span>
+        <span class="attr"><i class="i-hr"></i>人事</span>
+        <span class="attr"><i class="i-gvg"></i>GVG</span>
+        <span class="attr"><i class="i-pve"></i>PVE</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="roster">
+  <div class="wrap">
+    <span class="kicker">成员名册</span>
+    <h2>在册成员</h2>
+    <p class="lead">按职业可筛选，支持按游戏名搜索。名单数据来自理事（数据）手动录入，可能存在误差，出勤展示为最近记录，将定期更新。</p>
+    <div class="toolbar" style="margin-top:24px">
+      <input id="search" type="text" placeholder="搜索游戏名…">
+      <select id="fPath">
+        <option value="">全部职业</option>
+        <option>战士</option>
+        <option>观众</option>
+        <option>歌颂</option>
+        <option>窥秘</option>
+        <option>占卜</option>
+        <option>学徒</option>
+      </select>
+      <select id="fStatus">
+        <option value="">全部出勤</option>
+        <option>出席</option>
+        <option>已请假</option>
+        <option>缺席</option>
+      </select>
+      <span class="cnt-chip" id="cntChip"></span>
+    </div>
+    <div class="frame">
+      <div style="overflow-x:auto">
+      <table class="list">
+        <colgroup>
+          <col class="c1">
+          <col class="c2">
+          <col class="c3">
+          <col class="c4">
+          <col class="c5">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>游戏名</th>
+            <th>职业</th>
+            <th>职务</th>
+            <th>四方联赛</th>
+            <th>缺席</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      </div>
+      <div class="pager" id="pager"></div>
+    </div>
+
+    <!--管理员登录入口-->
+    <div class="admin-login">
+      <h4>🔐 管理员入口</h4>
+      <input id="adminPwdInput" placeholder="输入管理员密码" type="password">
+      <button class="admin-btn" onclick="adminLogin()">登录管理面板</button>
+    </div>
+
+    <!--管理员编辑面板，登录后显示-->
+    <div class="admin-panel" id="adminPanel">
+      <h3>📝成员数据编辑（修改后点保存到云端，所有人刷新页面生效）</h3>
+      <div>
+        <button class="admin-btn" onclick="addAdminRow()">新增一行成员</button>
+        <button class="admin-btn" onclick="saveToBin()">💾保存到云端JSONBin</button>
+        <button class="admin-btn" onclick="downloadBackup()">📥导出备份JSON</button>
+        <button class="admin-btn" onclick="reloadFromBin()">🔄重新拉取云端数据</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="admin-table" id="adminEditTable">
+          <thead>
+            <tr>
+              <th>游戏名</th>
+              <th>职业</th>
+              <th>职务</th>
+              <th>四方联赛</th>
+              <th>缺席次数</th>
+              <th>是否在群(1=是 0=否)</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="adminTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="seal">回 音</div>
+    <p>本页为俱乐部内部信息展示，数据取自成员名单统计表。<br>愿长夜之中，你的低语始终有回响。</p>
+  </div>
+</footer>
+
+<script>
+//====================【已填入你的配置】====================
+const ADMIN_PWD = "leilei666";
+const BIN_ID = "6ab35b97ac6210605aebb7db";
+const API_KEY = "$2a$10$916yc2qjHuqVIHsTRPLYV.XQEqVu9VeBN5LrCIRbiVsi8FpXya1hu";
+//=========================================================
+
+//初始兜底数据，云端拉取失败用这个
+const DEFAULT_MEMBERS=[
+["哈伯之盾","战士","","出席",0,1],
+["神秘人丶","战士","","出席",0,1],
+["银龙呀","战士","","出席",0,1],
+["秋也","战士","","已请假",0,1],
+["嘟嘟嘟嘟嘟嘟","战士","","已请假",0,0],
+["卿尘丶","战士","","出席",0,1],
+["优哒灵","战士","","已请假",0,1],
+["素食","战士","","已请假",0,1],
+["砻砻","战士","","已请假",0,1],
+["晚安绘梨衣小姐","战士","","已请假",0,1],
+["乔安娜·桑顿","战士","","已请假",0,1],
+["柏坤","战士","","已请假",0,1],
+["无锋","战士","","已请假",0,0],
+["哔哩·克莱儿","观众","","出席",0,1],
+["池菁","观众","","出席",0,1],
+["超级龙猫侠","观众","俱乐部之星1","出席",0,1],
+["阿陌","观众","","出席",0,1],
+["糯糯吖","观众","","缺席",1,1],
+["黛伦","观众","","出席",0,1],
+["棱零","观众","","缺席",1,1],
+["鸽者","观众","","出席",0,1],
+["蓝岸桉","观众","理事（途径攻略）","已请假",0,1],
+["三苏","观众","","已请假",0,1],
+["莱昂娜·考辛斯","观众","","已请假",0,1],
+["爱丽霞","观众","","已请假",0,1],
+["繁花·血景","歌颂","","出席",0,1],
+["本·史蒂文森","歌颂","","出席",0,1],
+["迪西迪西","歌颂","","出席",0,1],
+["蕾欧娜娜","歌颂","","已请假",0,1],
+["西德","歌颂","","已请假",0,1],
+["陨星辰","歌颂","","已请假",0,1],
+["潇潇雨未歇","歌颂","","已请假",0,1],
+["团战观光客","歌颂","","已请假",0,1],
+["小小的蕾蕾","窥秘","会长","缺席",1,1],
+["玛莉塞拉","窥秘","外交官","出席",0,1],
+["啊鋮","窥秘","副指组长","出席",0,1],
+["记封","窥秘","理事（数据）","出席",0,1],
+["多琳·戴尔","窥秘","","出席",0,1],
+["临水听风","窥秘","","出席",0,1],
+["奥赖恩·海耶斯","窥秘","","出席",0,1],
+["黎珩恪","窥秘","","出席",0,1],
+["卿若丶","窥秘","","出席",0,1],
+["呼呼呼呼呼呼","窥秘","","已请假",0,1],
+["白沭","窥秘","","已请假",0,1],
+["卢台长","窥秘","","出席",0,1],
+["狐糯糯","窥秘","俱乐部之星2","出席",0,1],
+["盆不会","窥秘","","已请假",0,1],
+["鱼卷卷","窥秘","","已请假",0,1],
+["真相荒漠","窥秘","","已请假",0,1],
+["悟道树下掘墓人","窥秘","","已请假",0,1],
+["一个盒子","窥秘","","已请假",0,1],
+["鸿闲一梦","窥秘","","已请假",0,1],
+["幻皧","窥秘","","已请假",0,1],
+["白鲨糖","窥秘","","已请假",0,1],
+["王牛奶","窥秘","","已请假",0,1],
+["伊莱克斯","窥秘","","已请假",0,1],
+["林中大屋","占卜","","出席",0,1],
+["鱼落万物生","占卜","","出席",0,1],
+["秋海棠","占卜","","已请假",0,1],
+["千城悦","学徒","","出席",0,1],
+["方颜","学徒","","已请假",0,1],
+["零夜","学徒","","已请假",0,1],
+["郭子健","学徒","","缺席",1,1],
+["唯独此刻","学徒","","出席",0,1],
+["千亿","学徒","","已请假",0,1],
+["代表太阳消灭你","学徒","","已请假",0,0],
+["上衫·枫","学徒","","已请假",0,1],
+["隐锋","学徒","","缺席",1,1]
+];
+
+let MEMBERS = [...DEFAULT_MEMBERS];
+const rankMap = {
+    "会长":1,
+    "外交官":2,
+    "理事（GVG）":3,
+    "理事（途径攻略）":3,
+    "理事（数据）":3,
+    "俱乐部之星1":4,
+    "俱乐部之星2":4,
+    "战指组长":5,
+    "副指组长":6,
+    "战研组长":7,
+    "副研组长":8
+};
+var PER=15,page=1;
+
+//======== JSONBin 网络函数 =========
+async function loadBin(){
+  try{
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,{
+      headers:{"X-Master-Key":API_KEY}
+    });
+    const json=await res.json();
+    if(json.record){
+      MEMBERS=json.record;
+    }
+  }catch(e){
+    console.warn("云端读取失败，使用本地默认数据",e);
+  }
+}
+async function saveToBin(){
+  const table=document.getElementById("adminTbody");
+  const rows=Array.from(table.querySelectorAll("tr"));
+  let newData=[];
+  for(let tr of rows){
+    const inputs=tr.querySelectorAll("input,select");
+    const gameName=inputs[0].value.trim();
+    if(!gameName) continue;
+    newData.push([
+      gameName,
+      inputs[1].value,
+      inputs[2].value.trim(),
+      inputs[3].value,
+      Number(inputs[4].value||0),
+      Number(inputs[5].value||1)
+    ]);
+  }
+  try{
+    const resp=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{
+      method:"PUT",
+      headers:{
+        "X-Master-Key":API_KEY,
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify(newData)
+    });
+    if(resp.ok){
+      MEMBERS=newData;
+      alert("✅保存成功！刷新页面即可看到更新");
+      renderAdminTable();
+      render();
+      drawChart();
+    }else{
+      alert("❌保存失败，请检查BIN_ID和API_KEY");
+    }
+  }catch(err){
+    alert("网络异常："+err.message);
+  }
+}
+async function reloadFromBin(){
+  await loadBin();
+  renderAdminTable();
+  render();
+  drawChart();
+  alert("已重新拉取云端数据");
+}
+
+//==== 管理员登录与编辑表格 ====
+function adminLogin(){
+  const inputPwd=document.getElementById("adminPwdInput").value;
+  if(inputPwd===ADMIN_PWD){
+    document.getElementById("adminPanel").classList.add("show");
+    renderAdminTable();
+  }else{
+    alert("密码错误");
+  }
+}
+function renderAdminTable(){
+  const tbody=document.getElementById("adminTbody");
+  tbody.innerHTML="";
+  MEMBERS.forEach((row,idx)=>{
+    tbody.appendChild(buildAdminTr(row,idx));
+  })
+}
+function buildAdminTr(arr,idx){
+  const tr=document.createElement("tr");
+  tr.innerHTML=`
+    <td><input value="${arr[0]||''}"></td>
+    <td>
+      <select>
+        <option value="战士" ${arr[1]==="战士"?"selected":""}>战士</option>
+        <option value="观众" ${arr[1]==="观众"?"selected":""}>观众</option>
+        <option value="歌颂" ${arr[1]==="歌颂"?"selected":""}>歌颂</option>
+        <option value="窥秘" ${arr[1]==="窥秘"?"selected":""}>窥秘</option>
+        <option value="占卜" ${arr[1]==="占卜"?"selected":""}>占卜</option>
+        <option value="学徒" ${arr[1]==="学徒"?"selected":""}>学徒</option>
+      </select>
+    </td>
+    <td><input value="${arr[2]||''}"></td>
+    <td>
+      <select>
+        <option value="出席" ${arr[3]==="出席"?"selected":""}>出席</option>
+        <option value="已请假" ${arr[3]==="已请假"?"selected":""}>已请假</option>
+        <option value="缺席" ${arr[3]==="缺席"?"selected":""}>缺席</option>
+      </select>
+    </td>
+    <td><input type="number" value="${arr[4]||0}" style="width:70px;"></td>
+    <td><input type="number" value="${arr[5]||1}" style="width:70px;"></td>
+    <td><button class="admin-btn" onclick="this.closest('tr').remove()">删除</button></td>
+  `;
+  return tr;
+}
+function addAdminRow(){
+  const tbody=document.getElementById("adminTbody");
+  const emptyRow = buildAdminTr(["","战士","","出席",0,1],-1);
+  tbody.appendChild(emptyRow);
+}
+function downloadBackup(){
+  const table=document.getElementById("adminTbody");
+  const rows=Array.from(table.querySelectorAll("tr"));
+  let exportArr=[];
+  for(let tr of rows){
+    const inputs=tr.querySelectorAll("input,select");
+    const gameName=inputs[0].value.trim();
+    if(!gameName) continue;
+    exportArr.push([
+      gameName,
+      inputs[1].value,
+      inputs[2].value.trim(),
+      inputs[3].value,
+      Number(inputs[4].value||0),
+      Number(inputs[5].value||1)
+    ]);
+  }
+  const blob=new Blob([JSON.stringify(exportArr,null,2)],{type:"application/json"});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download="回音俱乐部_成员备份.json";
+  a.click();
+}
+
+//======== 浏览页面渲染逻辑（原样保留）========
+function getSortedList(){
+    return MEMBERS
+    .filter(m=> !/组员/.test(m[2]))
+    .slice()
+    .sort((a,b)=>{
+        let wa = rankMap[a[2]] ?? 999;
+        let wb = rankMap[b[2]] ?? 999;
+        return wa - wb;
+    })
+}
+
+function stClass(s){
+  if(s==="出席")return "done";
+  if(s==="已请假")return "leave";
+  return "abs";
+}
+
+function render(){
+  var kw=(document.getElementById("search").value||"").trim().toLowerCase();
+  var fp=document.getElementById("fPath").value;
+  var fs=document.getElementById("fStatus").value;
+  var allSorted = getSortedList();
+  var list=allSorted.filter(function(m){
+    var hitPath=fp===""||m[1]===fp;
+    var hitSt=fs===""||m[3]===fs;
+    var hitKw=kw===""||m[0].toLowerCase().indexOf(kw)>-1;
+    return hitPath&&hitSt&&hitKw;
+  });
+  document.getElementById("cntChip").textContent="显示 "+list.length+" / 共 "+allSorted.length+" 人";
+  var pages=Math.max(1,Math.ceil(list.length/PER));
+  if(page>pages)page=pages;
+  var start=(page-1)*PER;
+  var rows=list.slice(start,start+PER);
+  var html="";
+  if(rows.length===0){
+    html='<tr><td colspan="5" class="empty">没有找到匹配的成员</td></tr>';
+  }else{
+    rows.forEach(function(m){
+      var role=m[2]?'<span class="pill role">'+m[2]+'</span>':"—";
+      html+='<tr>'
+        +'<td class="gname">'+m[0]+(m[5]===0?' <span style="color:var(--ink-mute);font-size:11px">(不在群)</span>':"")+'</td>'
+        +'<td>'+m[1]+'</td>'
+        +'<td>'+role+'</td>'
+        +'<td><span class="pill '+stClass(m[3])+'">'+m[3]+'</span></td>'
+        +'<td>'+(m[4]>0?'<span class="pill abs">'+m[4]+'</span>':"0")+'</td>'
+        +'</tr>';
+    });
+  }
+  document.getElementById("tbody").innerHTML=html;
+  renderPager(pages);
+}
+
+function renderPager(pages){
+  var p=document.getElementById("pager");
+  var h='<button '+(page===1?"disabled":"")+' onclick="goPage('+(page-1)+')">‹ 上一页</button>';
+  var lo=Math.max(1,page-2),hi=Math.min(pages,page+2);
+  if(lo>1){h+='<button onclick="goPage(1)">1</button>';if(lo>2)h+='<span style="color:var(--ink-mute);padding:0 4px">…</span>';}
+  for(var i=lo;i<=hi;i++)h+='<button class="'+(i===page?"on":"")+' onclick="goPage('+i+')">'+i+'</button>';
+  if(hi<pages){if(hi<pages-1)h+='<span style="color:var(--ink-mute);padding:0 4px">…</span>';h+='<button onclick="goPage('+pages+')">'+pages+'</button>';}
+  h+='<button '+(page>=pages?"disabled":"")+' onclick="goPage('+(page+1)+')">下一页 ›</button>';
+  p.innerHTML=h;
+}
+
+function goPage(n){page=n;render();}
+document.getElementById("search").addEventListener("input",function(){page=1;render();});
+document.getElementById("fPath").addEventListener("change",function(){page=1;render();});
+document.getElementById("fStatus").addEventListener("change",function(){page=1;render();});
+
+let chartIns=null;
+function drawChart(){
+  const el=document.getElementById("chart");
+  if(!el||typeof echarts==="undefined")return;
+  if(chartIns) chartIns.dispose();
+  chartIns=echarts.init(el);
+  //统计各途径数量
+  const stat={战士:0,观众:0,歌颂:0,窥秘:0,占卜:0,学徒:0};
+  MEMBERS.forEach(m=>{if(stat[m[1]]!==undefined) stat[m[1]]++;})
+  var opt={
+    tooltip:{trigger:"item",triggerOn:"click",renderMode:"richText",confine:true},
+    legend:{bottom:0,icon:"circle",itemWidth:8,itemHeight:8,textStyle:{color:"#5a4c38"}},
+    color:["#7b2cbf","#f59e0b","#84cc16","#ffeb3b","#9093a0","#38bdf8"],
+    series:[{
+      name:"职业人数",
+      type:"pie",
+      radius:["38%","62%"],
+      center:["50%","44%"],
+      itemStyle:{borderColor:"#f7f0e0",borderWidth:2},
+      label:{color:"#2b2318",fontSize:12,formatter:"{b} {c}"},
+      data:[
+        {name:"窥秘",value:stat.窥秘},
+        {name:"战士",value:stat.战士},
+        {name:"观众",value:stat.观众},
+        {name:"歌颂",value:stat.歌颂},
+        {name:"占卜",value:stat.占卜},
+        {name:"学徒",value:stat.学徒}
+      ]
+    }]
+  };
+  chartIns.setOption(opt);
+  window.addEventListener("resize",()=>{chartIns&&chartIns.resize();});
+}
+
+//页面启动
+(async function boot(){
+  await loadBin();
+  render();
+  drawChart();
+})();
+</script>
+</body>
+</html>
