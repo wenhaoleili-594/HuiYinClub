@@ -399,7 +399,7 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
             <tr><td>窥秘</td><td class="cnt" id="path-窥秘">23</td><td id="power-窥秘" class="hot">不招</td></tr>
             <tr><td>占卜</td><td class="cnt" id="path-占卜">3</td><td id="power-占卜">90,000</td></tr>
             <tr><td>学徒</td><td class="cnt" id="path-学徒">10</td><td id="power-学徒">114,000</td></tr>
-            <tr><td><b>合计</b></td><td class="cnt" id="path-合计">70</td><td class="hot" id="urgent-text">急招 T0 · 歌颂 3 人</td></tr>
+            <tr><td><b>合计</b></td><td class="cnt" id="path-合计">70</td><td class="hot" id="urgent-text">急招 · 歌颂 3 人</td></tr>
           </tbody>
         </table>
       </div>
@@ -883,7 +883,7 @@ function calcUrgent(currentCount, singleRef) {
         }
     });
     if (maxGap <= 0) return "";
-    return `急招 T0 · ${maxPath} ${maxGap} 人`;
+    return `急招 · ${maxPath} ${maxGap} 人`;
 }
 
 // 职务优先级
