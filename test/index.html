@@ -428,6 +428,111 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
 
   /* 空状态文字适配 */
   .empty{font-size:13px;padding:24px 0;}
+
+  /* ========== 阶段四：管理员面板适配 ========== */
+  /* 登录入口 */
+  .admin-login{padding:14px;}
+  .admin-login h4{font-size:15px;margin-bottom:8px;}
+  .admin-login input{
+    width:100%;
+    min-height:44px;
+    font-size:15px;
+    margin-bottom:8px;
+  }
+  .admin-btn{
+    min-height:44px;
+    padding:0 16px;
+    font-size:14px;
+  }
+
+  /* 管理面板标题与顶部按钮 */
+  .admin-panel h3{font-size:16px;margin-bottom:10px;}
+  .admin-panel > div:first-of-type{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-bottom:8px;
+  }
+  .admin-panel > div:first-of-type .admin-btn{
+    flex:1;
+    min-width:calc(50% - 3px);
+    font-size:13px;
+    padding:0 8px;
+  }
+  .admin-panel > p{font-size:12px;margin:6px 0 12px;}
+
+  /* 俱乐部数据编辑区 */
+  .club-edit-box{padding:12px;}
+  .club-edit-box h4{font-size:14px;margin-bottom:8px;}
+  .club-edit-row{
+    flex-wrap:wrap;
+    gap:6px;
+    margin-bottom:8px;
+  }
+  .club-edit-row label{
+    flex-basis:100%;
+    min-width:0;
+    font-size:12px;
+    margin-bottom:-2px;
+  }
+  .club-edit-row input[type="number"]{
+    flex:1;
+    min-height:40px;
+    min-width:0;
+  }
+  .club-edit-row .tip{
+    flex-basis:100%;
+    font-size:11px;
+    margin-top:-4px;
+  }
+  .preview-table{font-size:12px;}
+  .preview-table th,.preview-table td{padding:5px 4px;}
+
+  /* 每周活动配置区 */
+  .club-edit-box .club-edit-row input[type="text"]{
+    flex:1;
+    min-height:40px;
+    min-width:0;
+  }
+  .club-edit-box select{
+    min-height:40px;
+    font-size:13px;
+  }
+  .time-select select{width:42px;}
+  .activity-list{max-height:200px;}
+  .activity-item{font-size:12px;padding:5px 8px;}
+  .activity-item .del-btn{
+    min-height:28px;
+    padding:0 8px;
+    font-size:12px;
+  }
+  #weeklyNoteInput{
+    min-height:80px;
+    font-size:13px;
+  }
+
+  /* 成员编辑表格横向滚动 */
+  .admin-panel > div[style*="overflow-x"]{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    margin:0 -12px;
+    padding:0 12px;
+  }
+  .admin-table{
+    min-width:720px;
+    white-space:nowrap;
+    font-size:12px;
+  }
+  .admin-table th,.admin-table td{padding:8px 6px;}
+  .admin-table th .batch-select{
+    min-height:32px;
+    font-size:11px;
+    margin-top:3px;
+  }
+  .admin-table input,.admin-table select{
+    font-size:12px;
+    min-height:36px;
+  }
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
