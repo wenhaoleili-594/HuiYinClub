@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《回音》俱乐部</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%232b2318'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23b0823f' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23b0823f'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@500;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<style>
+:root{
+  --paper:#efe6d2;
+  --paper-deep:#e5d9bf;
+  --card:#f7f0e0;
+  --card-deep:#efe3c9;
+  --ink:#2b2318;
+  --ink-soft:#5a4c38;
+  --ink-mute:#8a7657;
+  --line:#b9a47c;
+  --line-soft:#d6c7a5;
+  --gold:#b0823f;
+  --gold-deep:#8a642b;
+  --green:#5f6f52;
+  --green-deep:#46553a;
+  --dipl:#b2453b;
+  --hr:#4a6f9b;
+  --gvg:#b06a24;
+  --pve:#4f7a58;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Noto Sans SC",system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(176,130,63,.14), transparent 60%),
+    radial-gradient(900px 500px at -10% 30%, rgba(95,11,82,.12), transparent 55%),
+    var(--paper);
+  color:var(--ink);
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1280px;margin:0 auto;padding:0 22px}
+section{padding:56px 0}
+.serif{font-family:"Noto Serif SC",serif}
+.kicker{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:12px;letter-spacing:.32em;color:var(--gold-deep);
+  font-weight:500;text-transform:uppercase;margin-bottom:14px;
+}
+.kicker::before,.kicker::after{content:"";height:1px;width:34px;background:var(--line)}
+h2{
+  font-family:"Noto Serif SC",serif;
+  font-size:clamp(26px,3.4vw,38px);
+  font-weight:700;color:var(--ink);line-height:1.25;
+}
+.lead{color:var(--ink-soft);margin-top:12px;max-width:60ch;font-weight:300}
+.hero{
+  position:relative;padding:84px 0 64px;overflow:hidden;
+  border-bottom:3px double var(--line);
+}
+.hero::after{
+  content:"";position:absolute;left:0;right:0;bottom:-2px;height:6px;
+  background:repeating-linear-gradient(90deg,var(--gold) 0 14px,transparent 14px 22px);
+  opacity:.35;
+}
+.hero-badge{
+  display:inline-block;padding:6px 16px;border:1px solid var(--gold);
+  color:var(--gold-deep);font-size:12px;letter-spacing:.4em;
+  margin-bottom:26px;border-radius:2px;background:rgba(176,130,63,.08);
+}
+.hero h1{
+  font-family:"Noto Serif SC",serif;
+  font-size:clamp(44px,8vw,88px);
+  font-weight:900;line-height:1.02;letter-spacing:.02em;
+}
+.hero h1 .amp{color:var(--gold-deep)}
+.hero-sub{
+  margin-top:22px;font-size:clamp(15px,2vw,19px);color:var(--ink-soft);
+  max-width:56ch;font-weight:300;
+}
+.hero-cols{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:18px;margin-top:44px;
+}
+.stat{
+  background:var(--card);border:1px solid var(--line-soft);
+  border-left:3px solid var(--gold);padding:18px 20px;
+  box-shadow:0 1px 0 rgba(90,76,56,.06);
+}
+.stat .num{font-family:"Noto Serif SC",serif;font-size:clamp(26px,3vw,34px);font-weight:700;color:var(--ink)}
+.stat .lbl{font-size:12px;letter-spacing:.14em;color:var(--ink-mute);margin-top:4px}
+.frame{border:1px solid var(--line-soft);border-top:3px solid var(--gold);background:var(--card);padding:26px}
+.frame-title{
+  font-family:"Noto Serif SC",serif;font-size:19px;font-weight:700;
+  color:var(--ink);margin-bottom:6px;
+}
+.overview-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:26px;align-items:stretch}
+.chart-card{position:relative;min-height:380px}
+#chart{width:100%;height:340px}
+.path-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px}
+.path-table th,.path-table td{padding:8px 10px;text-align:center;border-bottom:1px solid var(--line-soft)}
+.path-table th{font-size:12px;color:var(--ink-mute);letter-spacing:.06em;font-weight:500}
+.path-table td:first-child{text-align:left}
+.path-table .cnt{font-family:"Noto Serif SC",serif;font-weight:700}
+.tag{display:inline-block;padding:1px 8px;font-size:11px;border-radius:2px;border:1px solid var(--line)}
+.tag.dipl{color:var(--dipl);border-color:var(--dipl)}
+.tag.hr{color:var(--hr);border-color:var(--hr)}
+.tag.gvg{color:var(--gvg);border-color:var(--gvg)}
+.tag.pve{color:var(--pve);border-color:var(--pve)}
+.tag.green{color:var(--green-deep);border-color:var(--green-deep)}
+.tag.yellow{color:var(--gold-deep);border-color:var(--gold-deep)}
+.tag.red{color:var(--gvg);border-color:var(--gvg)}
+.tag.blue{color:var(--hr);border-color:var(--hr)}
+.hot{color:var(--gold-deep);font-weight:500}
+.note{font-size:12px;color:var(--ink-mute);margin-top:14px;line-height:1.8}
+.attr{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-soft)}
+.attr i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.i-dipl{background:var(--dipl)}.i-hr{background:var(--hr)}.i-gvg{background:var(--gvg)}.i-pve{background:var(--pve)}
+.org{display:flex;flex-direction:column;align-items:center}
+.org-row{display:flex;justify-content:center;flex-wrap:wrap;gap:16px}
+.org-branch{display:flex;justify-content:center;flex-wrap:wrap;gap:14px;margin-top:16px;width:100%}
+.org-box{
+  background:var(--card);border:1px solid var(--line-soft);
+  padding:12px 16px;min-width:150px;max-width:230px;text-align:center;
+  position:relative;
+}
+.org-box.captain{border-top:3px solid var(--gold);background:var(--card-deep)}
+.org-box.vice{border-top:3px solid var(--gold-deep)}
+.org-box .t{font-family:"Noto Serif SC",serif;font-weight:700;font-size:15px}
+.org-box .d{font-size:12px;color:var(--ink-soft);margin-top:4px;line-height:1.5}
+.org-box .badge{display:inline-block;margin-top:6px;font-size:10px;padding:1px 6px;border-radius:2px;border:1px solid var(--line);color:var(--ink-mute)}
+.org-box .badge.green{color:var(--green-deep);border-color:var(--green-deep)}
+.org-box .badge.yellow{color:var(--gold-deep);border-color:var(--gold-deep)}
+.org-box .badge.red{color:var(--gvg);border-color:var(--gvg)}
+.org-box .badge.blue{color:var(--hr);border-color:var(--hr)}
+.org-duties{font-size:12px;color:var(--ink-mute);margin-top:10px;text-align:center;max-width:700px;line-height:1.8}
+.org-caption{font-size:12px;color:var(--ink-mute);margin-top:18px;text-align:center}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:18px}
+.toolbar input,.toolbar select{
+  padding:8px 12px;border:1px solid var(--line);background:var(--card);
+  font-family:inherit;font-size:14px;color:var(--ink);border-radius:2px;
+}
+.toolbar input{flex:1;min-width:200px}
+.toolbar .cnt-chip{font-size:13px;color:var(--ink-mute);margin-left:auto}
+table.list{width:100%;border-collapse:collapse;font-size:13.5px;table-layout:fixed}
+table.list col.c1{width:20%}
+table.list col.c2{width:10%}
+table.list col.c3{width:14%}
+table.list col.c4{width:8%}
+table.list col.c5{width:12%}
+table.list thead th{
+  background:var(--card-deep);border-bottom:2px solid var(--line);
+  padding:10px 12px;text-align:left;font-size:12px;color:var(--ink-soft);
+  letter-spacing:.06em;font-weight:500;white-space:nowrap;
+}
+table.list tbody td{padding:9px 12px;border-bottom:1px solid var(--line-soft);vertical-align:middle}
+table.list tbody tr:nth-child(even){background:rgba(239,227,201,.35)}
+table.list tr:hover{background:rgba(176,130,63,.10)}
+.gname{font-weight:500}
+.pill{display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;border:1px solid var(--line-soft)}
+.pill.done{color:var(--pve);border-color:var(--pve)}
+.pill.leave{color:var(--gvg);border-color:var(--gvg)}
+.pill.abs{color:var(--dipl);border-color:var(--dipl)}
+.pill.role{background:var(--gold);color:#fff;border-color:var(--gold)}
+.empty{text-align:center;color:var(--ink-mute);padding:30px 0;font-size:14px}
+.pager{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.pager button{
+  padding:6px 12px;border:1px solid var(--line);background:var(--card);
+  font-family:inherit;font-size:13px;color:var(--ink);cursor:pointer;border-radius:2px;
+}
+.pager button.on{background:var(--gold);border-color:var(--gold);color:#fff}
+.pager button:hover:not(:disabled){border-color:var(--gold-deep)}
+.pager button:disabled{opacity:.4;cursor:default}
+/*管理员面板样式*/
+.admin-panel{margin-top:40px;padding:20px;background:#e5d9bf;border-radius:8px;border:1px solid #b9a47c;display:none;}
+.admin-panel.show{display:block;}
+.admin-login{margin-top:40px;padding:16px;background:#efe3c9;border-radius:8px;border:1px dashed #b0823f;}
+.admin-btn{background:#815c38;color:#fff;border:none;padding:8px 14px;border-radius:4px;margin:4px;cursor:pointer;}
+.admin-btn:hover{background:#9b7042;}
+.admin-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px;}
+.admin-table th,.admin-table td{border:1px solid #b9a47c;padding:6px 8px;}
+.admin-table th{
+  background:#e5d9bf;
+  font-weight:500;
+  vertical-align: middle;
+}
+.admin-table th .batch-select{
+  width: 100%;
+  margin-top: 4px;
+  font-size: 11px;
+  padding: 2px 4px;
+  background: #f7f0e0;
+  border: 1px solid #b9a47c;
+  border-radius: 2px;
+  color: #2b2318;
+  cursor: pointer;
+}
+.admin-table input,.admin-table select{width:100%;background:#f7f0e0;border:1px solid #b9a47c;color:#2b2318;padding:4px}
+.club-edit-box{
+  margin-bottom:16px;
+  padding:12px 14px;
+  background:#f7f0e0;
+  border:1px solid #b9a47c;
+  border-radius:4px;
+}
+.club-edit-box h4{
+  margin-bottom:10px;
+  font-size:15px;
+  color:#2b2318;
+}
+.club-edit-row{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  flex-wrap:wrap;
+  margin-bottom:8px;
+}
+.club-edit-row label{
+  font-size:13px;
+  color:#5a4c38;
+  white-space:nowrap;
+  min-width:70px;
+}
+.club-edit-row input[type=number]{
+  width:120px;
+  background:#f7f0e0;
+  border:1px solid #b9a47c;
+  color:#2b2318;
+  padding:6px 8px;
+}
+.club-edit-row .tip{
+  font-size:12px;
+  color:#8a7657;
+}
+.preview-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+  font-size:13px;
+}
+.preview-table th,.preview-table td{
+  border:1px solid #b9a47c;
+  padding:6px 8px;
+  text-align:center;
+}
+.preview-table th{
+  background:#e5d9bf;
+  font-weight:500;
+}
+footer{border-top:3px double var(--line);padding:34px 0 46px;text-align:center;color:var(--ink-mute);font-size:13px}
+footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-deep);letter-spacing:.3em;margin-bottom:8px}
+/* ---------- 每周活动样式 ---------- */
+.weekly-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+  font-size:14px;
+  table-layout:fixed;
+  font-family: "方正姚体", "FZYaoti", "Noto Serif SC", serif; /* 新增这行 */
+}
+.weekly-table th,
+.weekly-table td{
+  padding:10px 8px;
+  text-align:center;
+  border:1px solid var(--line-soft);
+  vertical-align:middle;
+}
+.weekly-table th{
+  background:var(--card-deep);
+  font-size:12px;
+  color:var(--ink-soft);
+  letter-spacing:.06em;
+  font-weight:500;
+}
+.weekly-table td:first-child{
+  width:90px;
+  text-align:center;
+  color:var(--ink-mute);
+  font-family:"Noto Serif SC",serif;
+  font-weight:500;
+}
+.weekly-item{
+  margin:4px 0;
+  line-height:1.4;
+  min-height: 38px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.weekly-item .all-tag{
+  font-size: 11px;
+  margin-top: 2px;
+  opacity: 0.85;
+}
+.w-blue{color:#0070c0;}
+.w-red{color:#c00000;}
+.w-black{color:#00000;}
+.w-purple{color:#7030a0;}
+
+.weekly-note{
+  margin-top:14px;
+  padding-top:14px;
+  border-top:1px solid var(--line-soft);
+  font-size:12px;
+  color:var(--ink-soft);
+  line-height:1.8;
+}
+.weekly-note b{
+  color:var(--ink);
+  margin-right:4px;
+}
+
+.activity-list{
+  margin:10px 0;
+  max-height:260px;
+  overflow-y:auto;
+  border:1px solid var(--line-soft);
+  background:#f7f0e0;
+}
+.activity-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 8px;
+  border-bottom:1px solid var(--line-soft);
+  font-size:13px;
+}
+.activity-item:last-child{
+  border-bottom:none;
+}
+.activity-item .del-btn{
+  margin-left:auto;
+  padding:2px 8px;
+  font-size:11px;
+}
+.time-select{
+  display:inline-flex;
+  gap:2px;
+  align-items:center;
+}
+.time-select select{
+  width:52px;
+  padding:4px;
+  font-size:12px;
+}
+@media (max-width:880px){
+  .overview-grid{grid-template-columns:1fr}
+  section{padding:44px 0}
+  .hero{padding:64px 0 48px}
+}
+@media (max-width:560px){
+  .org-row{flex-direction:column;align-items:center}
+  .org-box{width:100%;max-width:340px}
+  table.list{font-size:12.5px}
+  table.list thead th,table.list tbody td{padding:8px 8px}
+  .toolbar input,.toolbar select{font-size:16px}
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <span class="hero-badge">服务器：白银城</span>
+    <h1>回音<span class="amp">俱乐部</span></h1>
+    <p class="hero-sub">非凡之路上，总有一群人不合时宜地守在一起。<br>这里是《回音》，敬每一位仍在聆听的同行者。</p>
+    <div class="hero-cols">
+      <div class="stat"><div class="num" id="stat-memberCount">70</div><div class="lbl">在册成员</div></div>
+      <div class="stat"><div class="num" id="stat-clubPower">6,933,128</div><div class="lbl">俱乐部战力</div></div>
+      <div class="stat"><div class="num" id="stat-avgPower">100,480</div><div class="lbl">平均战力</div></div>
+      <div class="stat"><div class="num" id="stat-managerCount">7</div><div class="lbl">管理人员</div></div>
+    </div>
+  </div>
+</header>
+<section id="overview">
+  <div class="wrap">
+    <span class="kicker">名册概览</span>
+    <h2>成员概览</h2>
+    <p class="lead">下方为当前在册成员的职业分布，以及各途径的战力要求。</p>
+    <div class="overview-grid" style="margin-top:30px">
+      <div class="frame chart-card">
+        <div class="frame-title">各途径成员数量</div>
+        <div id="chart"></div>
+        <p class="note">数据口径：名单表在册 <span id="note-memberCount">70</span> 人，按途径分组统计。</p>
+      </div>
+      <div class="frame">
+        <div class="frame-title">现有成员数量及招新参考</div>
+        <table class="path-table">
+          <thead>
+            <tr>
+              <th>途径</th>
+              <th>人数</th>
+              <th>战力要求</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>战士</td><td class="cnt" id="path-战士">13</td><td id="power-战士">106,000</td></tr>
+            <tr><td>观众</td><td class="cnt" id="path-观众">13</td><td id="power-观众">100,000</td></tr>
+            <tr><td>歌颂</td><td class="cnt" id="path-歌颂">8</td><td id="power-歌颂">90,000</td></tr>
+            <tr><td>窥秘</td><td class="cnt" id="path-窥秘">23</td><td id="power-窥秘" class="hot">不招</td></tr>
+            <tr><td>占卜</td><td class="cnt" id="path-占卜">3</td><td id="power-占卜">90,000</td></tr>
+            <tr><td>学徒</td><td class="cnt" id="path-学徒">10</td><td id="power-学徒">114,000</td></tr>
+            <tr><td><b>合计</b></td><td class="cnt" id="path-合计">70</td><td class="hot" id="urgent-text">急招 · 歌颂 3 人</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- 每周活动区域 -->
+<section id="weekly">
+  <div class="wrap">
+    <span class="kicker">活动安排</span>
+    <h2>每周活动 <span style="font-size:.6em;color:var(--gold-deep);font-weight:500;" id="weeklyDateRange"></span></h2>
+    <p class="lead">本周固定活动安排，如有变动将另行通知。</p>
+    <div class="frame" style="margin-top:30px">
+      <table class="weekly-table" id="weeklyTable">
+        <thead>
+          <tr>
+            <th>时间</th>
+            <th>周一</th>
+            <th>周二</th>
+            <th>周三</th>
+            <th>周四</th>
+            <th>周五</th>
+            <th>周六</th>
+            <th>周日</th>
+          </tr>
+        </thead>
+        <tbody id="weeklyBody">
+          <tr><td colspan="8" style="padding:30px 0;color:var(--ink-mute);">暂无活动安排</td></tr>
+        </tbody>
+      </table>
+      <div class="weekly-note" id="weeklyNote" style="display:none;">
+        <b>注：</b><span id="weeklyNoteText"></span>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="structure" style="background:var(--card-deep)">
+  <div class="wrap">
+    <span class="kicker">组织架构</span>
+    <h2>管理架构</h2>
+    <p class="lead">建立长效稳定的管理体系，避免因管理人员变动导致俱乐部无法运转。</p>
+    <div class="org" style="margin-top:30px">
+      <div class="org-row">
+        <div class="org-box captain">
+          <div class="t">会长</div>
+          <div class="d" id="org-会长">小小的蕾蕾</div>
+          <div>
+            <span class="badge green">管理体系调整</span>
+            <span class="badge green">管理人员任免</span>
+            <span class="badge yellow">外联与敌对</span>
+            <span class="badge red">GVG指挥</span>
+            <span class="badge blue">PVE指挥</span>
+          </div>
+        </div>
+      </div>
+      <div class="org-branch" style="margin-top:14px">
+        <div class="org-box vice">
+          <div class="t">外交官</div>
+          <div class="d" id="org-外交官">玛莉塞拉</div>
+          <div>
+            <span class="badge green">内部成员管理</span>
+            <span class="badge yellow">俱乐部形象管理</span>
+            <span class="badge red">GVG指挥</span>
+            <span class="badge blue">PVE指挥</span>
+          </div>
+        </div>
+      </div>
+      <div class="org-branch">
+        <div class="org-box">
+          <div class="t">理事（GVG）</div>
+          <div class="d" id="org-理事GVG">暂缺</div>
+          <div><span class="badge red">GVG战术</span></div>
+        </div>
+        <div class="org-box">
+          <div class="t">理事（途径攻略）</div>
+          <div class="d" id="org-理事途径">蓝岸桉</div>
+          <div><span class="badge blue">技能·封印物</span></div>
+        </div>
+        <div class="org-box">
+          <div class="t">理事（数据）</div>
+          <div class="d" id="org-理事数据">记封</div>
+          <div><span class="badge green">成员统计</span></div>
+        </div>
+      </div>
+      <div class="org-branch">
+        <div class="org-box">
+          <div class="t">俱乐部之星 1</div>
+          <div class="d" id="org-之星1">超级龙猫侠</div>
+          <div>
+            <span class="badge green">入会拉新</span>
+            <span class="badge green">出席·请假记录</span>
+          </div>
+        </div>
+        <div class="org-box">
+          <div class="t">俱乐部之星 2</div>
+          <div class="d" id="org-之星2">狐糯糯</div>
+          <div>
+            <span class="badge green">成员清出</span>
+            <span class="badge green">出席·请假记录</span>
+          </div>
+        </div>
+        <div class="org-box">
+          <div class="t">战指组长</div>
+          <div class="d" id="org-战指组长">小小的蕾蕾</div>
+          <div><span class="badge red">GVG指挥组长</span></div>
+        </div>
+        <div class="org-box">
+          <div class="t">战研组长</div>
+          <div class="d" id="org-战研组长">暂缺</div>
+          <div><span class="badge red">GVG战术讨论组长</span></div>
+        </div>
+        <div class="org-box">
+          <div class="t">副指组长</div>
+          <div class="d" id="org-副指组长">啊鋮</div>
+          <div><span class="badge blue">PVE指挥组长</span></div>
+        </div>
+        <div class="org-box">
+          <div class="t">途径组长</div>
+          <div class="d" id="org-途径组长">蓝岸桉</div>
+          <div><span class="badge blue">途径攻略组长</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="roster">
+  <div class="wrap">
+    <span class="kicker">成员名册</span>
+    <h2>在册成员</h2>
+    <p class="lead">按职业可筛选，支持按游戏名搜索。名单数据来自理事（数据）手动录入，可能存在误差，出勤展示为最近记录，将定期更新。</p>
+    <div class="toolbar" style="margin-top:24px">
+      <input id="search" type="text" placeholder="搜索游戏名…">
+      <select id="fPath">
+        <option value="">全部职业</option>
+        <option>战士</option>
+        <option>观众</option>
+        <option>歌颂</option>
+        <option>窥秘</option>
+        <option>占卜</option>
+        <option>学徒</option>
+      </select>
+      <select id="fStatus">
+        <option value="">全部出勤</option>
+        <option>出席</option>
+        <option>已请假</option>
+        <option>缺席</option>
+      </select>
+      <span class="cnt-chip" id="cntChip"></span>
+    </div>
+    <div class="frame">
+      <div style="overflow-x:auto">
+      <table class="list">
+        <colgroup>
+          <col class="c1">
+          <col class="c2">
+          <col class="c3">
+          <col class="c4">
+          <col class="c5">
+          <col class="c5">
+          <col class="c5">
+          <col class="c5">
+          <col class="c5">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>游戏名</th>
+            <th>职业</th>
+            <th>职务</th>
+            <th>缺席</th>
+            <th>周三高原</th>
+            <th>周五猎龙</th>
+            <th>周六四方</th>
+            <th>周六势力/高原</th>
+            <th>周日猎龙</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      </div>
+      <div class="pager" id="pager"></div>
+    </div>
+    <!--管理员登录入口-->
+    <div class="admin-login">
+      <h4>🔐 管理员入口</h4>
+      <input id="adminPwdInput" placeholder="输入管理员密码" type="password">
+      <button class="admin-btn" onclick="adminLogin()">登录管理面板</button>
+    </div>
+    <!--管理员编辑面板，登录后显示-->
+    <div class="admin-panel" id="adminPanel">
+      <h3>📝成员数据编辑（修改后点保存到云端，所有人刷新页面生效）</h3>
+      <div>
+        <button class="admin-btn" onclick="addAdminRow()">新增一行成员</button>
+        <button class="admin-btn" onclick="saveToBin()">💾保存到云端JSONBin</button>
+        <button class="admin-btn" onclick="downloadBackup()">📥导出备份JSON</button>
+        <button class="admin-btn" onclick="reloadFromBin()">🔄重新拉取云端数据</button>
+      </div>
+      <p style="font-size:12px;color:#5a4c38;margin:8px 0;">提示：多个职务用 | 分隔，例如「会长|战指组长」；缺席次数自动统计，无需手动填写</p>
+      <!-- 俱乐部数据编辑区域 -->
+      <div class="club-edit-box">
+        <h4>📊 俱乐部数据编辑</h4>
+        <div class="club-edit-row">
+          <label>俱乐部战力：</label>
+          <input id="clubPowerInput" type="number" placeholder="请输入纯数字" oninput="updatePreview()">
+          <span class="tip">纯数字即可，无需加分隔符</span>
+        </div>
+        <div class="club-edit-row">
+          <label>满员总人数：</label>
+          <input id="fullTotalInput" type="number" placeholder="72" oninput="updatePreview()">
+          <span class="tip">满员总人数，各职业按单团比例自动分配</span>
+        </div>
+        <div style="margin-top:10px;">
+          <div style="font-size:13px;color:#5a4c38;margin-bottom:6px;">单团参考人数</div>
+          <div class="club-edit-row">
+            <label style="min-width:50px;">战士</label>
+            <input id="single-战士" type="number" class="single-input" placeholder="6" oninput="updatePreview()">
+          </div>
+          <div class="club-edit-row">
+            <label style="min-width:50px;">观众</label>
+            <input id="single-观众" type="number" class="single-input" placeholder="6" oninput="updatePreview()">
+          </div>
+          <div class="club-edit-row">
+            <label style="min-width:50px;">歌颂</label>
+            <input id="single-歌颂" type="number" class="single-input" placeholder="6" oninput="updatePreview()">
+          </div>
+          <div class="club-edit-row">
+            <label style="min-width:50px;">窥秘</label>
+            <input id="single-窥秘" type="number" class="single-input" placeholder="6" oninput="updatePreview()">
+          </div>
+          <div class="club-edit-row">
+            <label style="min-width:50px;">占卜</label>
+            <input id="single-占卜" type="number" class="single-input" placeholder="3" oninput="updatePreview()">
+          </div>
+          <div class="club-edit-row">
+            <label style="min-width:50px;">学徒</label>
+            <input id="single-学徒" type="number" class="single-input" placeholder="3" oninput="updatePreview()">
+          </div>
+        </div>
+        <!-- 实时预览表格 -->
+        <table class="preview-table" id="configPreview">
+          <thead>
+            <tr>
+              <th>途径</th>
+              <th>单团参考</th>
+              <th>双团参考</th>
+              <th>满员参考</th>
+              <th>当前战力要求</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+<!-- 每周活动配置区域 -->
+<div class="club-edit-box">
+  <h4>📅 每周活动配置</h4>
+  <div class="club-edit-row">
+    <label>日期范围：</label>
+    <input id="weeklyDateInput" type="text" placeholder="例如：09.21-09.27" style="width:160px;" oninput="updateWeeklyPreview()">
+    <span class="tip">展示在公共页标题旁的日期标识</span>
+  </div>
+
+  <div style="margin-top:12px;">
+    <div style="font-size:13px;color:#5a4c38;margin-bottom:6px;">新增活动</div>
+    <div class="club-edit-row" style="gap:6px;flex-wrap:wrap;">
+      <input id="actName" type="text" placeholder="活动名称" style="width:120px;">
+      <select id="actWeekday" style="width:70px;">
+        <option value="0">周一</option>
+        <option value="1">周二</option>
+        <option value="2">周三</option>
+        <option value="3">周四</option>
+        <option value="4">周五</option>
+        <option value="5">周六</option>
+        <option value="6">周日</option>
+      </select>
+      <div class="time-select">
+        <select id="actHour" style="width:50px;">
+          <option value="00">00</option><option value="01">01</option><option value="02">02</option><option value="03">03</option>
+          <option value="04">04</option><option value="05">05</option><option value="06">06</option><option value="07">07</option>
+          <option value="08">08</option><option value="09">09</option><option value="10">10</option><option value="11">11</option>
+          <option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option>
+          <option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option>
+          <option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option>
+        </select>
+        <span style="color:#5a4c38;">:</span>
+        <select id="actMinute" style="width:50px;">
+          <option value="00">00</option><option value="05">05</option><option value="10">10</option><option value="15">15</option>
+          <option value="20">20</option><option value="25">25</option><option value="30">30</option><option value="35">35</option>
+          <option value="40">40</option><option value="45">45</option><option value="50">50</option><option value="55">55</option>
+        </select>
+      </div>
+      <select id="actColor" style="width:60px;">
+        <option value="blue">蓝色</option>
+        <option value="red">红色</option>
+        <option value="black">黑色</option>
+        <option value="purple">紫色</option>
+      </select>
+      <select id="actAll" style="width:65px;">
+        <option value="0">非全员</option>
+        <option value="1">全员</option>
+      </select>
+      <button class="admin-btn" style="padding:4px 10px;font-size:12px;" onclick="addActivity()">添加</button>
+    </div>
+  </div>
+
+  <div style="margin-top:12px;">
+    <div style="font-size:13px;color:#5a4c38;margin-bottom:6px;">活动列表（按时间排序，点击删除）</div>
+    <div class="activity-list" id="adminActivityList">
+      <div style="padding:12px;text-align:center;color:var(--ink-mute);font-size:12px;">暂无活动</div>
+    </div>
+  </div>
+
+  <div style="margin-top:12px;">
+    <div style="font-size:13px;color:#5a4c38;margin-bottom:6px;">注释说明</div>
+    <textarea id="weeklyNoteInput" rows="4" style="width:100%;background:#f7f0e0;border:1px solid #b9a47c;color:#2b2318;padding:6px;border-radius:2px;font-family:inherit;font-size:13px;resize:vertical;" placeholder="输入注释内容，支持换行" oninput="updateWeeklyPreview()"></textarea>
+  </div>
+</div>
+      <div style="overflow-x:auto;">
+        <table class="admin-table" id="adminEditTable">
+          <thead>
+            <tr>
+              <th style="width:18%">游戏名</th>
+              <th style="width:10%">职业</th>
+              <th style="width:14%">职务</th>
+              <th>
+                <div>周三高原</div>
+                <select class="batch-select" onchange="batchSetStatus(1, this.value); this.value=''">
+                  <option value="">批量设置</option>
+                  <option value="-">-</option>
+                  <option value="出席">出席</option>
+                  <option value="已请假">已请假</option>
+                  <option value="缺席">缺席</option>
+                </select>
+              </th>
+              <th>
+                <div>周五猎龙</div>
+                <select class="batch-select" onchange="batchSetStatus(2, this.value); this.value=''">
+                  <option value="">批量设置</option>
+                  <option value="-">-</option>
+                  <option value="出席">出席</option>
+                  <option value="已请假">已请假</option>
+                  <option value="缺席">缺席</option>
+                </select>
+              </th>
+              <th>
+                <div>周六四方</div>
+                <select class="batch-select" onchange="batchSetStatus(3, this.value); this.value=''">
+                  <option value="">批量设置</option>
+                  <option value="-">-</option>
+                  <option value="出席">出席</option>
+                  <option value="已请假">已请假</option>
+                  <option value="缺席">缺席</option>
+                </select>
+              </th>
+              <th>
+                <div>周六势力/高原</div>
+                <select class="batch-select" onchange="batchSetStatus(4, this.value); this.value=''">
+                  <option value="">批量设置</option>
+                  <option value="-">-</option>
+                  <option value="出席">出席</option>
+                  <option value="已请假">已请假</option>
+                  <option value="缺席">缺席</option>
+                </select>
+              </th>
+              <th>
+                <div>周日猎龙</div>
+                <select class="batch-select" onchange="batchSetStatus(5, this.value); this.value=''">
+                  <option value="">批量设置</option>
+                  <option value="-">-</option>
+                  <option value="出席">出席</option>
+                  <option value="已请假">已请假</option>
+                  <option value="缺席">缺席</option>
+                </select>
+              </th>
+              <th style="width:9%">是否在群</th>
+              <th style="width:9%">操作</th>
+            </tr>
+          </thead>
+          <tbody id="adminTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="wrap">
+    <div class="seal">回 音</div>
+    <p>本页为俱乐部内部信息展示，请勿恶意盗用。<br>愿长夜之中，你的低语始终有回响。</p>
+  </div>
+</footer>
+<script>
+//====================【已填入你的配置】====================
+const ADMIN_PWD = "leilei666";
+const BIN_ID = "6ab4d1c3ffd5d16053297745";
+const API_KEY = "$2a$10$916yc2qjHuqVIHsTRPLYV.XQEqVu9VeBN5LrCIRbiVsi8FpXya1hu";
+//=========================================================
+
+// 职业顺序（优先级从高到低）
+const PATHS = ["战士", "观众", "歌颂", "窥秘", "占卜", "学徒"];
+// 参与急招T0的职业
+const URGENT_PATHS = ["战士", "观众", "歌颂", "窥秘"];
+// 超员阈值（超过满员多少人显示不招）
+const OVER_THRESHOLD = {
+    "战士": 4,
+    "观众": 4,
+    "歌颂": 4,
+    "窥秘": 4,
+    "占卜": 2,
+    "学徒": 2
+};
+// 出勤状态列索引（管理员表格中select的索引，从0开始：0=职业，1=周三，2=周五，3=周六四方，4=周六势力，5=周日，6=是否在群）
+const STATUS_SELECT_INDEX = [1, 2, 3, 4, 5];
+// 默认配置
+const DEFAULT_CLUB_POWER = 6933128;
+const DEFAULT_FULL_TOTAL = 72;
+const DEFAULT_SINGLE_REF = {
+    "战士": 6, "观众": 6, "歌颂": 6, "窥秘": 6, "占卜": 3, "学徒": 3
+};
+
+let CLUB_POWER = DEFAULT_CLUB_POWER;
+let FULL_TOTAL = DEFAULT_FULL_TOTAL;
+let SINGLE_REF = {...DEFAULT_SINGLE_REF};
+
+// 数字千分位格式化
+function formatNumber(num) {
+    return Math.round(Number(num) || 0).toLocaleString('en-US');
+}
+
+// 计算满员各职业人数（按单团比例分配，高优先级优先向上取整）
+function calcFullRef(singleRef, fullTotal) {
+    let singleTotal = 0;
+    PATHS.forEach(p => singleTotal += singleRef[p]);
+    let ratio = fullTotal / singleTotal;
+    let raw = {};
+    let floored = {};
+    let floorSum = 0;
+    PATHS.forEach(p => {
+        raw[p] = singleRef[p] * ratio;
+        floored[p] = Math.floor(raw[p]);
+        floorSum += floored[p];
+    });
+    let diff = fullTotal - floorSum;
+    let result = {...floored};
+    for (let i = 0; i < PATHS.length && diff > 0; i++) {
+        result[PATHS[i]] += 1;
+        diff--;
+    }
+    return result;
+}
+
+// 计算单个职业战力要求（基于平均战力，双团为分界）
+function calcPower(current, doubleRef, fullRef, avgPower, overThreshold) {
+    // 超员判定：超过满员人数达到阈值显示不招
+    if (current - fullRef >= overThreshold) {
+        return "不招";
+    }
+    let raw;
+    if (current < doubleRef) {
+        // 低于双团：90%平均战力
+        raw = avgPower * 0.9;
+    } else if (current < fullRef) {
+        // 双团~满员之间：线性插值
+        raw = avgPower * (1 + (current - doubleRef) / fullRef);
+    } else {
+        // 达到/超过满员：封顶到满员对应值
+        raw = avgPower * (1 + (fullRef - doubleRef) / fullRef);
+    }
+    // 千位取整
+    let rounded = Math.round(raw / 1000) * 1000;
+    return formatNumber(rounded);
+}
+
+// 计算急招T0（仅计算前4个职业）
+function calcUrgent(currentCount, singleRef) {
+    let maxGap = 0;
+    let maxPath = "";
+    URGENT_PATHS.forEach(p => {
+        let double = singleRef[p] * 2;
+        let gap = double - currentCount[p];
+        if (gap > maxGap) {
+            maxGap = gap;
+            maxPath = p;
+        }
+    });
+    if (maxGap <= 0) return "";
+    return `急招 · ${maxPath} ${maxGap} 人`;
+}
+
+// 职务优先级
+const rankMap = {
+    "会长": 1,
+    "外交官": 2,
+    "理事（GVG）": 3,
+    "理事（途径攻略）": 4,
+    "理事（数据）": 5,
+    "俱乐部之星1": 6,
+    "俱乐部之星2": 7,
+    "战指组长": 8,
+    "副指组长": 9,
+    "战研组长": 10,
+    "途径组长": 11,
+    "战指": 12,
+    "副指": 13,
+    "战研": 14,
+    "途径": 15,
+};
+// 管理架构职务映射
+const orgPostMap = {
+    "org-会长": "会长",
+    "org-外交官": "外交官",
+    "org-理事GVG": "理事（GVG）",
+    "org-理事途径": "理事（途径攻略）",
+    "org-理事数据": "理事（数据）",
+    "org-之星1": "俱乐部之星1",
+    "org-之星2": "俱乐部之星2",
+    "org-战指组长": "战指组长",
+    "org-战研组长": "战研组长",
+    "org-副指组长": "副指组长",
+    "org-途径组长": "途径组长"
+};
+// 职业途径排序
+const pathOrder = {
+    "战士": 1,
+    "观众": 2,
+    "歌颂": 3,
+    "窥秘": 4,
+    "占卜": 5,
+    "学徒": 6
+};
+
+// 计算单名成员的总缺席次数
+function calcAbsent(member) {
+    let count = 0;
+    for (let i = 4; i <= 8; i++) {
+        if (member[i] === "缺席") count++;
+    }
+    return count;
+}
+// 统计管理人员数量
+function countManagers() {
+    const allPosts = Object.values(orgPostMap);
+    const nameSet = new Set();
+    MEMBERS.forEach(m => {
+        if (!m[2]) return;
+        const roles = m[2].split("|");
+        let hasPost = false;
+        roles.forEach(r => {
+            if (allPosts.includes(r)) hasPost = true;
+        });
+        if (hasPost) nameSet.add(m[0]);
+    });
+    return nameSet.size;
+}
+
+// 统计各职业当前人数
+function getCurrentCount() {
+    const count = {};
+    PATHS.forEach(p => count[p] = 0);
+    MEMBERS.forEach(m => {
+        if (count[m[1]] !== undefined) count[m[1]]++;
+    });
+    return count;
+}
+
+// 更新顶部统计与职业表格
+function renderStats() {
+    const total = MEMBERS.length;
+    const managers = countManagers();
+    const avgPower = total > 0 ? Math.round(CLUB_POWER / total) : 0;
+    const currentCount = getCurrentCount();
+    const fullRef = calcFullRef(SINGLE_REF, FULL_TOTAL);
+
+    document.getElementById("stat-memberCount").textContent = total;
+    document.getElementById("stat-clubPower").textContent = formatNumber(CLUB_POWER);
+    document.getElementById("stat-avgPower").textContent = formatNumber(avgPower);
+    document.getElementById("stat-managerCount").textContent = managers;
+    document.getElementById("note-memberCount").textContent = total;
+    document.getElementById("path-合计").textContent = total;
+
+    // 更新各职业人数与战力
+    PATHS.forEach(p => {
+        const cntEl = document.getElementById("path-" + p);
+        const powEl = document.getElementById("power-" + p);
+        if (cntEl) cntEl.textContent = currentCount[p];
+        if (powEl) {
+            const doubleRef = SINGLE_REF[p] * 2;
+            const power = calcPower(
+                currentCount[p],
+                doubleRef,
+                fullRef[p],
+                avgPower,
+                OVER_THRESHOLD[p]
+            );
+            powEl.textContent = power;
+            if (power === "不招") {
+                powEl.classList.add("hot");
+            } else {
+                powEl.classList.remove("hot");
+            }
+        }
+    });
+
+    // 更新急招文本
+    const urgent = calcUrgent(currentCount, SINGLE_REF);
+    document.getElementById("urgent-text").textContent = urgent || "人员已满";
+}
+
+// 渲染管理架构人员
+function renderOrg() {
+    for (const [domId, postName] of Object.entries(orgPostMap)) {
+        const el = document.getElementById(domId);
+        if (!el) continue;
+        const member = MEMBERS.find(m => {
+            if (!m[2]) return false;
+            const roles = m[2].split("|");
+            return roles.includes(postName);
+        });
+        el.textContent = member ? member[0] : "暂缺";
+    }
+}
+
+// 管理员面板实时预览更新
+function updatePreview() {
+    // 读取输入
+    const clubPower = Number(document.getElementById("clubPowerInput").value) || CLUB_POWER;
+    const fullTotal = Number(document.getElementById("fullTotalInput").value) || FULL_TOTAL;
+    const singleRef = {};
+    PATHS.forEach(p => {
+        singleRef[p] = Number(document.getElementById("single-" + p).value) || SINGLE_REF[p];
+    });
+    const total = MEMBERS.length;
+    const avgPower = total > 0 ? Math.round(clubPower / total) : 0;
+    const fullRef = calcFullRef(singleRef, fullTotal);
+    const currentCount = getCurrentCount();
+
+    const tbody = document.querySelector("#configPreview tbody");
+    let html = "";
+    PATHS.forEach(p => {
+        const doubleRef = singleRef[p] * 2;
+        const power = calcPower(
+            currentCount[p],
+            doubleRef,
+            fullRef[p],
+            avgPower,
+            OVER_THRESHOLD[p]
+        );
+        html += `<tr>
+            <td>${p}</td>
+            <td>${singleRef[p]}</td>
+            <td>${doubleRef}</td>
+            <td>${fullRef[p]}</td>
+            <td class="${power === '不招' ? 'hot' : ''}">${power}</td>
+        </tr>`;
+    });
+    tbody.innerHTML = html;
+}
+
+// 批量设置联赛状态
+function batchSetStatus(selectIdx, value) {
+    if (!value) return;
+    const rows = document.querySelectorAll('#adminTbody tr');
+    rows.forEach(row => {
+        const selects = row.querySelectorAll('select');
+        if (selects[selectIdx]) {
+            selects[selectIdx].value = value;
+        }
+    });
+}
+
+//初始兜底数据
+const DEFAULT_MEMBERS=[
+["哈伯之盾","战士","",1,"-","-","-","-","-"],
+["神秘人丶","战士","",1,"-","-","-","-","-"],
+["银龙呀","战士","",1,"-","-","-","-","-"],
+["秋也","战士","",1,"-","-","-","-","-"],
+["嘟嘟嘟嘟嘟嘟","战士","",0,"-","-","-","-","-"],
+["卿尘丶","战士","",1,"-","-","-","-","-"],
+["优哒灵","战士","",1,"-","-","-","-","-"],
+["素食","战士","",1,"-","-","-","-","-"],
+["砻砻","战士","",1,"-","-","-","-","-"],
+["晚安绘梨衣小姐","战士","",1,"-","-","-","-","-"],
+["乔安娜·桑顿","战士","",1,"-","-","-","-","-"],
+["柏坤","战士","",1,"-","-","-","-","-"],
+["无锋","战士","",0,"-","-","-","-","-"],
+["哔哩·克莱儿","观众","",1,"-","-","-","-","-"],
+["池菁","观众","",1,"-","-","-","-","-"],
+["超级龙猫侠","观众","俱乐部之星1",1,"-","-","-","-","-"],
+["阿陌","观众","",1,"-","-","-","-","-"],
+["糯糯吖","观众","",1,"-","-","-","-","-"],
+["黛伦","观众","",1,"-","-","-","-","-"],
+["棱零","观众","",1,"-","-","-","-","-"],
+["鸽者","观众","",1,"-","-","-","-","-"],
+["蓝岸桉","观众","理事（途径攻略）",1,"-","-","-","-","-"],
+["三苏","观众","",1,"-","-","-","-","-"],
+["莱昂娜·考辛斯","观众","",1,"-","-","-","-","-"],
+["爱丽霞","观众","",1,"-","-","-","-","-"],
+["查理·哈德曼","观众","",1,"-","-","-","-","-"],
+["繁花·血景","歌颂","",1,"-","-","-","-","-"],
+["本·史蒂文森","歌颂","",1,"-","-","-","-","-"],
+["迪西迪西","歌颂","",1,"-","-","-","-","-"],
+["蕾欧娜娜","歌颂","",1,"-","-","-","-","-"],
+["西德","歌颂","",1,"-","-","-","-","-"],
+["陨星辰","歌颂","",1,"-","-","-","-","-"],
+["潇潇雨未歇","歌颂","",1,"-","-","-","-","-"],
+["团战观光客","歌颂","",1,"-","-","-","-","-"],
+["小小的蕾蕾","窥秘","会长|战指组长",1,"-","-","-","-","-"],
+["玛莉塞拉","窥秘","外交官",1,"-","-","-","-","-"],
+["啊鋮","窥秘","副指组长",1,"-","-","-","-","-"],
+["记封","窥秘","理事（数据）",1,"-","-","-","-","-"],
+["多琳·戴尔","窥秘","",1,"-","-","-","-","-"],
+["临水听风","窥秘","",1,"-","-","-","-","-"],
+["奥赖恩·海耶斯","窥秘","",1,"-","-","-","-","-"],
+["黎珩恪","窥秘","",1,"-","-","-","-","-"],
+["卿若丶","窥秘","",1,"-","-","-","-","-"],
+["呼呼呼呼呼呼","窥秘","",1,"-","-","-","-","-"],
+["白沫","窥秘","",1,"-","-","-","-","-"],
+["卢台长","窥秘","",1,"-","-","-","-","-"],
+["狐糯糯","窥秘","俱乐部之星2",1,"-","-","-","-","-"],
+["盆不会","窥秘","",1,"-","-","-","-","-"],
+["鱼卷卷","窥秘","",1,"-","-","-","-","-"],
+["真相荒漠","窥秘","",1,"-","-","-","-","-"],
+["悟道树下掘墓人","窥秘","",1,"-","-","-","-","-"],
+["一个盒子","窥秘","",1,"-","-","-","-","-"],
+["鸿闲一梦","窥秘","",1,"-","-","-","-","-"],
+["幻皧","窥秘","",1,"-","-","-","-","-"],
+["白鲨糖","窥秘","",1,"-","-","-","-","-"],
+["王牛奶","窥秘","",1,"-","-","-","-","-"],
+["伊莱克斯","窥秘","",1,"-","-","-","-","-"],
+["林中大屋","占卜","",1,"-","-","-","-","-"],
+["鱼落万物生","占卜","",1,"-","-","-","-","-"],
+["秋海棠","占卜","",1,"-","-","-","-","-"],
+["千城悦","学徒","",1,"-","-","-","-","-"],
+["方颜","学徒","",1,"-","-","-","-","-"],
+["零夜","学徒","",1,"-","-","-","-","-"],
+["郭子健","学徒","",1,"-","-","-","-","-"],
+["唯独此刻","学徒","",1,"-","-","-","-","-"],
+["千亿","学徒","",1,"-","-","-","-","-"],
+["代表太阳消灭你","学徒","",0,"-","-","-","-","-"],
+["上衫·枫","学徒","",1,"-","-","-","-","-"],
+["隐锋","学徒","",1,"-","-","-","-","-"]
+];
+let MEMBERS = [...DEFAULT_MEMBERS];
+var PER=15,page=1;
+
+//======== JSONBin 网络函数 =========
+async function loadBin(){
+  try{
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,{
+      headers:{"X-Master-Key":API_KEY}
+    });
+    const json=await res.json();
+    const data = json.record;
+    if(Array.isArray(data)){
+      MEMBERS = data;
+    } else if(data && Array.isArray(data.members)){
+      MEMBERS = data.members;
+      if(data.clubPower != null) CLUB_POWER = Number(data.clubPower) || DEFAULT_CLUB_POWER;
+      if(data.fullTotal != null) FULL_TOTAL = Number(data.fullTotal) || DEFAULT_FULL_TOTAL;
+      if(data.singleRef) SINGLE_REF = {...DEFAULT_SINGLE_REF, ...data.singleRef};
+      if(data.weeklyActivity) WEEKLY = {...DEFAULT_WEEKLY, ...data.weeklyActivity};
+    }
+  }catch(e){
+    console.warn("云端读取失败，使用本地默认数据",e);
+  }
+}
+async function saveToBin(){
+  // 读取所有配置
+  CLUB_POWER = Number(document.getElementById("clubPowerInput").value.trim()) || 0;
+  FULL_TOTAL = Number(document.getElementById("fullTotalInput").value.trim()) || DEFAULT_FULL_TOTAL;
+  PATHS.forEach(p => {
+      SINGLE_REF[p] = Number(document.getElementById("single-" + p).value) || DEFAULT_SINGLE_REF[p];
+  });
+
+  const table=document.getElementById("adminTbody");
+  const rows=Array.from(table.querySelectorAll("tr"));
+  let newData=[];
+  for(let tr of rows){
+    const inputs=tr.querySelectorAll("input,select");
+    const gameName=inputs[0].value.trim();
+    if(!gameName) continue;
+    newData.push([
+      gameName,
+      inputs[1].value,
+      inputs[2].value.trim(),
+      Number(inputs[8].value),
+      inputs[3].value,
+      inputs[4].value,
+      inputs[5].value,
+      inputs[6].value,
+      inputs[7].value
+    ]);
+  }
+  try{
+    const resp=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{
+      method:"PUT",
+      headers:{
+        "X-Master-Key":API_KEY,
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        members: newData,
+        clubPower: CLUB_POWER,
+        fullTotal: FULL_TOTAL,
+        singleRef: SINGLE_REF,
+        weeklyActivity: WEEKLY
+      })
+    });
+    if(resp.ok){
+      MEMBERS=newData;
+      alert("✅保存成功！刷新页面即可看到更新");
+      renderAdminTable();
+      render();
+      drawChart();
+      renderOrg();
+      renderStats();
+      updatePreview();
+    }else{
+      alert("❌保存失败，请检查BIN_ID和API_KEY");
+    }
+  }catch(err){
+    alert("网络异常："+err.message);
+  }
+}
+async function reloadFromBin(){
+  await loadBin();
+  renderAdminTable();
+  render();
+  drawChart();
+  renderOrg();
+  renderStats();
+  // 同步填充管理面板输入
+  const panel = document.getElementById("adminPanel");
+  if(panel.classList.contains("show")){
+    document.getElementById("clubPowerInput").value = CLUB_POWER;
+    document.getElementById("fullTotalInput").value = FULL_TOTAL;
+    PATHS.forEach(p => {
+        document.getElementById("single-" + p).value = SINGLE_REF[p];
+    });
+    updatePreview();
+    document.getElementById("weeklyDateInput").value = WEEKLY.dateRange;
+    document.getElementById("weeklyNoteInput").value = WEEKLY.note;
+    renderAdminActivityList();
+  }
+  alert("已重新拉取云端数据");
+}
+
+//==== 管理员登录与编辑表格 ====
+function adminLogin(){
+  const inputPwd=document.getElementById("adminPwdInput").value;
+  if(inputPwd===ADMIN_PWD){
+    document.getElementById("adminPanel").classList.add("show");
+    document.getElementById("clubPowerInput").value = CLUB_POWER;
+    document.getElementById("fullTotalInput").value = FULL_TOTAL;
+    PATHS.forEach(p => {
+        document.getElementById("single-" + p).value = SINGLE_REF[p];
+    });
+    renderAdminTable();
+    updatePreview();
+    document.getElementById("weeklyDateInput").value = WEEKLY.dateRange;
+    document.getElementById("weeklyNoteInput").value = WEEKLY.note;
+    renderAdminActivityList();
+  }else{
+    alert("密码错误");
+  }
+}
+function renderAdminTable(){
+  const tbody=document.getElementById("adminTbody");
+  tbody.innerHTML="";
+  MEMBERS.forEach((row,idx)=>{
+    tbody.appendChild(buildAdminTr(row,idx));
+  })
+}
+function buildAdminTr(arr,idx){
+  const tr=document.createElement("tr");
+  tr.innerHTML=`
+    <td><input value="${arr[0]||''}"></td>
+    <td>
+      <select>
+        <option value="战士" ${arr[1]==="战士"?"selected":""}>战士</option>
+        <option value="观众" ${arr[1]=="观众"?"selected":""}>观众</option>
+        <option value="歌颂" ${arr[1]=="歌颂"?"selected":""}>歌颂</option>
+        <option value="窥秘" ${arr[1]=="窥秘"?"selected":""}>窥秘</option>
+        <option value="占卜" ${arr[1]=="占卜"?"selected":""}>占卜</option>
+        <option value="学徒" ${arr[1]=="学徒"?"selected":""}>学徒</option>
+      </select>
+    </td>
+    <td><input value="${arr[2]||''}" placeholder="多个职务用|分隔"></td>
+    <td>
+      <select>
+        <option value="-" ${arr[4]=="-"?"selected":""}>-</option>
+        <option value="出席" ${arr[4]=="出席"?"selected":""}>出席</option>
+        <option value="已请假" ${arr[4]=="已请假"?"selected":""}>已请假</option>
+        <option value="缺席" ${arr[4]=="缺席"?"selected":""}>缺席</option>
+      </select>
+    </td>
+    <td>
+      <select>
+        <option value="-" ${arr[5]=="-"?"selected":""}>-</option>
+        <option value="出席" ${arr[5]=="出席"?"selected":""}>出席</option>
+        <option value="已请假" ${arr[5]=="已请假"?"selected":""}>已请假</option>
+        <option value="缺席" ${arr[5]=="缺席"?"selected":""}>缺席</option>
+      </select>
+    </td>
+    <td>
+      <select>
+        <option value="-" ${arr[6]=="-"?"selected":""}>-</option>
+        <option value="出席" ${arr[6]=="出席"?"selected":""}>出席</option>
+        <option value="已请假" ${arr[6]=="已请假"?"selected":""}>已请假</option>
+        <option value="缺席" ${arr[6]=="缺席"?"selected":""}>缺席</option>
+      </select>
+    </td>
+    <td>
+      <select>
+        <option value="-" ${arr[7]=="-"?"selected":""}>-</option>
+        <option value="出席" ${arr[7]=="出席"?"selected":""}>出席</option>
+        <option value="已请假" ${arr[7]=="已请假"?"selected":""}>已请假</option>
+        <option value="缺席" ${arr[7]=="缺席"?"selected":""}>缺席</option>
+      </select>
+    </td>
+    <td>
+      <select>
+        <option value="-" ${arr[8]=="-"?"selected":""}>-</option>
+        <option value="出席" ${arr[8]=="出席"?"selected":""}>出席</option>
+        <option value="已请假" ${arr[8]=="已请假"?"selected":""}>已请假</option>
+        <option value="缺席" ${arr[8]=="缺席"?"selected":""}>缺席</option>
+      </select>
+    </td>
+    <td>
+      <select style="width:70px;">
+        <option value="1" ${arr[3]==1?"selected":""}>是</option>
+        <option value="0" ${arr[3]==0?"selected":""}>否</option>
+      </select>
+    </td>
+    <td><button class="admin-btn" onclick="this.closest('tr').remove()">删除</button></td>
+  `;
+  return tr;
+}
+function addAdminRow(){
+  const tbody=document.getElementById("adminTbody");
+  const emptyRow = buildAdminTr(["","战士","",1,"-","-","-","-","-"],-1);
+  tbody.appendChild(emptyRow);
+}
+function downloadBackup(){
+  const table=document.getElementById("adminTbody");
+  const rows=Array.from(table.querySelectorAll("tr"));
+  let exportArr=[];
+  for(let tr of rows){
+    const inputs=tr.querySelectorAll("input,select");
+    const gameName=inputs[0].value.trim();
+    if(!gameName) continue;
+    exportArr.push([
+      gameName,
+      inputs[1].value,
+      inputs[2].value.trim(),
+      Number(inputs[8].value),
+      inputs[3].value,
+      inputs[4].value,
+      inputs[5].value,
+      inputs[6].value,
+      inputs[7].value
+    ]);
+  }
+  const blob=new Blob([JSON.stringify({
+    members: exportArr,
+    clubPower: CLUB_POWER,
+    fullTotal: FULL_TOTAL,
+    singleRef: SINGLE_REF
+  },null,2)],{type:"application/json"});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download="回音俱乐部_成员备份.json";
+  a.click();
+}
+
+//======== 浏览页面渲染逻辑 ========
+function getSortedList(){
+    return MEMBERS
+    .filter(m=> !/组员/.test(m[2]))
+    .slice()
+    .sort((a,b)=>{
+        let rolesA = a[2] ? a[2].split("|") : [];
+        let rankA = 999;
+        rolesA.forEach(r => {
+            if (rankMap[r] !== undefined) {
+                rankA = Math.min(rankA, rankMap[r]);
+            }
+        });
+        let rolesB = b[2] ? b[2].split("|") : [];
+        let rankB = 999;
+        rolesB.forEach(r => {
+            if (rankMap[r] !== undefined) {
+                rankB = Math.min(rankB, rankMap[r]);
+            }
+        });
+        if (rankA !== rankB) return rankA - rankB;
+        let pA = pathOrder[a[1]] || 99;
+        let pB = pathOrder[b[1]] || 99;
+        return pA - pB;
+    })
+}
+function stClass(s){
+  if(s==="出席")return "done";
+  if(s==="已请假")return "leave";
+  if(s==="缺席")return "abs";
+  return "";
+}
+function render(){
+  var kw=(document.getElementById("search").value||"").trim().toLowerCase();
+  var fp=document.getElementById("fPath").value;
+  var fs=document.getElementById("fStatus").value;
+  var allSorted = getSortedList();
+
+  var list=allSorted.filter(function(m){
+    var hitPath = fp === "" || m[1] === fp;
+    // 出勤筛选：任意一列匹配即可
+    var hitSt = fs === "" || [4,5,6,7,8].some(function(idx) {
+        return m[idx] === fs;
+    });
+    var hitKw = kw === "" || m[0].toLowerCase().indexOf(kw) > -1;
+    return hitPath && hitSt && hitKw;
+  });
+
+  document.getElementById("cntChip").textContent="显示 "+list.length+" / 共 "+allSorted.length+" 人";
+  var pages=Math.max(1,Math.ceil(list.length/PER));
+  if(page>pages)page=pages;
+  var start=(page-1)*PER;
+  var rows=list.slice(start,start+PER);
+  var html="";
+  if(rows.length===0){
+    html='<tr><td colspan="9" class="empty">没有找到匹配的成员</td></tr>';
+  }else{
+    rows.forEach(function(m){
+      let roles = m[2] ? m[2].split("|") : [];
+      let roleHtml = "";
+      if (roles.length === 0) {
+          roleHtml = "-";
+      } else {
+          roleHtml = roles.map(r => `<span class="pill role">${r}</span>`).join("<br>");
+      }
+      let absentCount = calcAbsent(m);
+      let nameHtml = m[0] + (m[3] === 0 ? ' <span style="color:var(--ink-mute);font-size:11px">(不在群)</span>' : "");
+      let renderStatus = function(s) {
+          if(s === "-") return "-";
+          return '<span class="pill '+stClass(s)+'">'+s+'</span>';
+      }
+      html+='<tr>'
+        +'<td class="gname">'+nameHtml+'</td>'
+        +'<td>'+m[1]+'</td>'
+        +'<td>'+roleHtml+'</td>'
+        +'<td>'+(absentCount>0?'<span class="pill abs">'+absentCount+'</span>':"0")+'</td>'
+        +'<td>'+renderStatus(m[4])+'</td>'
+        +'<td>'+renderStatus(m[5])+'</td>'
+        +'<td>'+renderStatus(m[6])+'</td>'
+        +'<td>'+renderStatus(m[7])+'</td>'
+        +'<td>'+renderStatus(m[8])+'</td>'
+        +'</tr>';
+    });
+  }
+  document.getElementById("tbody").innerHTML=html;
+  renderPager(pages);
+}
+function renderPager(pages){
+  var p=document.getElementById("pager");
+  var h='<button '+(page===1?"disabled":"")+' onclick="goPage('+(page-1)+')">‹ 上一页</button>';
+  var lo=Math.max(1,page-2),hi=Math.min(pages,page+2);
+  if(lo>1){h+='<button onclick="goPage(1)">1</button>';if(lo>2)h+='<span style="color:var(--ink-mute);padding:0 4px">…</span>';}
+  for(var i=lo;i<=hi;i++)h+='<button class="'+(i===page?"on":"")+' onclick="goPage('+i+')">'+i+'</button>';
+  if(hi<pages){if(hi<pages-1)h+='<span style="color:var(--ink-mute);padding:0 4px">…</span>';h+='<button onclick="goPage('+pages+')">'+pages+'</button>';}
+  h+='<button '+(page>=pages?"disabled":"")+' onclick="goPage('+(page+1)+')">下一页 ›</button>';
+  p.innerHTML=h;
+}
+function goPage(n){page=n;render();}
+document.getElementById("search").addEventListener("input",function(){page=1;render();});
+document.getElementById("fPath").addEventListener("change",function(){page=1;render();});
+document.getElementById("fStatus").addEventListener("change",function(){page=1;render();});
+
+let chartIns=null;
+function drawChart(){
+  const el=document.getElementById("chart");
+  if(!el||typeof echarts==="undefined")return;
+  if(chartIns) chartIns.dispose();
+  chartIns=echarts.init(el);
+  const stat={战士:0,观众:0,歌颂:0,窥秘:0,占卜:0,学徒:0};
+  MEMBERS.forEach(m=>{if(stat[m[1]]!==undefined) stat[m[1]]++;})
+  var opt={
+    tooltip:{trigger:"item",triggerOn:"click",renderMode:"richText",confine:true},
+    legend:{bottom:0,icon:"circle",itemWidth:8,itemHeight:8,textStyle:{color:"#5a4c38"}},
+    color:["#7030a0","#ffc000","#84cc16","#ffff00","#666699","#38bdf8"],
+    series:[{
+      name:"职业人数",
+      type:"pie",
+      radius:["38%","62%"],
+      center:["50%","44%"],
+      itemStyle:{borderColor:"#f7f0e0",borderWidth:2},
+      label:{color:"#2b2318",fontSize:12,formatter:"{b} {c}"},
+      data:[
+        {name:"窥秘",value:stat.窥秘},
+        {name:"战士",value:stat.战士},
+        {name:"观众",value:stat.观众},
+        {name:"歌颂",value:stat.歌颂},
+        {name:"占卜",value:stat.占卜},
+        {name:"学徒",value:stat.学徒}
+      ]
+    }]
+  };
+  chartIns.setOption(opt);
+  window.addEventListener("resize",()=>{chartIns&&chartIns.resize();});
+}
+
+//页面启动
+(async function boot(){
+  await loadBin();
+  render();
+  drawChart();
+  renderOrg();
+  renderStats();
+  renderWeekly();
+})();
+// ---------- 每周活动配置 ----------
+const DEFAULT_WEEKLY = { dateRange: "", activities: [], note: "" };
+let WEEKLY = {...DEFAULT_WEEKLY};
+const WEEKDAY_NAMES = ["周一","周二","周三","周四","周五","周六","周日"];
+
+// 渲染公共页每周活动
+function renderWeekly() {
+    const dateEl = document.getElementById("weeklyDateRange");
+    if(dateEl) dateEl.textContent = WEEKLY.dateRange ? "· " + WEEKLY.dateRange : "";
+
+    const tbody = document.getElementById("weeklyBody");
+    if(!tbody) return;
+
+    // 按时间分组，按星期分列
+    const timeMap = {};
+    WEEKLY.activities.forEach(act => {
+        const t = act.time;
+        if(!timeMap[t]) timeMap[t] = [[],[],[],[],[],[],[]];
+        timeMap[t][act.weekday].push({
+            name: act.name,
+            color: act.color,
+            allMember: act.allMember
+        });
+    });
+
+    const times = Object.keys(timeMap).sort();
+    let html = "";
+
+    if(times.length === 0){
+        html = `<tr><td colspan="8" style="padding:30px 0;color:var(--ink-mute);text-align:center;">暂无活动安排</td></tr>`;
+    } else {
+        times.forEach(time => {
+            html += `<tr><td>${time}</td>`;
+            for(let w = 0; w < 7; w++){
+                const items = timeMap[time][w];
+                let cell = "";
+items.forEach(item => {
+    cell += `<div class="weekly-item w-${item.color}">
+        <div>${item.name}</div>
+        ${item.allMember ? '<div class="all-tag">全员参加</div>' : ''}
+    </div>`;
+});
+                html += `<td>${cell}</td>`;
+            }
+            html += `</tr>`;
+        });
+    }
+    tbody.innerHTML = html;
+
+    // 注释渲染
+    const noteBox = document.getElementById("weeklyNote");
+    const noteText = document.getElementById("weeklyNoteText");
+    if(WEEKLY.note && noteBox && noteText){
+        noteBox.style.display = "block";
+        noteText.innerHTML = WEEKLY.note.replace(/\n/g, "<br>");
+    } else if(noteBox) {
+        noteBox.style.display = "none";
+    }
+}
+
+// 渲染管理员活动列表 + 实时同步预览
+function renderAdminActivityList() {
+    const listEl = document.getElementById("adminActivityList");
+    if(!listEl) return;
+
+    // 按星期+时间排序，保留原索引
+    const sorted = WEEKLY.activities.map((act, idx) => ({...act, _idx: idx}))
+        .sort((a,b) => {
+            if(a.weekday !== b.weekday) return a.weekday - b.weekday;
+            return a.time.localeCompare(b.time);
+        });
+
+    let html = "";
+    sorted.forEach(act => {
+        const cls = `w-${act.color} ${act.allMember ? 'all-member' : ''}`;
+        html += `
+        <div class="activity-item">
+            <span class="${cls}">${WEEKDAY_NAMES[act.weekday]} ${act.time} · ${act.name}</span>
+            <span style="font-size:11px;color:var(--ink-mute);">${act.allMember ? '全员' : ''}</span>
+            <button class="admin-btn del-btn" onclick="deleteActivity(${act._idx})">删除</button>
+        </div>`;
+    });
+    if(!sorted.length) html = `<div style="padding:12px;text-align:center;color:var(--ink-mute);font-size:12px;">暂无活动</div>`;
+    listEl.innerHTML = html;
+
+    updateWeeklyPreview();
+}
+
+// 添加活动
+function addActivity() {
+    const name = document.getElementById("actName").value.trim();
+    if(!name) { alert("请输入活动名称"); return; }
+
+    const weekday = +document.getElementById("actWeekday").value;
+    const hour = document.getElementById("actHour").value;
+    const minute = document.getElementById("actMinute").value;
+    const time = `${hour}:${minute}`;
+    const color = document.getElementById("actColor").value;
+    const allMember = document.getElementById("actAll").value === "1";
+
+    WEEKLY.activities.push({ name, weekday, time, color, allMember });
+    document.getElementById("actName").value = "";
+    renderAdminActivityList();
+}
+
+// 删除活动
+function deleteActivity(idx) {
+    WEEKLY.activities.splice(idx, 1);
+    renderAdminActivityList();
+}
+
+// 实时更新预览
+function updateWeeklyPreview() {
+    const dateInput = document.getElementById("weeklyDateInput");
+    const noteInput = document.getElementById("weeklyNoteInput");
+    if(dateInput) WEEKLY.dateRange = dateInput.value;
+    if(noteInput) WEEKLY.note = noteInput.value;
+    renderWeekly();
+}
+</script>
+</body>
+</html>
