@@ -358,16 +358,19 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
     <p>本页为俱乐部内部信息展示，请勿恶意盗用。<br>愿长夜之中，你的低语始终有回响。</p>
   </div>
 <!--管理员登录入口-->
-<div class="admin-login">
-  <h4>🔐 管理员入口</h4>
-  <input id="adminPwdInput" placeholder="输入管理员密码" type="password">
-  <button class="admin-btn" onclick="adminLogin()">登录管理面板</button>
+<!--管理员登录入口-->
+<div class="admin-login" style="margin-top: 40px; padding: 16px; background: #efe3c9; border-radius: 8px; border: 1px dashed #b0823f;">
+  <h4 style="margin: 0 0 10px 0; font-size: 15px; color: #2b2318;">🔐 管理员入口</h4>
+  <input id="adminPwdInput" placeholder="输入管理员密码" type="password" style="width: 100%; max-width: 320px; padding: 8px 10px; border: 1px solid #b9a47c; background: #f7f0e0; border-radius: 4px; font-size: 14px; font-family: inherit; color: #2b2318; box-sizing: border-box;">
+  <button class="admin-btn" onclick="adminLogin()" style="margin-top: 10px;">登录管理面板</button>
 </div>
+
 <!--管理员编辑面板，登录后显示-->
-<div class="admin-panel" id="adminPanel">
-  <h3>📝 途径攻略编辑（修改后点保存到云端，所有人刷新页面生效）</h3>
-  <div>
-    <select id="pathSelect" style="padding:6px 10px;border:1px solid #b9a47c;background:#f7f0e0;border-radius:2px;font-size:13px;" onchange="renderBuildEditor()">
+<div class="admin-panel" id="adminPanel" style="margin-top: 40px; padding: 20px; background: #e5d9bf; border-radius: 8px; border: 1px solid #b9a47c; display: none;">
+  <h3 style="margin: 0 0 14px 0; font-size: 16px; color: #2b2318;">📝 途径攻略编辑（修改后点保存到云端，所有人刷新页面生效）</h3>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px;">
+    <select id="pathSelect" style="padding: 7px 10px; border: 1px solid #b9a47c; background: #f7f0e0; border-radius: 4px; font-size: 13px; font-family: inherit; color: #2b2318;" onchange="renderBuildEditor()">
       <option value="warrior">战士</option>
       <option value="audience">观众</option>
       <option value="bard">歌颂</option>
@@ -380,8 +383,9 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
     <button class="admin-btn" onclick="downloadGuideBackup()">📥导出备份JSON</button>
     <button class="admin-btn" onclick="reloadGuideFromBin()">🔄重新拉取云端数据</button>
   </div>
-  <p style="font-size:12px;color:#5a4c38;margin:8px 0;">提示：编辑时上方展示区实时预览；保存后所有访问者刷新即可看到更新</p>
-  
+
+  <p style="font-size: 12px; color: #5a4c38; margin: 0 0 14px 0; line-height: 1.7;">提示：编辑时上方展示区实时预览；保存后所有访问者刷新即可看到更新</p>
+
   <div id="buildEditor">
     <!-- 配装方案编辑区由JS动态渲染 -->
   </div>
