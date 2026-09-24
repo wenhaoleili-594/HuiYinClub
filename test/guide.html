@@ -540,7 +540,7 @@ function renderGuideDisplay(){
       html += `<div style="color:var(--ink-soft); font-size:13px; padding: 10px 0;">暂无配装方案</div>`;
     }else{
       builds.forEach(build => {
-        html += `<div style="margin-bottom:16px; padding:14px; border:1px solid var(--line-soft); border-radius:4px; background:rgba(255,255,255,.03);">
+        html += `<div style="margin-bottom:16px; padding:14px; border:1px solid var(--line-soft); border-radius:4px; background:rgba(255,255,255,.03); font-family: "方正姚体", "FZYaoti", "Noto Serif SC", serif;">
           <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
             <div style="font-weight:600; font-size:15px; color:var(--ink);">${build.name || '未命名方案'}</div>
             ${build.tag ? `<span style="font-size:11px; padding:1px 6px; border-radius:2px; border:1px solid var(--gold-deep); color:var(--gold-deep);">${build.tag}</span>` : ''}
@@ -550,9 +550,9 @@ function renderGuideDisplay(){
         if(build.skills && build.skills.length){
           html += `<div style="margin-bottom:14px;">
             <div class="build-section-title">职业技能</div>
-            <div style="display:grid; gap:6px 12px; grid-template-columns: 1fr 2fr; font-size:13px; align-items: start;">`;
+            <div style="display:grid; gap:6px 12px; grid-template-columns: 1fr 2fr; font-size:13px; line-height: 1.6; align-items: start; align-content: start;">`;
           build.skills.forEach(sk => {
-            html += `<div style="font-weight:500; color:var(--ink);">${sk.name || ''}</div>
+            html += `<div style="font-weight:500; color:var(--ink); line-height: 1.6;">${sk.name || ''}</div>
                       <div style="color:var(--ink-soft); line-height:1.5;">${sk.desc || ''}</div>`;
           });
           html += `</div></div>`;
