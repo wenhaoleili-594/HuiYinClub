@@ -211,20 +211,20 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
       <div class="nav-group">
         <a href="gallery.html" class="nav-item nav-level-1">风采展示</a>
         <div class="nav-sub">
-          <a href="gallery-race.html" class="nav-item nav-level-2">第一届自行车大赛</a>
+          <a href="gallery.html#race1" class="nav-item nav-level-2">第一届自行车大赛</a>
         </div>
       </div>
 
-      <!-- 途径攻略（当前页高亮） -->
+      <!-- 途径攻略（当前页） -->
       <div class="nav-group">
-        <a href="guide.html" class="nav-item nav-level-1 active">途径攻略</a>
+        <a href="#top" class="nav-item nav-level-1 active">途径攻略</a>
         <div class="nav-sub">
-          <a href="guide-warrior.html" class="nav-item nav-level-2">战士</a>
-          <a href="guide-audience.html" class="nav-item nav-level-2">观众</a>
-          <a href="guide-bard.html" class="nav-item nav-level-2">歌颂</a>
-          <a href="guide-occult.html" class="nav-item nav-level-2">窥秘</a>
-          <a href="guide-divination.html" class="nav-item nav-level-2">占卜</a>
-          <a href="guide-apprentice.html" class="nav-item nav-level-2">学徒</a>
+          <a href="#warrior" class="nav-item nav-level-2">战士</a>
+          <a href="#audience" class="nav-item nav-level-2">观众</a>
+          <a href="#bard" class="nav-item nav-level-2">歌颂</a>
+          <a href="#occult" class="nav-item nav-level-2">窥秘</a>
+          <a href="#divination" class="nav-item nav-level-2">占卜</a>
+          <a href="#apprentice" class="nav-item nav-level-2">学徒</a>
         </div>
       </div>
     </nav>
@@ -238,15 +238,43 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
     <h2>途径攻略</h2>
     <p class="lead">各职业技能搭配、封印物推荐与玩法思路整理。</p>
     
-    <div class="frame" style="margin-top:30px; min-height: 460px;">
-      <!-- 后续内容添加到这里 -->
-      <div style="text-align:center; color:var(--ink-mute); padding: 100px 0;">
-        内容待补充
-      </div>
-    </div>
-  </div>
-</section>
+    <div class="frame" style="margin-top:30px;">
+      <!-- 战士 -->
+      <section id="warrior" style="padding: 16px 0; border-bottom:1px solid var(--line-soft);">
+        <h3 style="font-family:'Noto Serif SC',serif; font-size:18px; margin-bottom:10px; color:var(--ink);">战士</h3>
+        <div style="color:var(--ink-soft); min-height: 120px;">内容待补充</div>
+      </section>
 
+      <!-- 观众 -->
+      <section id="audience" style="padding: 16px 0; border-bottom:1px solid var(--line-soft);">
+        <h3 style="font-family:'Noto Serif SC',serif; font-size:18px; margin-bottom:10px; color:var(--ink);">观众</h3>
+        <div style="color:var(--ink-soft); min-height: 120px;">内容待补充</div>
+      </section>
+
+      <!-- 歌颂 -->
+      <section id="bard" style="padding: 16px 0; border-bottom:1px solid var(--line-soft);">
+        <h3 style="font-family:'Noto Serif SC',serif; font-size:18px; margin-bottom:10px; color:var(--ink);">歌颂</h3>
+        <div style="color:var(--ink-soft); min-height: 120px;">内容待补充</div>
+      </section>
+
+      <!-- 窥秘 -->
+      <section id="occult" style="padding: 16px 0; border-bottom:1px solid var(--line-soft);">
+        <h3 style="font-family:'Noto Serif SC',serif; font-size:18px; margin-bottom:10px; color:var(--ink);">窥秘</h3>
+        <div style="color:var(--ink-soft); min-height: 120px;">内容待补充</div>
+      </section>
+
+      <!-- 占卜 -->
+      <section id="divination" style="padding: 16px 0; border-bottom:1px solid var(--line-soft);">
+        <h3 style="font-family:'Noto Serif SC',serif; font-size:18px; margin-bottom:10px; color:var(--ink);">占卜</h3>
+        <div style="color:var(--ink-soft); min-height: 120px;">内容待补充</div>
+      </section>
+
+      <!-- 学徒 -->
+      <section id="apprentice" style="padding: 16px 0;">
+        <h3 style="font-family:'Noto Serif SC',serif; font-size:18px; margin-bottom:10px; color:var(--ink);">学徒</h3>
+        <div style="color:var(--ink-soft); min-height: 120px;">内容待补充</div>
+      </section>
+    </div>
 <footer>
   <div class="wrap">
     <div class="seal">回 音</div>
@@ -271,6 +299,31 @@ function toggleNav(show){
 }
 navToggle.addEventListener('click', ()=> toggleNav(!sidebar.classList.contains('show')));
 navMask.addEventListener('click', ()=> toggleNav(false));
+// 页内滚动高亮二级目录
+const navItems = document.querySelectorAll('.nav-item[href^="#"]');
+const sections = ['top', 'warrior', 'audience', 'bard', 'occult', 'divination', 'apprentice'];
+
+function updateActiveNav(){
+  const scrollY = window.scrollY + 80;
+  let current = 'top';
+  for(let i = sections.length-1; i >= 0; i--){
+    const el = document.getElementById(sections[i]);
+    if(el && el.offsetTop <= scrollY){
+      current = sections[i];
+      break;
+    }
+  }
+  navItems.forEach(item=>{
+    const href = item.getAttribute('href');
+    if(href === '#'+current){
+      item.classList.add('active');
+    }else{
+      item.classList.remove('active');
+    }
+  });
+}
+window.addEventListener('scroll', updateActiveNav);
+updateActiveNav();
 </script>
 </body>
 </html>
