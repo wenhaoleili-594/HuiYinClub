@@ -348,11 +348,191 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
   .hero{padding:64px 0 48px}
 }
 @media (max-width:560px){
-  .org-row{flex-direction:column;align-items:center}
-  .org-box{width:100%;max-width:340px}
-  table.list{font-size:12.5px}
-  table.list thead th,table.list tbody td{padding:8px 8px}
-  .toolbar input,.toolbar select{font-size:16px}
+  /* ========== 阶段一：全局基础适配 ========== */
+  html{-webkit-text-size-adjust:100%;}
+  body{font-size:15px;}
+  .wrap{padding:0 16px;}
+  section{padding:36px 0;}
+
+  /* 标题字号适配 */
+  h2{font-size:24px;}
+  .lead{font-size:14px;}
+  .kicker{font-size:11px;letter-spacing:.28em;}
+
+  /* 防止元素横向溢出 */
+  *{box-sizing:border-box;}
+  .frame{padding:18px;}
+  .overview-grid{gap:18px;}
+
+  /* ========== 阶段二：核心模块适配 ========== */
+  /* 1. 顶部Hero区 */
+  .hero{padding:48px 0 36px;}
+  .hero h1{font-size:36px;}
+  .hero-sub{font-size:14px;}
+  .hero-cols{grid-template-columns:1fr 1fr;gap:12px;margin-top:28px;}
+  .stat{padding:12px 14px;border-left-width:2px;}
+  .stat .num{font-size:20px;}
+  .stat .lbl{font-size:11px;}
+
+  /* 2. 成员概览区块 */
+  .chart-card{min-height:260px;}
+  #chart{height:220px;}
+  .path-table{font-size:13px;}
+  .path-table th,.path-table td{padding:6px 4px;}
+
+  /* 3. 每周活动表格 */
+  .weekly-table{font-size:13px;}
+  .weekly-table th,.weekly-table td{padding:8px 4px;}
+  .weekly-table td:first-child{width:60px;font-size:12px;}
+  .weekly-item{min-height:32px;font-size:12px;line-height:1.35;}
+  .weekly-item .all-tag{font-size:10px;margin-top:1px;}
+  .weekly-note{font-size:11px;line-height:1.6;}
+
+  /* 4. 组织架构区块 */
+  .org-branch{gap:10px;margin-top:12px;}
+  .org-box{min-width:140px;max-width:calc(50% - 5px);padding:10px 12px;}
+  .org-box .t{font-size:14px;}
+  .org-box .d{font-size:12px;margin-top:2px;}
+  .org-box .badge{font-size:9px;padding:1px 5px;margin-top:4px;}
+
+  /* ========== 阶段三：成员名册交互优化 ========== */
+  /* 工具栏换行适配 */
+  .toolbar{flex-wrap:wrap;gap:8px;}
+  .toolbar input{flex-basis:100%;}
+  .toolbar select{flex:1;min-width:0;}
+  .toolbar input,.toolbar select{min-height:44px;font-size:15px;}
+  .toolbar .cnt-chip{flex-basis:100%;text-align:right;margin:0;}
+
+  /* 表格横向滚动 */
+  .frame > div[style*="overflow-x"]{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    margin:0 -18px;
+    padding:0 18px;
+  }
+  table.list{
+    table-layout:auto;
+    min-width:640px;
+    white-space:nowrap;
+  }
+  table.list th,table.list td{padding:10px 8px;font-size:13px;}
+
+  /* 分页按钮触控优化 */
+  .pager{gap:6px;margin-top:16px;flex-wrap:wrap;}
+  .pager button{
+    min-height:44px;
+    padding:0 14px;
+    font-size:14px;
+  }
+  .pager span{padding:0 4px;}
+
+  /* 空状态文字适配 */
+  .empty{font-size:13px;padding:24px 0;}
+
+  /* ========== 阶段四：管理员面板适配 ========== */
+  /* 登录入口 */
+  .admin-login{padding:14px;}
+  .admin-login h4{font-size:15px;margin-bottom:8px;}
+  .admin-login input{
+    width:100%;
+    min-height:44px;
+    font-size:15px;
+    margin-bottom:8px;
+  }
+  .admin-btn{
+    min-height:44px;
+    padding:0 16px;
+    font-size:14px;
+  }
+
+  /* 管理面板标题与顶部按钮 */
+  .admin-panel h3{font-size:16px;margin-bottom:10px;}
+  .admin-panel > div:first-of-type{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-bottom:8px;
+  }
+  .admin-panel > div:first-of-type .admin-btn{
+    flex:1;
+    min-width:calc(50% - 3px);
+    font-size:13px;
+    padding:0 8px;
+  }
+  .admin-panel > p{font-size:12px;margin:6px 0 12px;}
+
+  /* 俱乐部数据编辑区 */
+  .club-edit-box{padding:12px;}
+  .club-edit-box h4{font-size:14px;margin-bottom:8px;}
+  .club-edit-row{
+    flex-wrap:wrap;
+    gap:6px;
+    margin-bottom:8px;
+  }
+  .club-edit-row label{
+    flex-basis:100%;
+    min-width:0;
+    font-size:12px;
+    margin-bottom:-2px;
+  }
+  .club-edit-row input[type="number"]{
+    flex:1;
+    min-height:40px;
+    min-width:0;
+  }
+  .club-edit-row .tip{
+    flex-basis:100%;
+    font-size:11px;
+    margin-top:-4px;
+  }
+  .preview-table{font-size:12px;}
+  .preview-table th,.preview-table td{padding:5px 4px;}
+
+  /* 每周活动配置区 */
+  .club-edit-box .club-edit-row input[type="text"]{
+    flex:1;
+    min-height:40px;
+    min-width:0;
+  }
+  .club-edit-box select{
+    min-height:40px;
+    font-size:13px;
+  }
+  .time-select select{width:42px;}
+  .activity-list{max-height:200px;}
+  .activity-item{font-size:12px;padding:5px 8px;}
+  .activity-item .del-btn{
+    min-height:28px;
+    padding:0 8px;
+    font-size:12px;
+  }
+  #weeklyNoteInput{
+    min-height:80px;
+    font-size:13px;
+  }
+
+  /* 成员编辑表格横向滚动 */
+  .admin-panel > div[style*="overflow-x"]{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    margin:0 -12px;
+    padding:0 12px;
+  }
+  .admin-table{
+    min-width:720px;
+    white-space:nowrap;
+    font-size:12px;
+  }
+  .admin-table th,.admin-table td{padding:8px 6px;}
+  .admin-table th .batch-select{
+    min-height:32px;
+    font-size:11px;
+    margin-top:3px;
+  }
+  .admin-table input,.admin-table select{
+    font-size:12px;
+    min-height:36px;
+  }
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
