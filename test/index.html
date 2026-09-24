@@ -395,10 +395,39 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
   .org-box .d{font-size:12px;margin-top:2px;}
   .org-box .badge{font-size:9px;padding:1px 5px;margin-top:4px;}
 
-  /* 原有表格基础适配 */
-  table.list{font-size:12.5px}
-  table.list thead th,table.list tbody td{padding:8px 6px;}
-  .toolbar input,.toolbar select{font-size:16px;min-height:44px;}
+  /* ========== 阶段三：成员名册交互优化 ========== */
+  /* 工具栏换行适配 */
+  .toolbar{flex-wrap:wrap;gap:8px;}
+  .toolbar input{flex-basis:100%;}
+  .toolbar select{flex:1;min-width:0;}
+  .toolbar input,.toolbar select{min-height:44px;font-size:15px;}
+  .toolbar .cnt-chip{flex-basis:100%;text-align:right;margin:0;}
+
+  /* 表格横向滚动 */
+  .frame > div[style*="overflow-x"]{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    margin:0 -18px;
+    padding:0 18px;
+  }
+  table.list{
+    table-layout:auto;
+    min-width:640px;
+    white-space:nowrap;
+  }
+  table.list th,table.list td{padding:10px 8px;font-size:13px;}
+
+  /* 分页按钮触控优化 */
+  .pager{gap:6px;margin-top:16px;flex-wrap:wrap;}
+  .pager button{
+    min-height:44px;
+    padding:0 14px;
+    font-size:14px;
+  }
+  .pager span{padding:0 4px;}
+
+  /* 空状态文字适配 */
+  .empty{font-size:13px;padding:24px 0;}
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
