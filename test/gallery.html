@@ -206,24 +206,24 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
       <a href="index.html#structure" class="nav-item nav-level-2">组织架构</a>
       <a href="index.html#roster" class="nav-item nav-level-2">成员名册</a>
 
-      <!-- 风采展示 一级+二级 -->
+      <!-- 风采展示（当前页） -->
       <div class="nav-group">
-        <a href="gallery.html" class="nav-item nav-level-1 active">风采展示</a>
+        <a href="#top" class="nav-item nav-level-1 active">风采展示</a>
         <div class="nav-sub">
-          <a href="gallery-race.html" class="nav-item nav-level-2">第一届自行车大赛</a>
+          <a href="#race1" class="nav-item nav-level-2">第一届自行车大赛</a>
         </div>
       </div>
 
-      <!-- 途径攻略 一级+二级 -->
+      <!-- 途径攻略 -->
       <div class="nav-group">
         <a href="guide.html" class="nav-item nav-level-1">途径攻略</a>
         <div class="nav-sub">
-          <a href="guide-warrior.html" class="nav-item nav-level-2">战士</a>
-          <a href="guide-audience.html" class="nav-item nav-level-2">观众</a>
-          <a href="guide-bard.html" class="nav-item nav-level-2">歌颂</a>
-          <a href="guide-occult.html" class="nav-item nav-level-2">窥秘</a>
-          <a href="guide-divination.html" class="nav-item nav-level-2">占卜</a>
-          <a href="guide-apprentice.html" class="nav-item nav-level-2">学徒</a>
+          <a href="guide.html#warrior" class="nav-item nav-level-2">战士</a>
+          <a href="guide.html#audience" class="nav-item nav-level-2">观众</a>
+          <a href="guide.html#bard" class="nav-item nav-level-2">歌颂</a>
+          <a href="guide.html#occult" class="nav-item nav-level-2">窥秘</a>
+          <a href="guide.html#divination" class="nav-item nav-level-2">占卜</a>
+          <a href="guide.html#apprentice" class="nav-item nav-level-2">学徒</a>
         </div>
       </div>
     </nav>
@@ -232,20 +232,16 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
 
 <!-- 主体内容区：空白预留 -->
 <section>
-  <div class="wrap">
-    <span class="kicker">俱乐部风貌</span>
-    <h2>风采展示</h2>
-    <p class="lead">记录公会活动、精彩瞬间与成员作品。</p>
-    
-    <div class="frame" style="margin-top:30px; min-height: 400px;">
-      <!-- 后续内容添加到这里 -->
-      <div style="text-align:center; color:var(--ink-mute); padding: 80px 0;">
-        内容待补充
-      </div>
+    <div class="frame" style="margin-top:30px;">
+      <!-- 第一届自行车大赛 -->
+      <section id="race1" style="padding: 20px 0;">
+        <h3 style="font-family:'Noto Serif SC',serif; font-size:20px; margin-bottom:12px; color:var(--ink);">第一届自行车大赛</h3>
+        <div style="color:var(--ink-soft); min-height: 200px;">
+          <!-- 后续内容添加到这里 -->
+          内容待补充
+        </div>
+      </section>
     </div>
-  </div>
-</section>
-
 <footer>
   <div class="wrap">
     <div class="seal">回 音</div>
@@ -270,6 +266,31 @@ function toggleNav(show){
 }
 navToggle.addEventListener('click', ()=> toggleNav(!sidebar.classList.contains('show')));
 navMask.addEventListener('click', ()=> toggleNav(false));
+// 页内滚动高亮二级目录
+const navItems = document.querySelectorAll('.nav-item[href^="#"]');
+const sections = ['top', 'race1'];
+
+function updateActiveNav(){
+  const scrollY = window.scrollY + 80;
+  let current = 'top';
+  for(let i = sections.length-1; i >= 0; i--){
+    const el = document.getElementById(sections[i]);
+    if(el && el.offsetTop <= scrollY){
+      current = sections[i];
+      break;
+    }
+  }
+  navItems.forEach(item=>{
+    const href = item.getAttribute('href');
+    if(href === '#'+current){
+      item.classList.add('active');
+    }else{
+      item.classList.remove('active');
+    }
+  });
+}
+window.addEventListener('scroll', updateActiveNav);
+updateActiveNav();
 </script>
 </body>
 </html>
