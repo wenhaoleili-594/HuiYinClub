@@ -652,8 +652,8 @@ function renderBuildEditor(){
         <select style="padding:4px 6px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:12px;" onchange="updateBuild(${idx}, 'tag', this.value)">
           <option value="">无标签</option>
           <option value="推荐" ${build.tag==='推荐'?'selected':''}>推荐</option>
-          <option value="进阶" ${build.tag==='进阶'?'selected':''}>进阶</option>
-          <option value="萌新" ${build.tag==='萌新'?'selected':''}>萌新</option>
+          <option value="高战" ${build.tag==='高战'?'selected':''}>高战</option>
+          <option value="低战" ${build.tag==='低战'?'selected':''}>低战</option>
         </select>
         <button class="admin-btn" style="padding:2px 8px; font-size:12px;" onclick="moveBuild(${idx}, -1)">↑</button>
         <button class="admin-btn" style="padding:2px 8px; font-size:12px;" onclick="moveBuild(${idx}, 1)">↓</button>
