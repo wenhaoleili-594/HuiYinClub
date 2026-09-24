@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>测试：《回音》俱乐部</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%232b2318'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23b0823f' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23b0823f'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@500;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
@@ -348,11 +348,30 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
   .hero{padding:64px 0 48px}
 }
 @media (max-width:560px){
+  /* 全局基础适配 */
+  html{-webkit-text-size-adjust:100%;}
+  body{font-size:15px;}
+  .wrap{padding:0 16px;}
+  section{padding:36px 0;}
+
+  /* 标题字号适配 */
+  h2{font-size:24px;}
+  .lead{font-size:14px;}
+  .kicker{font-size:11px;letter-spacing:.28em;}
+
+  /* 防止元素横向溢出 */
+  *{box-sizing:border-box;}
+  .frame{padding:18px;}
+  .overview-grid{gap:18px;}
+
+  /* 原有组织架构适配 */
   .org-row{flex-direction:column;align-items:center}
   .org-box{width:100%;max-width:340px}
+
+  /* 表格基础适配 */
   table.list{font-size:12.5px}
-  table.list thead th,table.list tbody td{padding:8px 8px}
-  .toolbar input,.toolbar select{font-size:16px}
+  table.list thead th,table.list tbody td{padding:8px 6px;}
+  .toolbar input,.toolbar select{font-size:16px;min-height:44px;}
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
