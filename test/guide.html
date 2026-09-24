@@ -291,6 +291,17 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
 .del-btn:hover{
   background:#c2554b;
 }
+/* 配装模块小标题 */
+.build-section-title{
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--ink-soft);
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
 </style>
 </head>
 <body>
@@ -535,11 +546,11 @@ function renderGuideDisplay(){
             ${build.tag ? `<span style="font-size:11px; padding:1px 6px; border-radius:2px; border:1px solid var(--gold-deep); color:var(--gold-deep);">${build.tag}</span>` : ''}
           </div>`;
         
-        // 知识技能
+        // 职业技能
         if(build.skills && build.skills.length){
-          html += `<div style="margin-bottom:10px;">
-            <div style="font-size:12px; color:var(--ink-mute); margin-bottom:4px;">知识技能</div>
-            <div style="display:grid; gap:4px 12px; grid-template-columns: 1fr 2fr; font-size:13px;">`;
+          html += `<div style="margin-bottom:14px;">
+            <div class="build-section-title">职业技能</div>
+            <div style="display:grid; gap:6px 12px; grid-template-columns: 1fr 2fr; font-size:13px; align-items: start;">`;
           build.skills.forEach(sk => {
             html += `<div style="font-weight:500; color:var(--ink);">${sk.name || ''}</div>
                       <div style="color:var(--ink-soft); line-height:1.5;">${sk.desc || ''}</div>`;
@@ -547,33 +558,36 @@ function renderGuideDisplay(){
           html += `</div></div>`;
         }
         
-        // 人偶技能
+        // 人脉技能
         if(build.puppetSkill && build.puppetSkill.name){
-          html += `<div style="margin-bottom:10px;">
-            <div style="font-size:12px; color:var(--ink-mute); margin-bottom:4px;">人偶技能</div>
+          html += `<div style="margin-bottom:14px;">
+            <div class="build-section-title">人脉技能</div>
             <div style="font-size:13px;">
-              <span style="font-weight:500; color:var(--ink);">${build.puppetSkill.name}</span>
-              <span style="color:var(--ink-soft); margin-left:6px;">${build.puppetSkill.desc || ''}</span>
+              <span style="font-weight:500; color:var(--ink); margin-right: 12px;">${build.puppetSkill.name}</span>
+              <span style="color:var(--ink-soft); line-height:1.6;">${build.puppetSkill.desc || ''}</span>
             </div>
           </div>`;
         }
         
         // 秘偶技能
         if(build.secretSkill && build.secretSkill.name){
-          html += `<div style="margin-bottom:10px;">
-            <div style="font-size:12px; color:var(--ink-mute); margin-bottom:4px;">秘偶技能</div>
+          html += `<div style="margin-bottom:14px;">
+            <div class="build-section-title">秘偶技能</div>
             <div style="font-size:13px;">
-              <span style="font-weight:500; color:var(--ink);">${build.secretSkill.name}</span>
-              <span style="color:var(--ink-soft); margin-left:6px;">${build.secretSkill.desc || ''}</span>
+              <span style="font-weight:500; color:var(--ink); margin-right: 12px;">${build.secretSkill.name}</span>
+              <span style="color:var(--ink-soft); line-height:1.6;">${build.secretSkill.desc || ''}</span>
             </div>
           </div>`;
         }
         
         // 非凡天赋
-        if(build.talent){
-          html += `<div style="margin-bottom:10px;">
-            <div style="font-size:12px; color:var(--ink-mute); margin-bottom:4px;">非凡天赋</div>
-            <div style="font-size:13px; color:var(--ink-soft); line-height:1.6;">${build.talent.replace(/\n/g,'<br>')}</div>
+        if(build.talent && build.talent.name){
+          html += `<div style="margin-bottom:14px;">
+            <div class="build-section-title">非凡天赋</div>
+            <div style="font-size:13px;">
+              <span style="font-weight:500; color:var(--ink); margin-right: 12px;">${build.talent.name}</span>
+              <span style="color:var(--ink-soft); line-height:1.6;">${build.talent.desc || ''}</span>
+            </div>
           </div>`;
         }
         
@@ -640,9 +654,9 @@ function renderBuildEditor(){
         <button class="admin-btn del-btn" onclick="deleteBuild(${idx})">删除</button>
       </h5>
       
-      <!-- 知识技能 -->
+      <!-- 职业技能 -->
       <div style="margin-bottom:10px;">
-        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">知识技能</div>
+        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">职业技能</div>
         <div id="skills-${idx}">`;
     
     (build.skills || []).forEach((sk, skIdx) => {
@@ -657,9 +671,9 @@ function renderBuildEditor(){
         <button class="admin-btn" style="font-size:12px; padding:3px 10px;" onclick="addSkill(${idx})">+ 新增技能</button>
       </div>
       
-      <!-- 人偶技能 -->
+      <!-- 人脉技能 -->
       <div style="margin-bottom:10px;">
-        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">人偶技能</div>
+        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">人脉技能</div>
         <div class="skill-row">
           <input value="${build.puppetSkill?.name || ''}" placeholder="技能名" oninput="updateSubSkill(${idx}, 'puppetSkill', 'name', this.value)">
           <input value="${build.puppetSkill?.desc || ''}" placeholder="效果描述" oninput="updateSubSkill(${idx}, 'puppetSkill', 'desc', this.value)">
@@ -680,7 +694,11 @@ function renderBuildEditor(){
       <!-- 非凡天赋 -->
       <div style="margin-bottom:10px;">
         <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">非凡天赋</div>
-        <textarea rows="3" placeholder="输入非凡天赋描述，支持换行" oninput="updateBuild(${idx}, 'talent', this.value)">${build.talent || ''}</textarea>
+        <div class="skill-row">
+          <input value="${build.talent?.name || ''}" placeholder="天赋名称" oninput="updateSubSkill(${idx}, 'talent', 'name', this.value)">
+          <input value="${build.talent?.desc || ''}" placeholder="天赋描述" oninput="updateSubSkill(${idx}, 'talent', 'desc', this.value)">
+          <span></span>
+        </div>
       </div>
       
       <!-- 封印物 -->
@@ -721,7 +739,7 @@ function addBuild(){
     skills: [],
     puppetSkill: {name:"", desc:""},
     secretSkill: {name:"", desc:""},
-    talent: "",
+    talent: {name:"", desc:""},
     seals: [],
     notice: ""
   });
