@@ -593,8 +593,8 @@ function renderGuideDisplay(){
         
         // 封印物
         if(build.seals && build.seals.length){
-          html += `<div style="margin-bottom:10px;">
-            <div style="font-size:12px; color:var(--ink-mute); margin-bottom:4px;">封印物</div>
+          html += `<div style="margin-bottom:14px;">
+            <div class="build-section-title">封印物</div>
             <div style="font-size:13px; color:var(--ink-soft); line-height:1.8;">`;
           build.seals.forEach(se => {
             html += `<div><span style="font-weight:500; color:var(--ink);">${se.name || ''}</span>
