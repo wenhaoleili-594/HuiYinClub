@@ -534,6 +534,105 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
     min-height:36px;
   }
 }
+/* ========== 左侧目录侧边栏 ========== */
+.nav-toggle{
+  display:none;
+  position:fixed;
+  top:16px;
+  left:16px;
+  z-index:1001;
+  width:40px;
+  height:40px;
+  border:1px solid var(--line);
+  background:var(--card);
+  border-radius:2px;
+  cursor:pointer;
+  padding:0;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:5px;
+}
+.nav-toggle span{
+  display:block;
+  width:18px;
+  height:2px;
+  background:var(--ink);
+  transition:.2s;
+}
+.nav-mask{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(43,35,24,.45);
+  z-index:999;
+}
+.nav-mask.show{display:block;}
+
+.sidebar{
+  position:fixed;
+  top:0;
+  left:0;
+  bottom:0;
+  width:200px;
+  background:var(--card);
+  border-right:1px solid var(--line-soft);
+  z-index:1000;
+  overflow-y:auto;
+  padding:28px 0;
+  transition:transform .25s ease;
+}
+.sidebar-inner{padding:0 16px;}
+.sidebar-title{
+  font-size:12px;
+  letter-spacing:.3em;
+  color:var(--gold-deep);
+  text-transform:uppercase;
+  font-weight:500;
+  margin-bottom:16px;
+  padding-left:4px;
+}
+.nav-list{display:flex;flex-direction:column;gap:2px;}
+.nav-item{
+  display:block;
+  padding:9px 12px;
+  font-size:14px;
+  color:var(--ink-soft);
+  text-decoration:none;
+  border-radius:2px;
+  border-left:2px solid transparent;
+  transition:.15s;
+}
+.nav-item:hover{
+  background:rgba(176,130,63,.08);
+  color:var(--ink);
+}
+.nav-item.active{
+  color:var(--ink);
+  font-weight:600;
+  border-left-color:var(--gold);
+  background:rgba(176,130,63,.10);
+}
+.nav-level-2{
+  padding-left:28px;
+  font-size:13px;
+}
+.nav-sub{display:flex;flex-direction:column;gap:1px;margin-top:1px;}
+
+/* 桌面端：常驻侧边栏，内容右移 */
+@media (min-width:1024px){
+  .wrap{margin-left:200px;max-width:calc(1280px - 200px);}
+}
+
+/* 移动端：抽屉式侧边栏 */
+@media (max-width:1023px){
+  .nav-toggle{display:flex;}
+  .sidebar{
+    transform:translateX(-100%);
+    box-shadow:2px 0 12px rgba(0,0,0,.15);
+  }
+  .sidebar.show{transform:translateX(0);}
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 </head>
@@ -1846,6 +1945,55 @@ function updateWeeklyPreview() {
     if(noteInput) WEEKLY.note = noteInput.value;
     renderWeekly();
 }
+// ========== 侧边栏目录交互 ==========
+const navToggle = document.getElementById('navToggle');
+const sidebar = document.getElementById('sidebar');
+const navMask = document.getElementById('navMask');
+const navItems = document.querySelectorAll('.nav-item[href^="#"]');
+const sections = ['top','overview','weekly','structure','roster'];
+
+// 汉堡菜单切换
+function toggleNav(show){
+  if(show){
+    sidebar.classList.add('show');
+    navMask.classList.add('show');
+  }else{
+    sidebar.classList.remove('show');
+    navMask.classList.remove('show');
+  }
+}
+navToggle.addEventListener('click', ()=> toggleNav(!sidebar.classList.contains('show')));
+navMask.addEventListener('click', ()=> toggleNav(false));
+
+// 点击目录链接自动关闭移动端抽屉
+navItems.forEach(item=>{
+  item.addEventListener('click', ()=>{
+    if(window.innerWidth < 1024) toggleNav(false);
+  });
+});
+
+// 滚动自动高亮当前章节
+function updateActiveNav(){
+  const scrollY = window.scrollY + 80;
+  let current = 'top';
+  for(let i = sections.length-1; i >= 0; i--){
+    const el = document.getElementById(sections[i]);
+    if(el && el.offsetTop <= scrollY){
+      current = sections[i];
+      break;
+    }
+  }
+  navItems.forEach(item=>{
+    const href = item.getAttribute('href');
+    if(href === '#'+current){
+      item.classList.add('active');
+    }else{
+      item.classList.remove('active');
+    }
+  });
+}
+window.addEventListener('scroll', updateActiveNav);
+updateActiveNav();
 </script>
 </body>
 </html>
