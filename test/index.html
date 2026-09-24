@@ -538,6 +538,37 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 </head>
 <body>
+<!-- 移动端汉堡按钮 -->
+<button class="nav-toggle" id="navToggle" aria-label="打开目录">
+  <span></span><span></span><span></span>
+</button>
+<!-- 侧边栏遮罩（移动端） -->
+<div class="nav-mask" id="navMask"></div>
+<!-- 左侧目录侧边栏 -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-inner">
+    <div class="sidebar-title">目录导航</div>
+    <nav class="nav-list">
+      <a href="#top" class="nav-item nav-level-1 active">首页</a>
+      <a href="#overview" class="nav-item nav-level-1">成员概览</a>
+      <a href="#weekly" class="nav-item nav-level-1">每周活动</a>
+      <a href="#structure" class="nav-item nav-level-1">组织架构</a>
+      <a href="#roster" class="nav-item nav-level-1">成员名册</a>
+      <!--
+      后续加二级目录示例：
+      <div class="nav-group">
+        <a href="#xxx" class="nav-item nav-level-1">一级标题</a>
+        <div class="nav-sub">
+          <a href="#xxx1" class="nav-item nav-level-2">二级子项1</a>
+          <a href="#xxx2" class="nav-item nav-level-2">二级子项2</a>
+        </div>
+      </div>
+      后续加新页面示例：
+      <a href="rule.html" class="nav-item nav-level-1">俱乐部规则</a>
+      -->
+    </nav>
+  </div>
+</aside>
 <header class="hero" id="top">
   <div class="wrap">
     <span class="hero-badge">服务器：白银城</span>
