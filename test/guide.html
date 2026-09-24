@@ -187,6 +187,110 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
   .kicker{font-size:11px;letter-spacing:.28em;}
   .frame{padding:18px;}
 }
+/* ---------- 管理员面板样式 ---------- */
+.admin-panel{margin-top:40px;padding:20px;background:#e5d9bf;border-radius:8px;border:1px solid #b9a47c;display:none;}
+.admin-panel.show{display:block;}
+.admin-login{margin-top:40px;padding:16px;background:#efe3c9;border-radius:8px;border:1px dashed #b0823f;}
+.admin-btn{background:#815c38;color:#fff;border:none;padding:8px 14px;border-radius:4px;margin:4px;cursor:pointer;}
+.admin-btn:hover{background:#9b7042;}
+.admin-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px;}
+.admin-table th,.admin-table td{border:1px solid #b9a47c;padding:6px 8px;}
+.admin-table th{
+  background:#e5d9bf;
+  font-weight:500;
+  vertical-align: middle;
+}
+.club-edit-box{
+  margin-bottom:16px;
+  padding:12px 14px;
+  background:#f7f0e0;
+  border:1px solid #b9a47c;
+  border-radius:4px;
+}
+.club-edit-box h4{
+  margin-bottom:10px;
+  font-size:15px;
+  color:#2b2318;
+}
+.club-edit-row{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  flex-wrap:wrap;
+  margin-bottom:8px;
+}
+.club-edit-row label{
+  font-size:13px;
+  color:#5a4c38;
+  white-space:nowrap;
+  min-width:70px;
+}
+.club-edit-row input[type="text"],
+.club-edit-row textarea,
+.club-edit-row select{
+  background:#f7f0e0;
+  border:1px solid #b9a47c;
+  color:#2b2318;
+  padding:6px 8px;
+  font-family:inherit;
+  font-size:13px;
+  border-radius:2px;
+}
+.club-edit-row textarea{
+  width:100%;
+  min-height:60px;
+  resize:vertical;
+}
+.build-item{
+  border:1px solid #b9a47c;
+  border-radius:4px;
+  padding:12px;
+  margin-bottom:12px;
+  background:#f7f0e0;
+}
+.build-item h5{
+  font-size:14px;
+  color:#2b2318;
+  margin-bottom:8px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.build-item .build-tag{
+  font-size:11px;
+  padding:1px 6px;
+  border-radius:2px;
+  border:1px solid var(--gold-deep);
+  color:var(--gold-deep);
+}
+.skill-row{
+  display:grid;
+  grid-template-columns: 1fr 2fr auto;
+  gap:6px;
+  margin-bottom:6px;
+  align-items:center;
+}
+.skill-row input{
+  width:100%;
+}
+.seal-row{
+  display:grid;
+  grid-template-columns: 1fr 2fr auto;
+  gap:6px;
+  margin-bottom:6px;
+  align-items:center;
+}
+.seal-row input{
+  width:100%;
+}
+.del-btn{
+  padding:2px 8px;
+  font-size:11px;
+  background:#b2453b;
+}
+.del-btn:hover{
+  background:#c2554b;
+}
 </style>
 </head>
 <body>
@@ -232,62 +336,90 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
 </aside>
 
 <!-- 主体内容区 -->
-<section>
+<section id="top">
   <div class="wrap">
     <span class="kicker">职业指引</span>
     <h2>途径攻略</h2>
     <p class="lead">各职业技能搭配、封印物推荐与玩法思路整理。</p>
     
-    <div class="frame" style="margin-top:30px;">
-      <!-- 战士 -->
-      <section id="warrior" style="padding: 16px 0; border-bottom:1px solid var(--line-soft);">
-        <h3 style="font-family:'Noto Serif SC',serif; font-size:18px; margin-bottom:10px; color:var(--ink);">战士</h3>
-        <div style="color:var(--ink-soft); min-height: 120px;">内容待补充</div>
-      </section>
+    <div class="frame" style="margin-top:30px;" id="guideDisplay">
+      <!-- 内容由JS动态渲染 -->
+      <div style="text-align:center; color:var(--ink-mute); padding: 60px 0;">
+        加载中...
+      </div>
+    </div>
+  </div>
+</section>
 
-      <!-- 观众 -->
-      <section id="audience" style="padding: 16px 0; border-bottom:1px solid var(--line-soft);">
-        <h3 style="font-family:'Noto Serif SC',serif; font-size:18px; margin-bottom:10px; color:var(--ink);">观众</h3>
-        <div style="color:var(--ink-soft); min-height: 120px;">内容待补充</div>
-      </section>
-
-      <!-- 歌颂 -->
-      <section id="bard" style="padding: 16px 0; border-bottom:1px solid var(--line-soft);">
-        <h3 style="font-family:'Noto Serif SC',serif; font-size:18px; margin-bottom:10px; color:var(--ink);">歌颂</h3>
-        <div style="color:var(--ink-soft); min-height: 120px;">内容待补充</div>
-      </section>
-
-      <!-- 窥秘 -->
-      <section id="occult" style="padding: 16px 0; border-bottom:1px solid var(--line-soft);">
-        <h3 style="font-family:'Noto Serif SC',serif; font-size:18px; margin-bottom:10px; color:var(--ink);">窥秘</h3>
-        <div style="color:var(--ink-soft); min-height: 120px;">内容待补充</div>
-      </section>
-
-      <!-- 占卜 -->
-      <section id="divination" style="padding: 16px 0; border-bottom:1px solid var(--line-soft);">
-        <h3 style="font-family:'Noto Serif SC',serif; font-size:18px; margin-bottom:10px; color:var(--ink);">占卜</h3>
-        <div style="color:var(--ink-soft); min-height: 120px;">内容待补充</div>
-      </section>
-
-      <!-- 学徒 -->
-      <section id="apprentice" style="padding: 16px 0;">
-        <h3 style="font-family:'Noto Serif SC',serif; font-size:18px; margin-bottom:10px; color:var(--ink);">学徒</h3>
-        <div style="color:var(--ink-soft); min-height: 120px;">内容待补充</div>
-      </section>
     </div>
 <footer>
   <div class="wrap">
     <div class="seal">回 音</div>
     <p>本页为俱乐部内部信息展示，请勿恶意盗用。<br>愿长夜之中，你的低语始终有回响。</p>
   </div>
+<!--管理员登录入口-->
+<div class="admin-login">
+  <h4>🔐 管理员入口</h4>
+  <input id="adminPwdInput" placeholder="输入管理员密码" type="password">
+  <button class="admin-btn" onclick="adminLogin()">登录管理面板</button>
+</div>
+<!--管理员编辑面板，登录后显示-->
+<div class="admin-panel" id="adminPanel">
+  <h3>📝 途径攻略编辑（修改后点保存到云端，所有人刷新页面生效）</h3>
+  <div>
+    <select id="pathSelect" style="padding:6px 10px;border:1px solid #b9a47c;background:#f7f0e0;border-radius:2px;font-size:13px;" onchange="renderBuildEditor()">
+      <option value="warrior">战士</option>
+      <option value="audience">观众</option>
+      <option value="bard">歌颂</option>
+      <option value="occult">窥秘</option>
+      <option value="divination">占卜</option>
+      <option value="apprentice">学徒</option>
+    </select>
+    <button class="admin-btn" onclick="addBuild()">➕ 新增配装方案</button>
+    <button class="admin-btn" onclick="saveGuideToBin()">💾保存到云端JSONBin</button>
+    <button class="admin-btn" onclick="downloadGuideBackup()">📥导出备份JSON</button>
+    <button class="admin-btn" onclick="reloadGuideFromBin()">🔄重新拉取云端数据</button>
+  </div>
+  <p style="font-size:12px;color:#5a4c38;margin:8px 0;">提示：编辑时上方展示区实时预览；保存后所有访问者刷新即可看到更新</p>
+  
+  <div id="buildEditor">
+    <!-- 配装方案编辑区由JS动态渲染 -->
+  </div>
+</div>
 </footer>
 
 <script>
+// ========== 配置 ==========
+const ADMIN_PWD = "leilei666";
+// 请替换为你 guide-test 对应的实际 BIN_ID
+const GUIDE_BIN_ID = "你的guide-test的BIN_ID";
+const API_KEY = "$2a$10$916yc2qjHuqVIHsTRPLYV.XQEqVu9VeBN5LrCIRbiVsi8FpXya1hu";
+
+// 职业名称映射
+const PATH_NAMES = {
+  warrior: "战士",
+  audience: "观众",
+  bard: "歌颂",
+  occult: "窥秘",
+  divination: "占卜",
+  apprentice: "学徒"
+};
+
+// 默认空数据
+const DEFAULT_GUIDE = {
+  warrior: [],
+  audience: [],
+  bard: [],
+  occult: [],
+  divination: [],
+  apprentice: []
+};
+let GUIDE_DATA = JSON.parse(JSON.stringify(DEFAULT_GUIDE));
+
 // ========== 侧边栏目录交互 ==========
 const navToggle = document.getElementById('navToggle');
 const sidebar = document.getElementById('sidebar');
 const navMask = document.getElementById('navMask');
-
 function toggleNav(show){
   if(show){
     sidebar.classList.add('show');
@@ -299,10 +431,10 @@ function toggleNav(show){
 }
 navToggle.addEventListener('click', ()=> toggleNav(!sidebar.classList.contains('show')));
 navMask.addEventListener('click', ()=> toggleNav(false));
+
 // 页内滚动高亮二级目录
 const navItems = document.querySelectorAll('.nav-item[href^="#"]');
 const sections = ['top', 'warrior', 'audience', 'bard', 'occult', 'divination', 'apprentice'];
-
 function updateActiveNav(){
   const scrollY = window.scrollY + 80;
   let current = 'top';
@@ -323,7 +455,355 @@ function updateActiveNav(){
   });
 }
 window.addEventListener('scroll', updateActiveNav);
-updateActiveNav();
+
+// ========== 云端数据读写 ==========
+async function loadGuideBin(){
+  try{
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${GUIDE_BIN_ID}/latest`,{
+      headers:{"X-Master-Key":API_KEY}
+    });
+    const json=await res.json();
+    const data = json.record;
+    if(data && typeof data === 'object'){
+      GUIDE_DATA = {...DEFAULT_GUIDE, ...data};
+    }
+  }catch(e){
+    console.warn("攻略数据读取失败，使用默认空数据",e);
+  }
+}
+
+async function saveGuideToBin(){
+  try{
+    const resp=await fetch(`https://api.jsonbin.io/v3/b/${GUIDE_BIN_ID}`,{
+      method:"PUT",
+      headers:{
+        "X-Master-Key":API_KEY,
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify(GUIDE_DATA)
+    });
+    if(resp.ok){
+      alert("✅保存成功！刷新页面即可看到更新");
+      renderGuideDisplay();
+    }else{
+      alert("❌保存失败，请检查GUIDE_BIN_ID是否正确");
+    }
+  }catch(err){
+    alert("网络异常："+err.message);
+  }
+}
+
+async function reloadGuideFromBin(){
+  await loadGuideBin();
+  renderGuideDisplay();
+  if(document.getElementById("adminPanel").classList.contains("show")){
+    renderBuildEditor();
+  }
+  alert("已重新拉取云端攻略数据");
+}
+
+function downloadGuideBackup(){
+  const blob=new Blob([JSON.stringify(GUIDE_DATA,null,2)],{type:"application/json"});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download="回音俱乐部_途径攻略备份.json";
+  a.click();
+}
+
+// ========== 前端展示渲染 ==========
+function renderGuideDisplay(){
+  const container = document.getElementById("guideDisplay");
+  let html = "";
+  
+  Object.keys(PATH_NAMES).forEach(pathKey => {
+    const builds = GUIDE_DATA[pathKey] || [];
+    const pathName = PATH_NAMES[pathKey];
+    
+    html += `<section id="${pathKey}" style="padding: 16px 0; ${pathKey !== 'apprentice' ? 'border-bottom:1px solid var(--line-soft);' : ''}">
+      <h3 style="font-family:\'Noto Serif SC\',serif; font-size:20px; margin-bottom:12px; color:var(--ink);">${pathName}</h3>`;
+    
+    if(builds.length === 0){
+      html += `<div style="color:var(--ink-soft); font-size:13px; padding: 10px 0;">暂无配装方案</div>`;
+    }else{
+      builds.forEach(build => {
+        html += `<div style="margin-bottom:16px; padding:14px; border:1px solid var(--line-soft); border-radius:4px; background:rgba(255,255,255,.03);">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+            <div style="font-weight:600; font-size:15px; color:var(--ink);">${build.name || '未命名方案'}</div>
+            ${build.tag ? `<span style="font-size:11px; padding:1px 6px; border-radius:2px; border:1px solid var(--gold-deep); color:var(--gold-deep);">${build.tag}</span>` : ''}
+          </div>`;
+        
+        // 知识技能
+        if(build.skills && build.skills.length){
+          html += `<div style="margin-bottom:10px;">
+            <div style="font-size:12px; color:var(--ink-mute); margin-bottom:4px;">知识技能</div>
+            <div style="display:grid; gap:4px 12px; grid-template-columns: 1fr 2fr; font-size:13px;">`;
+          build.skills.forEach(sk => {
+            html += `<div style="font-weight:500; color:var(--ink);">${sk.name || ''}</div>
+                      <div style="color:var(--ink-soft); line-height:1.5;">${sk.desc || ''}</div>`;
+          });
+          html += `</div></div>`;
+        }
+        
+        // 人偶技能
+        if(build.puppetSkill && build.puppetSkill.name){
+          html += `<div style="margin-bottom:10px;">
+            <div style="font-size:12px; color:var(--ink-mute); margin-bottom:4px;">人偶技能</div>
+            <div style="font-size:13px;">
+              <span style="font-weight:500; color:var(--ink);">${build.puppetSkill.name}</span>
+              <span style="color:var(--ink-soft); margin-left:6px;">${build.puppetSkill.desc || ''}</span>
+            </div>
+          </div>`;
+        }
+        
+        // 秘偶技能
+        if(build.secretSkill && build.secretSkill.name){
+          html += `<div style="margin-bottom:10px;">
+            <div style="font-size:12px; color:var(--ink-mute); margin-bottom:4px;">秘偶技能</div>
+            <div style="font-size:13px;">
+              <span style="font-weight:500; color:var(--ink);">${build.secretSkill.name}</span>
+              <span style="color:var(--ink-soft); margin-left:6px;">${build.secretSkill.desc || ''}</span>
+            </div>
+          </div>`;
+        }
+        
+        // 非凡天赋
+        if(build.talent){
+          html += `<div style="margin-bottom:10px;">
+            <div style="font-size:12px; color:var(--ink-mute); margin-bottom:4px;">非凡天赋</div>
+            <div style="font-size:13px; color:var(--ink-soft); line-height:1.6;">${build.talent.replace(/\n/g,'<br>')}</div>
+          </div>`;
+        }
+        
+        // 封印物
+        if(build.seals && build.seals.length){
+          html += `<div style="margin-bottom:10px;">
+            <div style="font-size:12px; color:var(--ink-mute); margin-bottom:4px;">封印物</div>
+            <div style="font-size:13px; color:var(--ink-soft); line-height:1.8;">`;
+          build.seals.forEach(se => {
+            html += `<div><span style="font-weight:500; color:var(--ink);">${se.name || ''}</span>
+                      ${se.note ? `<span style="margin-left:6px;">${se.note}</span>` : ''}</div>`;
+          });
+          html += `</div></div>`;
+        }
+        
+        // 注意事项
+        if(build.notice){
+          html += `<div style="padding:10px 12px; background:rgba(176,130,63,.08); border-radius:4px; font-size:12px; color:var(--ink-soft); line-height:1.6;">
+            <b style="color:var(--gold-deep);">注意事项：</b>${build.notice.replace(/\n/g,'<br>')}
+          </div>`;
+        }
+        
+        html += `</div>`;
+      });
+    }
+    
+    html += `</section>`;
+  });
+  
+  container.innerHTML = html;
+  updateActiveNav();
+}
+
+// ========== 管理员编辑逻辑 ==========
+function adminLogin(){
+  const inputPwd=document.getElementById("adminPwdInput").value;
+  if(inputPwd===ADMIN_PWD){
+    document.getElementById("adminPanel").classList.add("show");
+    renderBuildEditor();
+  }else{
+    alert("密码错误");
+  }
+}
+
+function renderBuildEditor(){
+  const pathKey = document.getElementById("pathSelect").value;
+  const builds = GUIDE_DATA[pathKey] || [];
+  const container = document.getElementById("buildEditor");
+  
+  let html = `<div style="margin-bottom:8px; font-size:13px; color:#5a4c38;">当前职业：<b>${PATH_NAMES[pathKey]}</b>，共 ${builds.length} 个方案</div>`;
+  
+  builds.forEach((build, idx) => {
+    html += `<div class="build-item" data-idx="${idx}">
+      <h5>
+        <input value="${build.name || ''}" placeholder="方案名称" style="flex:1; padding:4px 8px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:13px;" oninput="updateBuild(${idx}, 'name', this.value)">
+        <select style="padding:4px 6px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:12px;" onchange="updateBuild(${idx}, 'tag', this.value)">
+          <option value="">无标签</option>
+          <option value="推荐" ${build.tag==='推荐'?'selected':''}>推荐</option>
+          <option value="进阶" ${build.tag==='进阶'?'selected':''}>进阶</option>
+          <option value="萌新" ${build.tag==='萌新'?'selected':''}>萌新</option>
+        </select>
+        <button class="admin-btn" style="padding:2px 8px; font-size:12px;" onclick="moveBuild(${idx}, -1)">↑</button>
+        <button class="admin-btn" style="padding:2px 8px; font-size:12px;" onclick="moveBuild(${idx}, 1)">↓</button>
+        <button class="admin-btn del-btn" onclick="deleteBuild(${idx})">删除</button>
+      </h5>
+      
+      <!-- 知识技能 -->
+      <div style="margin-bottom:10px;">
+        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">知识技能</div>
+        <div id="skills-${idx}">`;
+    
+    (build.skills || []).forEach((sk, skIdx) => {
+      html += `<div class="skill-row">
+        <input value="${sk.name || ''}" placeholder="技能名" oninput="updateSkill(${idx}, ${skIdx}, 'name', this.value)">
+        <input value="${sk.desc || ''}" placeholder="效果描述" oninput="updateSkill(${idx}, ${skIdx}, 'desc', this.value)">
+        <button class="admin-btn del-btn" onclick="deleteSkill(${idx}, ${skIdx})">删</button>
+      </div>`;
+    });
+    
+    html += `</div>
+        <button class="admin-btn" style="font-size:12px; padding:3px 10px;" onclick="addSkill(${idx})">+ 新增技能</button>
+      </div>
+      
+      <!-- 人偶技能 -->
+      <div style="margin-bottom:10px;">
+        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">人偶技能</div>
+        <div class="skill-row">
+          <input value="${build.puppetSkill?.name || ''}" placeholder="技能名" oninput="updateSubSkill(${idx}, 'puppetSkill', 'name', this.value)">
+          <input value="${build.puppetSkill?.desc || ''}" placeholder="效果描述" oninput="updateSubSkill(${idx}, 'puppetSkill', 'desc', this.value)">
+          <span></span>
+        </div>
+      </div>
+      
+      <!-- 秘偶技能 -->
+      <div style="margin-bottom:10px;">
+        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">秘偶技能</div>
+        <div class="skill-row">
+          <input value="${build.secretSkill?.name || ''}" placeholder="技能名" oninput="updateSubSkill(${idx}, 'secretSkill', 'name', this.value)">
+          <input value="${build.secretSkill?.desc || ''}" placeholder="效果描述" oninput="updateSubSkill(${idx}, 'secretSkill', 'desc', this.value)">
+          <span></span>
+        </div>
+      </div>
+      
+      <!-- 非凡天赋 -->
+      <div style="margin-bottom:10px;">
+        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">非凡天赋</div>
+        <textarea rows="3" placeholder="输入非凡天赋描述，支持换行" oninput="updateBuild(${idx}, 'talent', this.value)">${build.talent || ''}</textarea>
+      </div>
+      
+      <!-- 封印物 -->
+      <div style="margin-bottom:10px;">
+        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">封印物</div>
+        <div id="seals-${idx}">`;
+    
+    (build.seals || []).forEach((se, seIdx) => {
+      html += `<div class="seal-row">
+        <input value="${se.name || ''}" placeholder="物品名称" oninput="updateSeal(${idx}, ${seIdx}, 'name', this.value)">
+        <input value="${se.note || ''}" placeholder="参考说明" oninput="updateSeal(${idx}, ${seIdx}, 'note', this.value)">
+        <button class="admin-btn del-btn" onclick="deleteSeal(${idx}, ${seIdx})">删</button>
+      </div>`;
+    });
+    
+    html += `</div>
+        <button class="admin-btn" style="font-size:12px; padding:3px 10px;" onclick="addSeal(${idx})">+ 新增封印物</button>
+      </div>
+      
+      <!-- 注意事项 -->
+      <div>
+        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">注意事项</div>
+        <textarea rows="3" placeholder="输入注意事项，支持换行" oninput="updateBuild(${idx}, 'notice', this.value)">${build.notice || ''}</textarea>
+      </div>
+    </div>`;
+  });
+  
+  container.innerHTML = html;
+  renderGuideDisplay();
+}
+
+// 新增配装方案
+function addBuild(){
+  const pathKey = document.getElementById("pathSelect").value;
+  GUIDE_DATA[pathKey].push({
+    name: "新配装方案",
+    tag: "",
+    skills: [],
+    puppetSkill: {name:"", desc:""},
+    secretSkill: {name:"", desc:""},
+    talent: "",
+    seals: [],
+    notice: ""
+  });
+  renderBuildEditor();
+}
+
+// 删除配装方案
+function deleteBuild(idx){
+  if(!confirm("确定删除这个配装方案？")) return;
+  const pathKey = document.getElementById("pathSelect").value;
+  GUIDE_DATA[pathKey].splice(idx, 1);
+  renderBuildEditor();
+}
+
+// 移动方案顺序
+function moveBuild(idx, dir){
+  const pathKey = document.getElementById("pathSelect").value;
+  const list = GUIDE_DATA[pathKey];
+  const target = idx + dir;
+  if(target < 0 || target >= list.length) return;
+  const temp = list[idx];
+  list[idx] = list[target];
+  list[target] = temp;
+  renderBuildEditor();
+}
+
+// 更新方案基础字段
+function updateBuild(idx, field, value){
+  const pathKey = document.getElementById("pathSelect").value;
+  GUIDE_DATA[pathKey][idx][field] = value;
+  renderGuideDisplay();
+}
+
+// 知识技能操作
+function addSkill(buildIdx){
+  const pathKey = document.getElementById("pathSelect").value;
+  if(!GUIDE_DATA[pathKey][buildIdx].skills) GUIDE_DATA[pathKey][buildIdx].skills = [];
+  GUIDE_DATA[pathKey][buildIdx].skills.push({name:"", desc:""});
+  renderBuildEditor();
+}
+function updateSkill(buildIdx, skillIdx, field, value){
+  const pathKey = document.getElementById("pathSelect").value;
+  GUIDE_DATA[pathKey][buildIdx].skills[skillIdx][field] = value;
+  renderGuideDisplay();
+}
+function deleteSkill(buildIdx, skillIdx){
+  const pathKey = document.getElementById("pathSelect").value;
+  GUIDE_DATA[pathKey][buildIdx].skills.splice(skillIdx, 1);
+  renderBuildEditor();
+}
+
+// 人偶/秘偶技能更新
+function updateSubSkill(buildIdx, skillKey, field, value){
+  const pathKey = document.getElementById("pathSelect").value;
+  if(!GUIDE_DATA[pathKey][buildIdx][skillKey]){
+    GUIDE_DATA[pathKey][buildIdx][skillKey] = {name:"", desc:""};
+  }
+  GUIDE_DATA[pathKey][buildIdx][skillKey][field] = value;
+  renderGuideDisplay();
+}
+
+// 封印物操作
+function addSeal(buildIdx){
+  const pathKey = document.getElementById("pathSelect").value;
+  if(!GUIDE_DATA[pathKey][buildIdx].seals) GUIDE_DATA[pathKey][buildIdx].seals = [];
+  GUIDE_DATA[pathKey][buildIdx].seals.push({name:"", note:""});
+  renderBuildEditor();
+}
+function updateSeal(buildIdx, sealIdx, field, value){
+  const pathKey = document.getElementById("pathSelect").value;
+  GUIDE_DATA[pathKey][buildIdx].seals[sealIdx][field] = value;
+  renderGuideDisplay();
+}
+function deleteSeal(buildIdx, sealIdx){
+  const pathKey = document.getElementById("pathSelect").value;
+  GUIDE_DATA[pathKey][buildIdx].seals.splice(sealIdx, 1);
+  renderBuildEditor();
+}
+
+// ========== 页面启动 ==========
+(async function boot(){
+  await loadGuideBin();
+  renderGuideDisplay();
+  updateActiveNav();
+})();
 </script>
 </body>
 </html>
