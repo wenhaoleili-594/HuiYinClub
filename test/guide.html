@@ -487,6 +487,18 @@ async function loadGuideBin(){
     if(data && typeof data === 'object'){
       GUIDE_DATA = {...DEFAULT_GUIDE, ...data};
     }
+    // 兼容旧单条人脉/秘偶数据，自动转为数组
+    Object.keys(GUIDE_DATA).forEach(pathKey => {
+      (GUIDE_DATA[pathKey] || []).forEach(build => {
+        if(build.puppetSkill && build.puppetSkill.name && (!build.puppetSkills || !build.puppetSkills.length)){
+          build.puppetSkills = [build.puppetSkill];
+        }
+        if(build.secretSkill && build.secretSkill.name && (!build.secretSkills || !build.secretSkills.length)){
+          build.secretSkills = [build.secretSkill];
+        }
+      });
+    });
+
   }catch(e){
     console.warn("攻略数据读取失败，使用默认空数据",e);
   }
@@ -547,9 +559,10 @@ function renderGuideDisplay(){
     }else{
       builds.forEach(build => {
         html += `<div class="guide-build-card" style="margin-bottom:16px; padding:14px; border:1px solid var(--line-soft); border-radius:4px; background:rgba(255,255,255,.03);">
-          <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+          <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:10px;">
             <div style="font-weight:600; font-size:15px; color:var(--ink);">${build.name || '未命名方案'}</div>
             ${build.tag ? `<span style="font-size:11px; padding:1px 6px; border-radius:2px; border:1px solid var(--gold-deep); color:var(--gold-deep);">${build.tag}</span>` : ''}
+            ${build.shareFrom ? `<span style="font-family: '方正姚体', 'FZYaoti', serif; font-weight: 700; font-style: italic; font-size: 12px; color: var(--gold-deep); margin-left: 4px;">分享来自：${build.shareFrom}</span>` : ''}
           </div>`;
         
         // 职业技能
@@ -567,25 +580,31 @@ function renderGuideDisplay(){
         }
         
         // 人脉技能
-        if(build.puppetSkill && build.puppetSkill.name){
+        if(build.puppetSkills && build.puppetSkills.length){
           html += `<div style="margin-bottom:14px;">
             <div class="build-section-title">人脉技能</div>
-            <div style="font-size:13px; line-height: 1.6;">
-              <div style="font-weight:700; color:var(--ink); margin-bottom: 2px;">${build.puppetSkill.name}</div>
-              <div style="color:var(--ink-soft);">${build.puppetSkill.desc || ''}</div>
-            </div>
-          </div>`;
+            <div style="font-size:13px; line-height: 1.6;">`;
+          build.puppetSkills.forEach(sk => {
+            html += `<div style="margin-bottom: 8px;">
+              <div style="font-weight:700; color:var(--ink);">${sk.name || ''}</div>
+              <div style="color:var(--ink-soft);">${sk.desc || ''}</div>
+            </div>`;
+          });
+          html += `</div></div>`;
         }
         
         // 秘偶技能
-        if(build.secretSkill && build.secretSkill.name){
+        if(build.secretSkills && build.secretSkills.length){
           html += `<div style="margin-bottom:14px;">
             <div class="build-section-title">秘偶技能</div>
-            <div style="font-size:13px; line-height: 1.6;">
-              <div style="font-weight:700; color:var(--ink); margin-bottom: 2px;">${build.secretSkill.name}</div>
-              <div style="color:var(--ink-soft);">${build.secretSkill.desc || ''}</div>
-            </div>
-          </div>`;
+            <div style="font-size:13px; line-height: 1.6;">`;
+          build.secretSkills.forEach(sk => {
+            html += `<div style="margin-bottom: 8px;">
+              <div style="font-weight:700; color:var(--ink);">${sk.name || ''}</div>
+              <div style="color:var(--ink-soft);">${sk.desc || ''}</div>
+            </div>`;
+          });
+          html += `</div></div>`;
         }
 
         // 非凡天赋
@@ -653,6 +672,7 @@ function renderBuildEditor(){
     html += `<div class="build-item" data-idx="${idx}">
       <h5>
         <input value="${build.name || ''}" placeholder="方案名称" style="flex:1; padding:4px 8px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:13px;" oninput="updateBuild(${idx}, 'name', this.value)">
+        <input value="${build.shareFrom || ''}" placeholder="分享人" style="width:140px; padding:4px 8px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:13px;" oninput="updateBuild(${idx}, 'shareFrom', this.value)">
         <select style="padding:4px 6px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:12px;" onchange="updateBuild(${idx}, 'tag', this.value)">
           <option value="">无标签</option>
           <option value="推荐" ${build.tag==='推荐'?'selected':''}>推荐</option>
@@ -683,22 +703,36 @@ function renderBuildEditor(){
       <!-- 人脉技能 -->
       <div style="margin-bottom:10px;">
         <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">人脉技能</div>
-        <div class="skill-row">
-          <input value="${build.puppetSkill?.name || ''}" placeholder="技能名" oninput="updateSubSkill(${idx}, 'puppetSkill', 'name', this.value)">
-          <input value="${build.puppetSkill?.desc || ''}" placeholder="效果描述" oninput="updateSubSkill(${idx}, 'puppetSkill', 'desc', this.value)">
-          <span></span>
-        </div>
-      </div>
+        <div id="puppet-skills-${idx}">`;
+
+    (build.puppetSkills || []).forEach((sk, skIdx) => {
+      html += `<div class="skill-row">
+        <input value="${sk.name || ''}" placeholder="技能名" oninput="updatePuppetSkill(${idx}, ${skIdx}, 'name', this.value)">
+        <input value="${sk.desc || ''}" placeholder="效果描述" oninput="updatePuppetSkill(${idx}, ${skIdx}, 'desc', this.value)">
+        <button class="admin-btn del-btn" onclick="deletePuppetSkill(${idx}, ${skIdx})">删</button>
+      </div>`;
+    });
+
+    html += `</div>
+        <button class="admin-btn" style="font-size:12px; padding:3px 10px;" onclick="addPuppetSkill(${idx})">+ 新增人脉技能</button>
+      </div>`;
       
       <!-- 秘偶技能 -->
       <div style="margin-bottom:10px;">
         <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">秘偶技能</div>
-        <div class="skill-row">
-          <input value="${build.secretSkill?.name || ''}" placeholder="技能名" oninput="updateSubSkill(${idx}, 'secretSkill', 'name', this.value)">
-          <input value="${build.secretSkill?.desc || ''}" placeholder="效果描述" oninput="updateSubSkill(${idx}, 'secretSkill', 'desc', this.value)">
-          <span></span>
-        </div>
-      </div>
+        <div id="secret-skills-${idx}">`;
+
+    (build.secretSkills || []).forEach((sk, skIdx) => {
+      html += `<div class="skill-row">
+        <input value="${sk.name || ''}" placeholder="技能名" oninput="updateSecretSkill(${idx}, ${skIdx}, 'name', this.value)">
+        <input value="${sk.desc || ''}" placeholder="效果描述" oninput="updateSecretSkill(${idx}, ${skIdx}, 'desc', this.value)">
+        <button class="admin-btn del-btn" onclick="deleteSecretSkill(${idx}, ${skIdx})">删</button>
+      </div>`;
+    });
+
+    html += `</div>
+        <button class="admin-btn" style="font-size:12px; padding:3px 10px;" onclick="addSecretSkill(${idx})">+ 新增秘偶技能</button>
+      </div>`;
       
       <!-- 非凡天赋 -->
       <div style="margin-bottom:10px;">
@@ -742,12 +776,13 @@ function renderBuildEditor(){
 // 新增配装方案
 function addBuild(){
   const pathKey = document.getElementById("pathSelect").value;
-  GUIDE_DATA[pathKey].push({
+    GUIDE_DATA[pathKey].push({
     name: "新配装方案",
     tag: "",
+    shareFrom: "",
     skills: [],
-    puppetSkill: {name:"", desc:""},
-    secretSkill: {name:"", desc:""},
+    puppetSkills: [],
+    secretSkills: [],
     talent: {name:"", desc:""},
     seals: [],
     notice: ""
@@ -809,7 +844,41 @@ function updateSubSkill(buildIdx, skillKey, field, value){
   GUIDE_DATA[pathKey][buildIdx][skillKey][field] = value;
   renderGuideDisplay();
 }
+// 人脉技能多条操作
+function addPuppetSkill(buildIdx){
+  const pathKey = document.getElementById("pathSelect").value;
+  if(!GUIDE_DATA[pathKey][buildIdx].puppetSkills) GUIDE_DATA[pathKey][buildIdx].puppetSkills = [];
+  GUIDE_DATA[pathKey][buildIdx].puppetSkills.push({name:"", desc:""});
+  renderBuildEditor();
+}
+function updatePuppetSkill(buildIdx, skillIdx, field, value){
+  const pathKey = document.getElementById("pathSelect").value;
+  GUIDE_DATA[pathKey][buildIdx].puppetSkills[skillIdx][field] = value;
+  renderGuideDisplay();
+}
+function deletePuppetSkill(buildIdx, skillIdx){
+  const pathKey = document.getElementById("pathSelect").value;
+  GUIDE_DATA[pathKey][buildIdx].puppetSkills.splice(skillIdx, 1);
+  renderBuildEditor();
+}
 
+// 秘偶技能多条操作
+function addSecretSkill(buildIdx){
+  const pathKey = document.getElementById("pathSelect").value;
+  if(!GUIDE_DATA[pathKey][buildIdx].secretSkills) GUIDE_DATA[pathKey][buildIdx].secretSkills = [];
+  GUIDE_DATA[pathKey][buildIdx].secretSkills.push({name:"", desc:""});
+  renderBuildEditor();
+}
+function updateSecretSkill(buildIdx, skillIdx, field, value){
+  const pathKey = document.getElementById("pathSelect").value;
+  GUIDE_DATA[pathKey][buildIdx].secretSkills[skillIdx][field] = value;
+  renderGuideDisplay();
+}
+function deleteSecretSkill(buildIdx, skillIdx){
+  const pathKey = document.getElementById("pathSelect").value;
+  GUIDE_DATA[pathKey][buildIdx].secretSkills.splice(skillIdx, 1);
+  renderBuildEditor();
+}
 // 封印物操作
 function addSeal(buildIdx){
   const pathKey = document.getElementById("pathSelect").value;
