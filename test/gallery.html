@@ -54,7 +54,6 @@ h2{
 }
 .lead{color:var(--ink-soft);margin-top:12px;max-width:60ch;font-weight:300}
 .frame{border:1px solid var(--line-soft);border-top:3px solid var(--gold);background:var(--card);padding:26px}
-
 /* ========== 左侧目录侧边栏 ========== */
 .nav-toggle{
   display:none;
@@ -141,10 +140,8 @@ h2{
 }
 .nav-sub{display:flex;flex-direction:column;gap:1px;margin-top:1px;}
 .nav-group{display:flex;flex-direction:column;}
-
 footer{border-top:3px double var(--line);padding:34px 0 46px;text-align:center;color:var(--ink-mute);font-size:13px}
 footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-deep);letter-spacing:.3em;margin-bottom:8px}
-
 /* 桌面端：常驻侧边栏，内容居中 */
 @media (min-width:1024px){
   .wrap{
@@ -175,7 +172,6 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
   .frame{padding:18px;}
   .swiper{ width: 100%; }
 }
-
 /* ---------- 管理员面板样式 ---------- */
 .admin-panel{margin-top:40px;padding:20px;background:#e5d9bf;border-radius:8px;border:1px solid #b9a47c;display:none;}
 .admin-panel.show{display:block;}
@@ -222,7 +218,6 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
   cursor:pointer;
 }
 .del-btn:hover{ background:#c2554b; }
-
 /* ---------- 相册轮播样式 ---------- */
 .gallery-item{
   margin-bottom:32px;
@@ -241,7 +236,6 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
   margin-bottom:16px;
   line-height:1.8;
 }
-
 /* 轮播容器 - 复古四角细框 */
 .swiper{
   position:relative;
@@ -257,7 +251,6 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
     0 6px 18px rgba(43,35,24,.12),
     0 0 0 1px rgba(176,130,63,.25);
 }
-
 /* 四角装饰 */
 .swiper::before,
 .swiper::after,
@@ -292,20 +285,23 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
   left: 4px;
   border-width: 0 0 2px 2px;
 }
-
-/* 内侧细金线 */
-.swiper-track{
-  position: relative;
-  display:flex;
-  height:100%;
-  transition: transform .6s ease;
+/* 轮播视口（裁剪图片） */
+.swiper-viewport{
+  width: 100%;
+  height: 100%;
   border-radius: 2px;
   overflow: hidden;
   border: 1px solid var(--gold);
   box-shadow: inset 0 0 0 3px var(--card), inset 0 0 0 4px var(--line-soft);
 }
+/* 轮播滚动轨道 */
+.swiper-track{
+  display:flex;
+  height:100%;
+  transition: transform .6s ease;
+}
 .swiper-slide{
-  min-width:100%;
+  flex: 0 0 100%;
   height:100%;
   display:flex;
   align-items:center;
@@ -353,11 +349,12 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
 }
 .swiper-dots{
   position:absolute;
-  bottom: 16px;
+  bottom: 22px;
   left:50%;
   transform:translateX(-50%);
   display:flex;
   gap:8px;
+  z-index: 3;
 }
 .swiper-dot{
   width:8px;
@@ -368,7 +365,6 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
   transition:.2s;
 }
 .swiper-dot.active{ background:#fff; }
-
 /* 配装卡片字体（复用） */
 .guide-build-card{
   font-family: "方正姚体", "FZYaoti", "Noto Serif SC", serif;
@@ -471,7 +467,6 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
     </nav>
   </div>
 </aside>
-
 <!-- 主体内容区 -->
 <section id="top">
   <div class="wrap">
@@ -486,7 +481,6 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
     </div>
   </div>
 </section>
-
 <!-- 管理员入口区域 -->
 <div class="wrap" style="padding-bottom: 56px;">
   <div class="admin-login">
@@ -494,7 +488,6 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
     <input id="adminPwdInput" placeholder="输入管理员密码" type="password">
     <button class="admin-btn" onclick="adminLogin()">登录管理面板</button>
   </div>
-
   <div class="admin-panel" id="adminPanel">
     <h3>📝 风采展示编辑</h3>
     <div>
@@ -509,21 +502,18 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
     </div>
   </div>
 </div>
-
 <footer>
   <div class="wrap">
     <div class="seal">回 音</div>
     <p>本页为俱乐部内部信息展示，请勿恶意盗用。<br>愿长夜之中，你的低语始终有回响。</p>
   </div>
 </footer>
-
 <script>
 // ========== 配置 ==========
 const ADMIN_PWD = "leilei666";
 const GALLERY_BIN_ID = "6ab643eaac6210605af3d0ff";
 const API_KEY = "$2a$10$916yc2qjHuqVIHsTRPLYV.XQEqVu9VeBN5LrCIRbiVsi8FpXya1hu";
 const MAX_SAVE_SIZE = 1.5 * 1024 * 1024; // 1.5MB 安全上限
-
 // 默认空数据
 const DEFAULT_GALLERY = [
   {
@@ -542,7 +532,6 @@ const DEFAULT_GALLERY = [
 ];
 let GALLERY_DATA = JSON.parse(JSON.stringify(DEFAULT_GALLERY));
 let currentEditIdx = 0;
-
 // ========== 侧边栏交互 ==========
 const navToggle = document.getElementById('navToggle');
 const sidebar = document.getElementById('sidebar');
@@ -558,7 +547,6 @@ function toggleNav(show){
 }
 navToggle.addEventListener('click', ()=> toggleNav(!sidebar.classList.contains('show')));
 navMask.addEventListener('click', ()=> toggleNav(false));
-
 // ========== 云端数据读写 ==========
 async function loadGalleryBin(){
   try{
@@ -578,7 +566,6 @@ async function loadGalleryBin(){
     console.warn("风采数据读取失败，使用默认数据", e);
   }
 }
-
 async function saveGalleryToBin(){
   syncDescFromEditor();
   
@@ -612,7 +599,6 @@ async function saveGalleryToBin(){
     console.error(err);
   }
 }
-
 async function reloadFromBin(){
   await loadGalleryBin();
   renderGalleryDisplay();
@@ -621,7 +607,6 @@ async function reloadFromBin(){
   }
   alert("已重新拉取云端数据");
 }
-
 function downloadBackup(){
   const blob=new Blob([JSON.stringify(GALLERY_DATA,null,2)],{type:"application/json"});
   const a=document.createElement('a');
@@ -629,7 +614,6 @@ function downloadBackup(){
   a.download="回音俱乐部_风采展示备份.json";
   a.click();
 }
-
 // ========== 前端展示渲染 ==========
 function renderGalleryDisplay(){
   const container = document.getElementById("galleryDisplay");
@@ -652,11 +636,11 @@ function renderGalleryDisplay(){
     if(album.images && album.images.length){
       const sortedImages = [...album.images].sort((a,b)=> (a.order||0) - (b.order||0));
       
-      html += `<div class="swiper" data-idx="${idx}"><span class="corner-tl"></span><span class="corner-br"></span><div class="swiper-track">`;
+      html += `<div class="swiper" data-idx="${idx}"><span class="corner-tl"></span><span class="corner-br"></span><div class="swiper-viewport"><div class="swiper-track">`;
       sortedImages.forEach(img => {
         html += `<div class="swiper-slide"><img src="${img.url}" alt="${album.title}" loading="lazy"></div>`;
       });
-      html += `</div>
+      html += `</div></div>
         <div class="swiper-btns">
           <button class="swiper-btn swiper-prev" onclick="swiperPrev(${idx})">‹</button>
           <button class="swiper-btn swiper-next" onclick="swiperNext(${idx})">›</button>
@@ -674,11 +658,9 @@ function renderGalleryDisplay(){
   container.innerHTML = html;
   initAllSwipers();
 }
-
 // ========== 轮播控制 ==========
 let swiperStates = {};
 let swiperTimers = {};
-
 function initAllSwipers(){
   Object.values(swiperTimers).forEach(t=> clearInterval(t));
   swiperStates = {};
@@ -691,7 +673,6 @@ function initAllSwipers(){
     }, 4000);
   });
 }
-
 function swiperGoTo(idx, slideIdx){
   const swiper = document.querySelectorAll('.swiper')[idx];
   if(!swiper) return;
@@ -701,25 +682,22 @@ function swiperGoTo(idx, slideIdx){
   
   slideIdx = (slideIdx + total) % total;
   swiperStates[idx] = slideIdx;
-  track.style.transform = `translateX(-${slideIdx * 100}%)`;
+  track.style.transform = `translateX(-${ (slideIdx * 100) / total }%)`;
   
   dots.forEach((d,i)=> d.classList.toggle('active', i===slideIdx));
   
   clearInterval(swiperTimers[idx]);
   swiperTimers[idx] = setInterval(()=>{ swiperNext(idx); }, 4000);
 }
-
 function swiperNext(idx){
   const swiper = document.querySelectorAll('.swiper')[idx];
   if(!swiper) return;
   const total = swiper.querySelectorAll('.swiper-slide').length;
   swiperGoTo(idx, swiperStates[idx] + 1);
 }
-
 function swiperPrev(idx){
   swiperGoTo(idx, swiperStates[idx] - 1);
 }
-
 // ========== 管理员编辑逻辑 ==========
 function adminLogin(){
   const inputPwd=document.getElementById("adminPwdInput").value;
@@ -730,7 +708,6 @@ function adminLogin(){
     alert("密码错误");
   }
 }
-
 function renderAlbumEditor(){
   const container = document.getElementById("albumEditor");
   let html = "";
@@ -803,14 +780,12 @@ function renderAlbumEditor(){
   container.innerHTML = html;
   renderGalleryDisplay();
 }
-
 // ========== 富文本操作 ==========
 function execFormat(cmd, value){
   document.execCommand(cmd, false, value || '');
   syncDescFromEditor();
   renderGalleryDisplay();
 }
-
 function setFontSize(px){
   if(!px) return;
   const selection = window.getSelection();
@@ -830,18 +805,15 @@ function setFontSize(px){
   syncDescFromEditor();
   renderGalleryDisplay();
 }
-
 function onDescInput(idx){
   currentEditIdx = idx;
 }
-
 function syncDescFromEditor(){
   const editor = document.getElementById(`desc-editor-${currentEditIdx}`);
   if(editor && GALLERY_DATA[currentEditIdx]){
     GALLERY_DATA[currentEditIdx].desc = editor.innerHTML;
   }
 }
-
 // ========== 图片上传+强压缩 ==========
 function uploadImage(albumIdx, imgIdx, input){
   const file = input.files[0];
@@ -853,7 +825,6 @@ function uploadImage(albumIdx, imgIdx, input){
     renderAlbumEditor();
   });
 }
-
 function compressImage(file, maxWidth, quality){
   return new Promise((resolve)=>{
     const img = new Image();
@@ -880,7 +851,6 @@ function compressImage(file, maxWidth, quality){
     reader.readAsDataURL(file);
   });
 }
-
 // ========== 相册操作 ==========
 function addAlbum(){
   GALLERY_DATA.push({
@@ -892,13 +862,11 @@ function addAlbum(){
   });
   renderAlbumEditor();
 }
-
 function deleteAlbum(idx){
   if(!confirm("确定删除这个相册？")) return;
   GALLERY_DATA.splice(idx, 1);
   renderAlbumEditor();
 }
-
 function moveAlbum(idx, dir){
   const target = idx + dir;
   if(target < 0 || target >= GALLERY_DATA.length) return;
@@ -907,12 +875,10 @@ function moveAlbum(idx, dir){
   GALLERY_DATA[target] = temp;
   renderAlbumEditor();
 }
-
 function updateAlbum(idx, field, value){
   GALLERY_DATA[idx][field] = value;
   renderGalleryDisplay();
 }
-
 // ========== 图片操作 ==========
 function addImage(albumIdx){
   if(!GALLERY_DATA[albumIdx].images) GALLERY_DATA[albumIdx].images = [];
@@ -920,18 +886,15 @@ function addImage(albumIdx){
   GALLERY_DATA[albumIdx].images.push({ url:"", order: maxOrder + 1 });
   renderAlbumEditor();
 }
-
 function updateImage(albumIdx, imgIdx, field, value){
   if(field === 'order') value = Number(value) || 0;
   GALLERY_DATA[albumIdx].images[imgIdx][field] = value;
   renderGalleryDisplay();
 }
-
 function deleteImage(albumIdx, imgIdx){
   GALLERY_DATA[albumIdx].images.splice(imgIdx, 1);
   renderAlbumEditor();
 }
-
 // ========== 页面启动 ==========
 window.onload = function(){
   document.execCommand('styleWithCSS', false, true);
