@@ -458,6 +458,7 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
 const ADMIN_PWD = "leilei666";
 const GALLERY_BIN_ID = "6ab643eaac6210605af3d0ff";
 const API_KEY = "$2a$10$916yc2qjHuqVIHsTRPLYV.XQEqVu9VeBN5LrCIRbiVsi8FpXya1hu";
+const MAX_SAVE_SIZE = 2 * 1024 * 1024; // 保存上限 2MB
 
 // 默认空数据
 const DEFAULT_GALLERY = [
@@ -511,8 +512,15 @@ async function loadGalleryBin(){
 }
 
 async function saveGalleryToBin(){
-  // 保存前先把当前编辑的富文本内容同步回数据
   syncDescFromEditor();
+  
+  // 检测数据大小
+  const dataStr = JSON.stringify(GALLERY_DATA);
+  if(dataStr.length > MAX_SAVE_SIZE){
+    alert("⚠️ 数据过大，保存失败\n\n建议：\n1. 减少图片数量或压缩图片\n2. 大图改用图床链接形式");
+    return;
+  }
+  
   try{
     const resp=await fetch(`https://api.jsonbin.io/v3/b/${GALLERY_BIN_ID}`,{
       method:"PUT",
@@ -520,7 +528,7 @@ async function saveGalleryToBin(){
         "X-Master-Key":API_KEY,
         "Content-Type":"application/json"
       },
-      body:JSON.stringify(GALLERY_DATA)
+      body: dataStr
     });
     if(resp.ok){
       alert("✅保存成功！刷新页面即可看到更新");
@@ -529,7 +537,7 @@ async function saveGalleryToBin(){
       alert("❌保存失败，请检查BIN_ID是否正确");
     }
   }catch(err){
-    alert("网络异常："+err.message);
+    alert("网络异常：保存失败，请稍后重试\n" + err.message);
   }
 }
 
@@ -670,13 +678,13 @@ function renderAlbumEditor(){
         
         <div class="desc-toolbar">
           <button type="button" onclick="execFormat('bold')" title="加粗"><b>B</b></button>
-          <select onchange="execFormat('fontName', this.value)">
+          <select onchange="execFormat('fontName', this.value); this.selectedIndex=0;">
             <option value="">字体</option>
             <option value="方正姚体">方正姚体</option>
             <option value="Noto Serif SC">思源宋体</option>
             <option value="Noto Sans SC">思源黑体</option>
           </select>
-          <select onchange="execFormat('fontSize', this.value)">
+          <select onchange="setFontSize(this.value); this.selectedIndex=0;">
             <option value="">字号</option>
             <option value="12px">12px</option>
             <option value="14px">14px</option>
@@ -685,7 +693,6 @@ function renderAlbumEditor(){
             <option value="20px">20px</option>
           </select>
           <input type="color" value="${style.color || '#5a4c38'}" onchange="execFormat('foreColor', this.value)" title="文字颜色">
-          <select onchange="execFormat('justifyLeft')" style="display:none"></select>
           <button type="button" onclick="execFormat('justifyLeft')" title="左对齐">左</button>
           <button type="button" onclick="execFormat('justifyCenter')" title="居中">中</button>
           <button type="button" onclick="execFormat('justifyRight')" title="右对齐">右</button>
@@ -697,13 +704,13 @@ function renderAlbumEditor(){
       </div>
       
       <div style="margin-bottom:10px;">
-        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">图片列表（按顺序播放）</div>
+        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">图片列表（按顺序播放，支持本地上传）</div>
         <div id="images-${idx}">`;
     
     (album.images || []).sort((a,b)=>(a.order||0)-(b.order||0)).forEach((img, imgIdx) => {
       html += `<div class="upload-row">
         <input value="${img.order || ''}" placeholder="排序" style="width:60px; padding:4px 6px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:12px;" oninput="updateImage(${idx}, ${imgIdx}, 'order', this.value)">
-        <div style="display:flex; gap:8px; align-items:center;">
+        <div style="display:flex; gap:8px; align-items:center; flex:1;">
           ${img.url ? `<img src="${img.url}" class="upload-preview" alt="">` : ''}
           <input type="file" accept="image/*" style="flex:1; font-size:12px;" onchange="uploadImage(${idx}, ${imgIdx}, this)">
         </div>
@@ -728,6 +735,32 @@ function execFormat(cmd, value){
   renderGalleryDisplay();
 }
 
+function setFontSize(px){
+  if(!px) return;
+  // 用 span 包裹选中文字，精确设置像素字号
+  const selection = window.getSelection();
+  if(selection.rangeCount === 0) return;
+  
+  const range = selection.getRangeAt(0);
+  if(range.collapsed) return;
+  
+  const span = document.createElement('span');
+  span.style.fontSize = px;
+  
+  try{
+    range.surroundContents(span);
+  }catch(e){
+    // 跨节点选中时降级处理
+    document.execCommand('styleWithCSS', false, true);
+    document.execCommand('fontSize', false, '3');
+    // 修正为像素值
+    const font = document.queryCommandValue('fontSize');
+  }
+  
+  syncDescFromEditor();
+  renderGalleryDisplay();
+}
+
 function onDescInput(idx){
   currentEditIdx = idx;
 }
@@ -739,17 +772,53 @@ function syncDescFromEditor(){
   }
 }
 
-// ========== 图片上传处理 ==========
+// ========== 图片上传+压缩 ==========
 function uploadImage(albumIdx, imgIdx, input){
   const file = input.files[0];
   if(!file) return;
   
-  const reader = new FileReader();
-  reader.onload = function(e){
-    GALLERY_DATA[albumIdx].images[imgIdx].url = e.target.result;
-    renderAlbumEditor();
-  };
-  reader.readAsDataURL(file);
+  // 超过 1MB 自动压缩
+  if(file.size > 1024 * 1024){
+    compressImage(file, 1200, 0.8).then(base64=>{
+      GALLERY_DATA[albumIdx].images[imgIdx].url = base64;
+      renderAlbumEditor();
+    });
+  }else{
+    const reader = new FileReader();
+    reader.onload = function(e){
+      GALLERY_DATA[albumIdx].images[imgIdx].url = e.target.result;
+      renderAlbumEditor();
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// 图片压缩函数
+function compressImage(file, maxWidth, quality){
+  return new Promise((resolve)=>{
+    const img = new Image();
+    const reader = new FileReader();
+    reader.onload = function(e){
+      img.src = e.target.result;
+      img.onload = function(){
+        const canvas = document.createElement('canvas');
+        let w = img.width;
+        let h = img.height;
+        
+        if(w > maxWidth){
+          h = h * (maxWidth / w);
+          w = maxWidth;
+        }
+        
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      }
+    };
+    reader.readAsDataURL(file);
+  });
 }
 
 // ========== 相册操作 ==========
@@ -805,6 +874,8 @@ function deleteImage(albumIdx, imgIdx){
 
 // ========== 页面启动 ==========
 window.onload = function(){
+  // 开启富文本样式模式
+  document.execCommand('styleWithCSS', false, true);
   loadGalleryBin().then(function(){
     renderGalleryDisplay();
   });
