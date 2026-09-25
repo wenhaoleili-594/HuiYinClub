@@ -644,8 +644,7 @@ function renderGalleryDisplay(){
     if(album.images && album.images.length){
       const sortedImages = [...album.images].sort((a,b)=> (a.order||0) - (b.order||0));
       
-      html += `<div class="swiper" data-idx="${idx}"><span class="corner-tl"></span><span class="corner-br"></span>`;
-        <div class="swiper-track">`;
+      html += `<div class="swiper" data-idx="${idx}"><span class="corner-tl"></span><span class="corner-br"></span><div class="swiper-track">`;
       sortedImages.forEach(img => {
         html += `<div class="swiper-slide"><img src="${img.url}" alt="${album.title}" loading="lazy"></div>`;
       });
