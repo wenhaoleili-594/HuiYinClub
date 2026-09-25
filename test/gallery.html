@@ -297,6 +297,7 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
 /* 轮播滚动轨道 */
 .swiper-track{
   display:flex;
+  width: 100%;
   height:100%;
   transition: transform .6s ease;
 }
@@ -682,7 +683,7 @@ function swiperGoTo(idx, slideIdx){
   
   slideIdx = (slideIdx + total) % total;
   swiperStates[idx] = slideIdx;
-  track.style.transform = `translateX(-${ (slideIdx * 100) / total }%)`;
+  track.style.transform = `translateX(-${slideIdx * 100}%)`;
   
   dots.forEach((d,i)=> d.classList.toggle('active', i===slideIdx));
   
