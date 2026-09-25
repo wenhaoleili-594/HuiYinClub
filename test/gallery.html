@@ -162,6 +162,7 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
     box-shadow:2px 0 12px rgba(0,0,0,.15);
   }
   .sidebar.show{transform:translateX(0);}
+  .swiper-btns{ display: none; }
 }
 @media (max-width:560px){
   html{-webkit-text-size-adjust:100%;}
@@ -247,7 +248,7 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
   width: 84%;
   margin: 0 auto;
   border-radius: 2px;
-  overflow: hidden;
+  overflow: visible;
   aspect-ratio: 16 / 9;
   background: var(--card);
   padding: 14px;
@@ -302,13 +303,6 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
   overflow: hidden;
   border: 1px solid var(--gold);
   box-shadow: inset 0 0 0 3px var(--card), inset 0 0 0 4px var(--line-soft);
-}
-.swiper-track{
-  display:flex;
-  height:100%;
-  transition: transform .6s ease;
-  border-radius: 2px;
-  overflow: hidden;
 }
 .swiper-slide{
   min-width:100%;
@@ -663,7 +657,7 @@ function renderGalleryDisplay(){
         html += `<div class="swiper-slide"><img src="${img.url}" alt="${album.title}" loading="lazy"></div>`;
       });
       html += `</div>
-        <div class="swiper-btns">`;
+        <div class="swiper-btns">
           <button class="swiper-btn swiper-prev" onclick="swiperPrev(${idx})">‹</button>
           <button class="swiper-btn swiper-next" onclick="swiperNext(${idx})">›</button>
         </div>
