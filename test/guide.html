@@ -700,8 +700,10 @@ function renderBuildEditor(){
     
     html += `</div>
         <button class="admin-btn" style="font-size:12px; padding:3px 10px;" onclick="addSkill(${idx})">+ 新增技能</button>
-      </div>
+      </div>`;
       
+    // 人脉技能
+    html += `
       <!-- 人脉技能 -->
       <div style="margin-bottom:10px;">
         <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">人脉技能</div>
@@ -717,8 +719,10 @@ function renderBuildEditor(){
 
     html += `</div>
         <button class="admin-btn" style="font-size:12px; padding:3px 10px;" onclick="addPuppetSkill(${idx})">+ 新增人脉技能</button>
-      </div>
+      </div>`;
       
+    // 秘偶技能
+    html += `
       <!-- 秘偶技能 -->
       <div style="margin-bottom:10px;">
         <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">秘偶技能</div>
@@ -734,8 +738,10 @@ function renderBuildEditor(){
 
     html += `</div>
         <button class="admin-btn" style="font-size:12px; padding:3px 10px;" onclick="addSecretSkill(${idx})">+ 新增秘偶技能</button>
-      </div>
+      </div>`;
       
+    // 非凡天赋
+    html += `
       <!-- 非凡天赋 -->
       <div style="margin-bottom:10px;">
         <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">非凡天赋</div>
@@ -744,8 +750,10 @@ function renderBuildEditor(){
           <input value="${build.talent?.desc || ''}" placeholder="天赋描述" oninput="updateSubSkill(${idx}, 'talent', 'desc', this.value)">
           <span></span>
         </div>
-      </div>
+      </div>`;
       
+    // 封印物
+    html += `
       <!-- 封印物 -->
       <div style="margin-bottom:10px;">
         <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">封印物</div>
