@@ -486,6 +486,17 @@ async function loadGuideBin(){
   }catch(e){
     console.warn("攻略数据读取失败，使用默认空数据",e);
   }
+  // 兼容旧单条人脉/秘偶数据，自动转为数组
+  Object.keys(GUIDE_DATA).forEach(pathKey => {
+    (GUIDE_DATA[pathKey] || []).forEach(build => {
+      if(build.puppetSkill && build.puppetSkill.name && (!build.puppetSkills || !build.puppetSkills.length)){
+        build.puppetSkills = [build.puppetSkill];
+      }
+      if(build.secretSkill && build.secretSkill.name && (!build.secretSkills || !build.secretSkills.length)){
+        build.secretSkills = [build.secretSkill];
+      }
+    });
+  });
 }
 
 async function saveGuideToBin(){
@@ -535,92 +546,104 @@ function renderGuideDisplay(){
     const builds = GUIDE_DATA[pathKey] || [];
     const pathName = PATH_NAMES[pathKey];
     
-    html += `<section id="${pathKey}" style="padding: 16px 0; ${pathKey !== 'apprentice' ? 'border-bottom:1px solid var(--line-soft);' : ''}">
-      <h3 style="font-family:'Noto Serif SC',serif; font-size:20px; margin-bottom:12px; color:var(--ink);">${pathName}</h3>`;
+    html += '<section id="'+pathKey+'" style="padding: 16px 0; '+(pathKey !== 'apprentice' ? 'border-bottom:1px solid var(--line-soft);' : '')+'">';
+    html += '<h3 style="font-family:\'Noto Serif SC\',serif; font-size:20px; margin-bottom:12px; color:var(--ink);">'+pathName+'</h3>';
     
     if(builds.length === 0){
-      html += `<div style="color:var(--ink-soft); font-size:13px; padding: 10px 0;">暂无配装方案</div>`;
+      html += '<div style="color:var(--ink-soft); font-size:13px; padding: 10px 0;">暂无配装方案</div>';
     }else{
       builds.forEach(build => {
-        html += `<div class="guide-build-card" style="margin-bottom:16px; padding:14px; border:1px solid var(--line-soft); border-radius:4px; background:rgba(255,255,255,.03);">
-          <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
-            <div style="font-weight:600; font-size:15px; color:var(--ink);">${build.name || '未命名方案'}</div>
-            ${build.tag ? `<span style="font-size:11px; padding:1px 6px; border-radius:2px; border:1px solid var(--gold-deep); color:var(--gold-deep);">${build.tag}</span>` : ''}
-          </div>`;
+        html += '<div class="guide-build-card" style="margin-bottom:16px; padding:14px; border:1px solid var(--line-soft); border-radius:4px; background:rgba(255,255,255,.03);">';
+        html += '<div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:10px;">';
+        html += '<div style="display:flex; align-items:center; gap:8px;">';
+        html += '<div style="font-weight:600; font-size:15px; color:var(--ink);">'+(build.name || '未命名方案')+'</div>';
+        if(build.tag){
+          html += '<span style="font-size:11px; padding:1px 6px; border-radius:2px; border:1px solid var(--gold-deep); color:var(--gold-deep);">'+build.tag+'</span>';
+        }
+        html += '</div>';
+        if(build.shareFrom){
+          html += '<span style="font-family: \'方正姚体\', \'FZYaoti\', serif; font-weight: 700; font-style: italic; font-size: 12px; color: var(--gold-deep); margin-left: auto;">分享来自：'+build.shareFrom+'</span>';
+        }
+        html += '</div>';
         
         // 职业技能
         if(build.skills && build.skills.length){
-          html += `<div style="margin-bottom:14px;">
-            <div class="build-section-title">职业技能</div>
-            <div style="font-size:13px; line-height: 1.6;">`;
+          html += '<div style="margin-bottom:14px;">';
+          html += '<div class="build-section-title">职业技能</div>';
+          html += '<div style="font-size:13px; line-height: 1.6;">';
           build.skills.forEach(sk => {
-            html += `<div style="margin-bottom: 8px;">
-              <div style="font-weight:700; color:var(--ink);">${sk.name || ''}</div>
-              <div style="color:var(--ink-soft);">${sk.desc || ''}</div>
-            </div>`;
+            html += '<div style="margin-bottom: 8px;">';
+            html += '<div style="font-weight:700; color:var(--ink);">'+(sk.name || '')+'</div>';
+            html += '<div style="color:var(--ink-soft);">'+(sk.desc || '')+'</div>';
+            html += '</div>';
           });
-          html += `</div></div>`;
+          html += '</div></div>';
         }
         
         // 人脉技能
-        if(build.puppetSkill && build.puppetSkill.name){
-          html += `<div style="margin-bottom:14px;">
-            <div class="build-section-title">人脉技能</div>
-            <div style="font-size:13px; line-height: 1.6;">
-              <div style="font-weight:700; color:var(--ink); margin-bottom: 2px;">${build.puppetSkill.name}</div>
-              <div style="color:var(--ink-soft);">${build.puppetSkill.desc || ''}</div>
-            </div>
-          </div>`;
+        if(build.puppetSkills && build.puppetSkills.length){
+          html += '<div style="margin-bottom:14px;">';
+          html += '<div class="build-section-title">人脉技能</div>';
+          html += '<div style="font-size:13px; line-height: 1.6;">';
+          build.puppetSkills.forEach(sk => {
+            html += '<div style="margin-bottom: 8px;">';
+            html += '<div style="font-weight:700; color:var(--ink);">'+(sk.name || '')+'</div>';
+            html += '<div style="color:var(--ink-soft);">'+(sk.desc || '')+'</div>';
+            html += '</div>';
+          });
+          html += '</div></div>';
         }
         
         // 秘偶技能
-        if(build.secretSkill && build.secretSkill.name){
-          html += `<div style="margin-bottom:14px;">
-            <div class="build-section-title">秘偶技能</div>
-            <div style="font-size:13px; line-height: 1.6;">
-              <div style="font-weight:700; color:var(--ink); margin-bottom: 2px;">${build.secretSkill.name}</div>
-              <div style="color:var(--ink-soft);">${build.secretSkill.desc || ''}</div>
-            </div>
-          </div>`;
+        if(build.secretSkills && build.secretSkills.length){
+          html += '<div style="margin-bottom:14px;">';
+          html += '<div class="build-section-title">秘偶技能</div>';
+          html += '<div style="font-size:13px; line-height: 1.6;">';
+          build.secretSkills.forEach(sk => {
+            html += '<div style="margin-bottom: 8px;">';
+            html += '<div style="font-weight:700; color:var(--ink);">'+(sk.name || '')+'</div>';
+            html += '<div style="color:var(--ink-soft);">'+(sk.desc || '')+'</div>';
+            html += '</div>';
+          });
+          html += '</div></div>';
         }
 
         // 非凡天赋
         if(build.talent && build.talent.name){
-          html += `<div style="margin-bottom:14px;">
-            <div class="build-section-title">非凡天赋</div>
-            <div style="font-size:13px; line-height: 1.6;">
-              <div style="font-weight:700; color:var(--ink); margin-bottom: 2px;">${build.talent.name}</div>
-              <div style="color:var(--ink-soft);">${build.talent.desc || ''}</div>
-            </div>
-          </div>`;
+          html += '<div style="margin-bottom:14px;">';
+          html += '<div class="build-section-title">非凡天赋</div>';
+          html += '<div style="font-size:13px; line-height: 1.6;">';
+          html += '<div style="font-weight:700; color:var(--ink); margin-bottom: 2px;">'+build.talent.name+'</div>';
+          html += '<div style="color:var(--ink-soft);">'+(build.talent.desc || '')+'</div>';
+          html += '</div></div>';
         }
 
         // 封印物
         if(build.seals && build.seals.length){
-          html += `<div style="margin-bottom:14px;">
-            <div class="build-section-title">封印物</div>
-            <div style="font-size:13px; line-height: 1.6;">`;
+          html += '<div style="margin-bottom:14px;">';
+          html += '<div class="build-section-title">封印物</div>';
+          html += '<div style="font-size:13px; line-height: 1.6;">';
           build.seals.forEach(se => {
-            html += `<div style="margin-bottom: 6px;">
-              <div style="font-weight:700; color:var(--ink);">${se.name || ''}</div>
-              <div style="color:var(--ink-soft);">${se.note || ''}</div>
-            </div>`;
+            html += '<div style="margin-bottom: 6px;">';
+            html += '<div style="font-weight:700; color:var(--ink);">'+(se.name || '')+'</div>';
+            html += '<div style="color:var(--ink-soft);">'+(se.note || '')+'</div>';
+            html += '</div>';
           });
-          html += `</div></div>`;
+          html += '</div></div>';
         }
         
         // 注意事项
         if(build.notice){
-          html += `<div style="padding:10px 12px; background:rgba(176,130,63,.08); border-radius:4px; font-size:12px; color:var(--ink-soft); line-height:1.6;">
-            <b style="color:var(--gold-deep);">注意事项：</b>${build.notice.replace(/\n/g,'<br>')}
-          </div>`;
+          html += '<div style="padding:10px 12px; background:rgba(176,130,63,.08); border-radius:4px; font-size:12px; color:var(--ink-soft); line-height:1.6;">';
+          html += '<b style="color:var(--gold-deep);">注意事项：</b>'+build.notice.replace(/\n/g,'<br>');
+          html += '</div>';
         }
         
-        html += `</div>`;
+        html += '</div>';
       });
     }
     
-    html += `</section>`;
+    html += '</section>';
   });
   
   container.innerHTML = html;
@@ -643,93 +666,101 @@ function renderBuildEditor(){
   const builds = GUIDE_DATA[pathKey] || [];
   const container = document.getElementById("buildEditor");
   
-  let html = `<div style="margin-bottom:8px; font-size:13px; color:#5a4c38;">当前职业：<b>${PATH_NAMES[pathKey]}</b>，共 ${builds.length} 个方案</div>`;
+  let html = '<div style="margin-bottom:8px; font-size:13px; color:#5a4c38;">当前职业：<b>'+PATH_NAMES[pathKey]+'</b>，共 '+builds.length+' 个方案</div>';
   
   builds.forEach((build, idx) => {
-    html += `<div class="build-item" data-idx="${idx}">
-      <h5>
-        <input value="${build.name || ''}" placeholder="方案名称" style="flex:1; padding:4px 8px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:13px;" oninput="updateBuild(${idx}, 'name', this.value)">
-        <select style="padding:4px 6px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:12px;" onchange="updateBuild(${idx}, 'tag', this.value)">
-          <option value="">无标签</option>
-          <option value="推荐" ${build.tag==='推荐'?'selected':''}>推荐</option>
-          <option value="高战" ${build.tag==='高战'?'selected':''}>高战</option>
-          <option value="低战" ${build.tag==='低战'?'selected':''}>低战</option>
-        </select>
-        <button class="admin-btn" style="padding:2px 8px; font-size:12px;" onclick="moveBuild(${idx}, -1)">↑</button>
-        <button class="admin-btn" style="padding:2px 8px; font-size:12px;" onclick="moveBuild(${idx}, 1)">↓</button>
-        <button class="admin-btn del-btn" onclick="deleteBuild(${idx})">删除</button>
-      </h5>
+    html += '<div class="build-item" data-idx="'+idx+'">';
+    html += '<h5>';
+    html += '<input value="'+(build.name || '')+'" placeholder="方案名称" style="flex:1; padding:4px 8px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:13px;" oninput="updateBuild('+idx+', \'name\', this.value)">';
+    html += '<input value="'+(build.shareFrom || '')+'" placeholder="分享人" style="width:140px; padding:4px 8px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:13px;" oninput="updateBuild('+idx+', \'shareFrom\', this.value)">';
+    html += '<select style="padding:4px 6px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:12px;" onchange="updateBuild('+idx+', \'tag\', this.value)">';
+    html += '<option value="">无标签</option>';
+    html += '<option value="推荐" '+(build.tag==='推荐'?'selected':'')+'>推荐</option>';
+    html += '<option value="高战" '+(build.tag==='高战'?'selected':'')+'>高战</option>';
+    html += '<option value="低战" '+(build.tag==='低战'?'selected':'')+'>低战</option>';
+    html += '</select>';
+    html += '<button class="admin-btn" style="padding:2px 8px; font-size:12px;" onclick="moveBuild('+idx+', -1)">↑</button>';
+    html += '<button class="admin-btn" style="padding:2px 8px; font-size:12px;" onclick="moveBuild('+idx+', 1)">↓</button>';
+    html += '<button class="admin-btn del-btn" onclick="deleteBuild('+idx+')">删除</button>';
+    html += '</h5>';
       
-      <!-- 职业技能 -->
-      <div style="margin-bottom:10px;">
-        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">职业技能</div>
-        <div id="skills-${idx}">`;
-    
+    // 职业技能
+    html += '<div style="margin-bottom:10px;">';
+    html += '<div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">职业技能</div>';
+    html += '<div id="skills-'+idx+'">';
     (build.skills || []).forEach((sk, skIdx) => {
-      html += `<div class="skill-row">
-        <input value="${sk.name || ''}" placeholder="技能名" oninput="updateSkill(${idx}, ${skIdx}, 'name', this.value)">
-        <input value="${sk.desc || ''}" placeholder="效果描述" oninput="updateSkill(${idx}, ${skIdx}, 'desc', this.value)">
-        <button class="admin-btn del-btn" onclick="deleteSkill(${idx}, ${skIdx})">删</button>
-      </div>`;
+      html += '<div class="skill-row">';
+      html += '<input value="'+(sk.name || '')+'" placeholder="技能名" oninput="updateSkill('+idx+', '+skIdx+', \'name\', this.value)">';
+      html += '<input value="'+(sk.desc || '')+'" placeholder="效果描述" oninput="updateSkill('+idx+', '+skIdx+', \'desc\', this.value)">';
+      html += '<button class="admin-btn del-btn" onclick="deleteSkill('+idx+', '+skIdx+')">删</button>';
+      html += '</div>';
     });
-    
-    html += `</div>
-        <button class="admin-btn" style="font-size:12px; padding:3px 10px;" onclick="addSkill(${idx})">+ 新增技能</button>
-      </div>
+    html += '</div>';
+    html += '<button class="admin-btn" style="font-size:12px; padding:3px 10px;" onclick="addSkill('+idx+')">+ 新增技能</button>';
+    html += '</div>';
       
-      <!-- 人脉技能 -->
-      <div style="margin-bottom:10px;">
-        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">人脉技能</div>
-        <div class="skill-row">
-          <input value="${build.puppetSkill?.name || ''}" placeholder="技能名" oninput="updateSubSkill(${idx}, 'puppetSkill', 'name', this.value)">
-          <input value="${build.puppetSkill?.desc || ''}" placeholder="效果描述" oninput="updateSubSkill(${idx}, 'puppetSkill', 'desc', this.value)">
-          <span></span>
-        </div>
-      </div>
+    // 人脉技能
+    html += '<div style="margin-bottom:10px;">';
+    html += '<div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">人脉技能</div>';
+    html += '<div id="puppet-skills-'+idx+'">';
+    (build.puppetSkills || []).forEach((sk, skIdx) => {
+      html += '<div class="skill-row">';
+      html += '<input value="'+(sk.name || '')+'" placeholder="技能名" oninput="updatePuppetSkill('+idx+', '+skIdx+', \'name\', this.value)">';
+      html += '<input value="'+(sk.desc || '')+'" placeholder="效果描述" oninput="updatePuppetSkill('+idx+', '+skIdx+', \'desc\', this.value)">';
+      html += '<button class="admin-btn del-btn" onclick="deletePuppetSkill('+idx+', '+skIdx+')">删</button>';
+      html += '</div>';
+    });
+    html += '</div>';
+    html += '<button class="admin-btn" style="font-size:12px; padding:3px 10px;" onclick="addPuppetSkill('+idx+')">+ 新增人脉技能</button>';
+    html += '</div>';
       
-      <!-- 秘偶技能 -->
-      <div style="margin-bottom:10px;">
-        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">秘偶技能</div>
-        <div class="skill-row">
-          <input value="${build.secretSkill?.name || ''}" placeholder="技能名" oninput="updateSubSkill(${idx}, 'secretSkill', 'name', this.value)">
-          <input value="${build.secretSkill?.desc || ''}" placeholder="效果描述" oninput="updateSubSkill(${idx}, 'secretSkill', 'desc', this.value)">
-          <span></span>
-        </div>
-      </div>
+    // 秘偶技能
+    html += '<div style="margin-bottom:10px;">';
+    html += '<div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">秘偶技能</div>';
+    html += '<div id="secret-skills-'+idx+'">';
+    (build.secretSkills || []).forEach((sk, skIdx) => {
+      html += '<div class="skill-row">';
+      html += '<input value="'+(sk.name || '')+'" placeholder="技能名" oninput="updateSecretSkill('+idx+', '+skIdx+', \'name\', this.value)">';
+      html += '<input value="'+(sk.desc || '')+'" placeholder="效果描述" oninput="updateSecretSkill('+idx+', '+skIdx+', \'desc\', this.value)">';
+      html += '<button class="admin-btn del-btn" onclick="deleteSecretSkill('+idx+', '+skIdx+')">删</button>';
+      html += '</div>';
+    });
+    html += '</div>';
+    html += '<button class="admin-btn" style="font-size:12px; padding:3px 10px;" onclick="addSecretSkill('+idx+')">+ 新增秘偶技能</button>';
+    html += '</div>';
       
-      <!-- 非凡天赋 -->
-      <div style="margin-bottom:10px;">
-        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">非凡天赋</div>
-        <div class="skill-row">
-          <input value="${build.talent?.name || ''}" placeholder="天赋名称" oninput="updateSubSkill(${idx}, 'talent', 'name', this.value)">
-          <input value="${build.talent?.desc || ''}" placeholder="天赋描述" oninput="updateSubSkill(${idx}, 'talent', 'desc', this.value)">
-          <span></span>
-        </div>
-      </div>
+    // 非凡天赋
+    html += '<div style="margin-bottom:10px;">';
+    html += '<div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">非凡天赋</div>';
+    html += '<div class="skill-row">';
+    html += '<input value="'+(build.talent?.name || '')+'" placeholder="天赋名称" oninput="updateSubSkill('+idx+', \'talent\', \'name\', this.value)">';
+    html += '<input value="'+(build.talent?.desc || '')+'" placeholder="天赋描述" oninput="updateSubSkill('+idx+', \'talent\', \'desc\', this.value)">';
+    html += '<span></span>';
+    html += '</div>';
+    html += '</div>';
       
-      <!-- 封印物 -->
-      <div style="margin-bottom:10px;">
-        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">封印物</div>
-        <div id="seals-${idx}">`;
-    
+    // 封印物
+    html += '<div style="margin-bottom:10px;">';
+    html += '<div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">封印物</div>';
+    html += '<div id="seals-'+idx+'">';
     (build.seals || []).forEach((se, seIdx) => {
-      html += `<div class="seal-row">
-        <input value="${se.name || ''}" placeholder="物品名称" oninput="updateSeal(${idx}, ${seIdx}, 'name', this.value)">
-        <input value="${se.note || ''}" placeholder="参考说明" oninput="updateSeal(${idx}, ${seIdx}, 'note', this.value)">
-        <button class="admin-btn del-btn" onclick="deleteSeal(${idx}, ${seIdx})">删</button>
-      </div>`;
+      html += '<div class="seal-row">';
+      html += '<input value="'+(se.name || '')+'" placeholder="物品名称" oninput="updateSeal('+idx+', '+seIdx+', \'name\', this.value)">';
+      html += '<input value="'+(se.note || '')+'" placeholder="参考说明" oninput="updateSeal('+idx+', '+seIdx+', \'note\', this.value)">';
+      html += '<button class="admin-btn del-btn" onclick="deleteSeal('+idx+', '+seIdx+')">删</button>';
+      html += '</div>';
     });
-    
-    html += `</div>
-        <button class="admin-btn" style="font-size:12px; padding:3px 10px;" onclick="addSeal(${idx})">+ 新增封印物</button>
-      </div>
+    html += '</div>';
+    html += '<button class="admin-btn" style="font-size:12px; padding:3px 10px;" onclick="addSeal('+idx+')">+ 新增封印物</button>';
+    html += '</div>';
       
-      <!-- 注意事项 -->
-      <div>
-        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">注意事项</div>
-        <textarea rows="3" placeholder="输入注意事项，支持换行" oninput="updateBuild(${idx}, 'notice', this.value)">${build.notice || ''}</textarea>
-      </div>
-    </div>`;
+    // 注意事项
+    html += '<div>';
+    html += '<div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">注意事项</div>';
+    html += '<textarea rows="3" placeholder="输入注意事项，支持换行" oninput="updateBuild('+idx+', \'notice\', this.value)">'+(build.notice || '')+'</textarea>';
+    html += '</div>';
+      
+    html += '</div>';
   });
   
   container.innerHTML = html;
@@ -742,9 +773,10 @@ function addBuild(){
   GUIDE_DATA[pathKey].push({
     name: "新配装方案",
     tag: "",
+    shareFrom: "",
     skills: [],
-    puppetSkill: {name:"", desc:""},
-    secretSkill: {name:"", desc:""},
+    puppetSkills: [],
+    secretSkills: [],
     talent: {name:"", desc:""},
     seals: [],
     notice: ""
@@ -779,7 +811,7 @@ function updateBuild(idx, field, value){
   renderGuideDisplay();
 }
 
-// 知识技能操作
+// 职业技能操作
 function addSkill(buildIdx){
   const pathKey = document.getElementById("pathSelect").value;
   if(!GUIDE_DATA[pathKey][buildIdx].skills) GUIDE_DATA[pathKey][buildIdx].skills = [];
@@ -797,7 +829,7 @@ function deleteSkill(buildIdx, skillIdx){
   renderBuildEditor();
 }
 
-// 人偶/秘偶/天赋 更新
+// 非凡天赋更新
 function updateSubSkill(buildIdx, skillKey, field, value){
   const pathKey = document.getElementById("pathSelect").value;
   if(!GUIDE_DATA[pathKey][buildIdx][skillKey]){
@@ -805,6 +837,42 @@ function updateSubSkill(buildIdx, skillKey, field, value){
   }
   GUIDE_DATA[pathKey][buildIdx][skillKey][field] = value;
   renderGuideDisplay();
+}
+
+// 人脉技能多条操作
+function addPuppetSkill(buildIdx){
+  const pathKey = document.getElementById("pathSelect").value;
+  if(!GUIDE_DATA[pathKey][buildIdx].puppetSkills) GUIDE_DATA[pathKey][buildIdx].puppetSkills = [];
+  GUIDE_DATA[pathKey][buildIdx].puppetSkills.push({name:"", desc:""});
+  renderBuildEditor();
+}
+function updatePuppetSkill(buildIdx, skillIdx, field, value){
+  const pathKey = document.getElementById("pathSelect").value;
+  GUIDE_DATA[pathKey][buildIdx].puppetSkills[skillIdx][field] = value;
+  renderGuideDisplay();
+}
+function deletePuppetSkill(buildIdx, skillIdx){
+  const pathKey = document.getElementById("pathSelect").value;
+  GUIDE_DATA[pathKey][buildIdx].puppetSkills.splice(skillIdx, 1);
+  renderBuildEditor();
+}
+
+// 秘偶技能多条操作
+function addSecretSkill(buildIdx){
+  const pathKey = document.getElementById("pathSelect").value;
+  if(!GUIDE_DATA[pathKey][buildIdx].secretSkills) GUIDE_DATA[pathKey][buildIdx].secretSkills = [];
+  GUIDE_DATA[pathKey][buildIdx].secretSkills.push({name:"", desc:""});
+  renderBuildEditor();
+}
+function updateSecretSkill(buildIdx, skillIdx, field, value){
+  const pathKey = document.getElementById("pathSelect").value;
+  GUIDE_DATA[pathKey][buildIdx].secretSkills[skillIdx][field] = value;
+  renderGuideDisplay();
+}
+function deleteSecretSkill(buildIdx, skillIdx){
+  const pathKey = document.getElementById("pathSelect").value;
+  GUIDE_DATA[pathKey][buildIdx].secretSkills.splice(skillIdx, 1);
+  renderBuildEditor();
 }
 
 // 封印物操作
@@ -826,11 +894,12 @@ function deleteSeal(buildIdx, sealIdx){
 }
 
 // ========== 页面启动 ==========
-(async function boot(){
-  await loadGuideBin();
-  renderGuideDisplay();
-  updateActiveNav();
-})();
+window.onload = function(){
+  loadGuideBin().then(function(){
+    renderGuideDisplay();
+    updateActiveNav();
+  });
+};
 </script>
 </body>
 </html>
