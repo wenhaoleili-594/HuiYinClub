@@ -560,10 +560,12 @@ function renderGuideDisplay(){
       builds.forEach(build => {
         html += `<div class="guide-build-card" style="margin-bottom:16px; padding:14px; border:1px solid var(--line-soft); border-radius:4px; background:rgba(255,255,255,.03);">
           <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:10px;">
-            <div style="font-weight:600; font-size:15px; color:var(--ink);">${build.name || '未命名方案'}</div>
-            ${build.tag ? `<span style="font-size:11px; padding:1px 6px; border-radius:2px; border:1px solid var(--gold-deep); color:var(--gold-deep);">${build.tag}</span>` : ''}
-            ${build.shareFrom ? `<span style="font-family: '方正姚体', 'FZYaoti', serif; font-weight: 700; font-style: italic; font-size: 12px; color: var(--gold-deep); margin-left: 4px;">分享来自：${build.shareFrom}</span>` : ''}
-          </div>`;
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div style="font-weight:600; font-size:15px; color:var(--ink);">${build.name || '未命名方案'}</div>
+              ${build.tag ? `<span style="font-size:11px; padding:1px 6px; border-radius:2px; border:1px solid var(--gold-deep); color:var(--gold-deep);">${build.tag}</span>` : ''}
+            </div>
+            ${build.shareFrom ? `<span style="font-family: '方正姚体', 'FZYaoti', serif; font-weight: 700; font-style: italic; font-size: 12px; color: var(--gold-deep); margin-left: auto;">分享来自：${build.shareFrom}</span>` : ''}
+          </div>
         
         // 职业技能
         if(build.skills && build.skills.length){
