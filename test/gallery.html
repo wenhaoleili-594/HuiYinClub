@@ -89,7 +89,6 @@ h2{
   z-index:999;
 }
 .nav-mask.show{display:block;}
-
 .sidebar{
   position:fixed;
   top:0;
@@ -134,25 +133,14 @@ h2{
   border-left-color:var(--gold);
   background:rgba(176,130,63,.10);
 }
-.nav-level-1{
-  font-weight: 600;
-}
+.nav-level-1{ font-weight: 600; }
 .nav-level-2{
   padding-left:28px;
   font-size:13px;
   position: relative;
 }
-.nav-level-2::before{
-  content: "";
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--gold-deep);
-  font-size: 18px;
-  line-height: 1;
-}
 .nav-sub{display:flex;flex-direction:column;gap:1px;margin-top:1px;}
+.nav-group{display:flex;flex-direction:column;}
 
 footer{border-top:3px double var(--line);padding:34px 0 46px;text-align:center;color:var(--ink-mute);font-size:13px}
 footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-deep);letter-spacing:.3em;margin-bottom:8px}
@@ -166,7 +154,6 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
     box-sizing: border-box;
   }
 }
-
 /* 移动端：抽屉式侧边栏 + 全局适配 */
 @media (max-width:1023px){
   .nav-toggle{display:flex;}
@@ -185,6 +172,142 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
   .lead{font-size:14px;}
   .kicker{font-size:11px;letter-spacing:.28em;}
   .frame{padding:18px;}
+}
+
+/* ---------- 管理员面板样式 ---------- */
+.admin-panel{margin-top:40px;padding:20px;background:#e5d9bf;border-radius:8px;border:1px solid #b9a47c;display:none;}
+.admin-panel.show{display:block;}
+.admin-login{margin-top:40px;padding:16px;background:#efe3c9;border-radius:8px;border:1px dashed #b0823f;}
+.admin-btn{background:#815c38;color:#fff;border:none;padding:8px 14px;border-radius:4px;margin:4px;cursor:pointer;}
+.admin-btn:hover{background:#9b7042;}
+.build-item{
+  border:1px solid #b9a47c;
+  border-radius:4px;
+  padding:12px;
+  margin-bottom:12px;
+  background:#f7f0e0;
+}
+.build-item h5{
+  font-size:14px;
+  color:#2b2318;
+  margin-bottom:8px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.skill-row{
+  display:grid;
+  grid-template-columns: 1fr 2fr auto;
+  gap:6px;
+  margin-bottom:6px;
+  align-items:center;
+}
+.skill-row input{
+  width:100%;
+  padding:4px 8px;
+  border:1px solid #b9a47c;
+  background:#fff;
+  border-radius:2px;
+  font-size:13px;
+}
+.del-btn{
+  padding:2px 8px;
+  font-size:11px;
+  background:#b2453b;
+  color:#fff;
+  border:none;
+  border-radius:2px;
+  cursor:pointer;
+}
+.del-btn:hover{ background:#c2554b; }
+
+/* ---------- 相册轮播样式 ---------- */
+.gallery-item{
+  margin-bottom:32px;
+  padding-bottom:24px;
+  border-bottom:1px solid var(--line-soft);
+}
+.gallery-item:last-child{ border-bottom:none; margin-bottom:0; padding-bottom:0; }
+.gallery-title{
+  font-family:"Noto Serif SC",serif;
+  font-size:22px;
+  font-weight:700;
+  color:var(--ink);
+  margin-bottom:12px;
+}
+.gallery-desc{
+  margin-bottom:16px;
+  line-height:1.8;
+}
+
+/* 轮播容器 */
+.swiper{
+  position:relative;
+  width:100%;
+  border-radius:6px;
+  overflow:hidden;
+  border:1px solid var(--line-soft);
+  background:rgba(0,0,0,.02);
+  aspect-ratio: 16 / 9;
+}
+.swiper-track{
+  display:flex;
+  height:100%;
+  transition: transform .6s ease;
+}
+.swiper-slide{
+  min-width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.swiper-slide img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.swiper-btn{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:rgba(255,255,255,.85);
+  border:none;
+  color:var(--ink);
+  font-size:18px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:.2s;
+}
+.swiper-btn:hover{ background:#fff; }
+.swiper-prev{ left:12px; }
+.swiper-next{ right:12px; }
+.swiper-dots{
+  position:absolute;
+  bottom:12px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:8px;
+}
+.swiper-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:rgba(255,255,255,.5);
+  cursor:pointer;
+  transition:.2s;
+}
+.swiper-dot.active{ background:#fff; }
+
+/* 配装卡片字体（复用） */
+.guide-build-card{
+  font-family: "方正姚体", "FZYaoti", "Noto Serif SC", serif;
 }
 </style>
 </head>
@@ -205,15 +328,13 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
       <a href="index.html#weekly" class="nav-item nav-level-2">每周活动</a>
       <a href="index.html#structure" class="nav-item nav-level-2">组织架构</a>
       <a href="index.html#roster" class="nav-item nav-level-2">成员名册</a>
-
-      <!-- 风采展示（当前页） -->
+      <!-- 风采展示 -->
       <div class="nav-group">
         <a href="#top" class="nav-item nav-level-1 active">风采展示</a>
         <div class="nav-sub">
           <a href="#race1" class="nav-item nav-level-2">第一届自行车大赛</a>
         </div>
       </div>
-
       <!-- 途径攻略 -->
       <div class="nav-group">
         <a href="guide.html" class="nav-item nav-level-1">途径攻略</a>
@@ -230,27 +351,44 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
   </div>
 </aside>
 
-<!-- 主体内容区：空白预留 -->
+<!-- 主体内容区 -->
 <section id="top">
   <div class="wrap">
     <span class="kicker">俱乐部风貌</span>
     <h2>风采展示</h2>
     <p class="lead">记录公会活动、精彩瞬间与成员作品。</p>
     
-    <div class="frame" style="margin-top:30px;">
-      <!-- 第一届自行车大赛 -->
-      <section id="race1" style="padding: 22px 0; border-bottom: 1px solid var(--line-soft);">
-        <h3 style="font-family:'Noto Serif SC',serif; font-size:20px; margin-bottom:10px; color:var(--ink);">第一届自行车大赛</h3>
-        <div style="color:var(--ink-soft); min-height: 200px;">
-          内容待补充
-        </div>
-      </section>
-
-      <!-- 后续风采内容可继续添加到这里 -->
+    <div class="frame" style="margin-top:30px;" id="galleryDisplay">
+      <div style="text-align:center; color:var(--ink-mute); padding: 60px 0;">
+        加载中...
+      </div>
     </div>
   </div>
 </section>
+
+<!-- 管理员入口区域 -->
+<div class="wrap" style="padding-bottom: 56px;">
+  <div class="admin-login">
+    <h4>🔐 管理员入口</h4>
+    <input id="adminPwdInput" placeholder="输入管理员密码" type="password">
+    <button class="admin-btn" onclick="adminLogin()">登录管理面板</button>
+  </div>
+
+  <div class="admin-panel" id="adminPanel">
+    <h3>📝 风采展示编辑</h3>
+    <div>
+      <button class="admin-btn" onclick="addAlbum()">➕ 新增相册</button>
+      <button class="admin-btn" onclick="saveGalleryToBin()">💾保存到云端</button>
+      <button class="admin-btn" onclick="downloadBackup()">📥导出备份</button>
+      <button class="admin-btn" onclick="reloadFromBin()">🔄重新拉取</button>
     </div>
+    <p style="font-size:12px;color:#5a4c38;margin:8px 0;">提示：编辑后保存，所有人刷新即可看到更新</p>
+    <div id="albumEditor">
+      <!-- 编辑区由JS渲染 -->
+    </div>
+  </div>
+</div>
+
 <footer>
   <div class="wrap">
     <div class="seal">回 音</div>
@@ -259,11 +397,37 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
 </footer>
 
 <script>
-// ========== 侧边栏目录交互 ==========
+// ========== 配置 ==========
+const ADMIN_PWD = "leilei666";
+// 风采展示数据 BIN_ID（建议新建一个独立的BIN）
+const GALLERY_BIN_ID = "6ab643eaac6210605af3d0ff";
+const API_KEY = "$2a$10$916yc2qjHuqVIHsTRPLYV.XQEqVu9VeBN5LrCIRbiVsi8FpXya1hu";
+
+// 默认空数据
+const DEFAULT_GALLERY = [
+  {
+    title: "第一届自行车大赛",
+    anchor: "race1",
+    desc: "记录公会首次线下自行车团建活动的精彩瞬间。",
+    descStyle: {
+      fontFamily: "inherit",
+      fontSize: "15px",
+      color: "#5a4c38",
+      textAlign: "left"
+    },
+    images: [
+      { url: "https://picsum.photos/id/1018/1200/675", order: 1 },
+      { url: "https://picsum.photos/id/1015/1200/675", order: 2 },
+      { url: "https://picsum.photos/id/1019/1200/675", order: 3 }
+    ]
+  }
+];
+let GALLERY_DATA = JSON.parse(JSON.stringify(DEFAULT_GALLERY));
+
+// ========== 侧边栏交互 ==========
 const navToggle = document.getElementById('navToggle');
 const sidebar = document.getElementById('sidebar');
 const navMask = document.getElementById('navMask');
-
 function toggleNav(show){
   if(show){
     sidebar.classList.add('show');
@@ -275,31 +439,282 @@ function toggleNav(show){
 }
 navToggle.addEventListener('click', ()=> toggleNav(!sidebar.classList.contains('show')));
 navMask.addEventListener('click', ()=> toggleNav(false));
-// 页内滚动高亮二级目录
-const navItems = document.querySelectorAll('.nav-item[href^="#"]');
-const sections = ['top', 'race1'];
 
-function updateActiveNav(){
-  const scrollY = window.scrollY + 80;
-  let current = 'top';
-  for(let i = sections.length-1; i >= 0; i--){
-    const el = document.getElementById(sections[i]);
-    if(el && el.offsetTop <= scrollY){
-      current = sections[i];
-      break;
+// ========== 云端数据读写 ==========
+async function loadGalleryBin(){
+  try{
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${GALLERY_BIN_ID}/latest`,{
+      headers:{"X-Master-Key":API_KEY}
+    });
+    const json=await res.json();
+    const data = json.record;
+    if(data && Array.isArray(data)){
+      GALLERY_DATA = data;
     }
+  }catch(e){
+    console.warn("风采数据读取失败，使用默认数据",e);
   }
-  navItems.forEach(item=>{
-    const href = item.getAttribute('href');
-    if(href === '#'+current){
-      item.classList.add('active');
+}
+
+async function saveGalleryToBin(){
+  try{
+    const resp=await fetch(`https://api.jsonbin.io/v3/b/${GALLERY_BIN_ID}`,{
+      method:"PUT",
+      headers:{
+        "X-Master-Key":API_KEY,
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify(GALLERY_DATA)
+    });
+    if(resp.ok){
+      alert("✅保存成功！刷新页面即可看到更新");
+      renderGalleryDisplay();
     }else{
-      item.classList.remove('active');
+      alert("❌保存失败，请检查BIN_ID是否正确");
     }
+  }catch(err){
+    alert("网络异常："+err.message);
+  }
+}
+
+async function reloadFromBin(){
+  await loadGalleryBin();
+  renderGalleryDisplay();
+  if(document.getElementById("adminPanel").classList.contains("show")){
+    renderAlbumEditor();
+  }
+  alert("已重新拉取云端数据");
+}
+
+function downloadBackup(){
+  const blob=new Blob([JSON.stringify(GALLERY_DATA,null,2)],{type:"application/json"});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download="回音俱乐部_风采展示备份.json";
+  a.click();
+}
+
+// ========== 前端展示渲染 ==========
+function renderGalleryDisplay(){
+  const container = document.getElementById("galleryDisplay");
+  let html = "";
+  
+  GALLERY_DATA.forEach((album, idx) => {
+    const style = album.descStyle || {};
+    const descStyle = `
+      font-family: ${style.fontFamily || 'inherit'};
+      font-size: ${style.fontSize || '15px'};
+      color: ${style.color || '#5a4c38'};
+      text-align: ${style.textAlign || 'left'};
+    `;
+    
+    html += `<div class="gallery-item" id="${album.anchor || 'album-'+idx}">
+      <h3 class="gallery-title">${album.title}</h3>
+      <div class="gallery-desc" style="${descStyle}">${album.desc || ''}</div>`;
+    
+    if(album.images && album.images.length){
+      // 按order排序
+      const sortedImages = [...album.images].sort((a,b)=> (a.order||0) - (b.order||0));
+      
+      html += `<div class="swiper" data-idx="${idx}">
+        <div class="swiper-track">`;
+      sortedImages.forEach(img => {
+        html += `<div class="swiper-slide"><img src="${img.url}" alt="${album.title}" loading="lazy"></div>`;
+      });
+      html += `</div>
+        <button class="swiper-btn swiper-prev" onclick="swiperPrev(${idx})">‹</button>
+        <button class="swiper-btn swiper-next" onclick="swiperNext(${idx})">›</button>
+        <div class="swiper-dots">`;
+      sortedImages.forEach((_,i)=>{
+        html += `<span class="swiper-dot ${i===0?'active':''}" onclick="swiperGoTo(${idx},${i})"></span>`;
+      });
+      html += `</div></div>`;
+    }
+    
+    html += `</div>`;
+  });
+  
+  container.innerHTML = html;
+  initAllSwipers();
+}
+
+// ========== 轮播控制 ==========
+let swiperStates = {};
+let swiperTimers = {};
+
+function initAllSwipers(){
+  // 清理旧定时器
+  Object.values(swiperTimers).forEach(t=> clearInterval(t));
+  swiperStates = {};
+  swiperTimers = {};
+  
+  document.querySelectorAll('.swiper').forEach((el, idx) => {
+    swiperStates[idx] = 0;
+    // 自动轮播
+    swiperTimers[idx] = setInterval(()=>{
+      swiperNext(idx);
+    }, 4000);
   });
 }
-window.addEventListener('scroll', updateActiveNav);
-updateActiveNav();
+
+function swiperGoTo(idx, slideIdx){
+  const swiper = document.querySelectorAll('.swiper')[idx];
+  if(!swiper) return;
+  const track = swiper.querySelector('.swiper-track');
+  const dots = swiper.querySelectorAll('.swiper-dot');
+  const total = swiper.querySelectorAll('.swiper-slide').length;
+  
+  slideIdx = (slideIdx + total) % total;
+  swiperStates[idx] = slideIdx;
+  track.style.transform = `translateX(-${slideIdx * 100}%)`;
+  
+  dots.forEach((d,i)=> d.classList.toggle('active', i===slideIdx));
+  
+  // 重置自动播放计时
+  clearInterval(swiperTimers[idx]);
+  swiperTimers[idx] = setInterval(()=>{ swiperNext(idx); }, 4000);
+}
+
+function swiperNext(idx){
+  const swiper = document.querySelectorAll('.swiper')[idx];
+  if(!swiper) return;
+  const total = swiper.querySelectorAll('.swiper-slide').length;
+  swiperGoTo(idx, swiperStates[idx] + 1);
+}
+
+function swiperPrev(idx){
+  swiperGoTo(idx, swiperStates[idx] - 1);
+}
+
+// ========== 管理员编辑逻辑 ==========
+function adminLogin(){
+  const inputPwd=document.getElementById("adminPwdInput").value;
+  if(inputPwd===ADMIN_PWD){
+    document.getElementById("adminPanel").classList.add("show");
+    renderAlbumEditor();
+  }else{
+    alert("密码错误");
+  }
+}
+
+function renderAlbumEditor(){
+  const container = document.getElementById("albumEditor");
+  let html = "";
+  
+  GALLERY_DATA.forEach((album, idx) => {
+    const style = album.descStyle || {};
+    html += `<div class="build-item" data-idx="${idx}">
+      <h5>
+        <input value="${album.title || ''}" placeholder="相册标题" style="flex:1; padding:4px 8px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:13px;" oninput="updateAlbum(${idx}, 'title', this.value)">
+        <input value="${album.anchor || ''}" placeholder="锚点ID" style="width:120px; padding:4px 8px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:13px;" oninput="updateAlbum(${idx}, 'anchor', this.value)">
+        <button class="admin-btn" style="padding:2px 8px; font-size:12px;" onclick="moveAlbum(${idx}, -1)">↑</button>
+        <button class="admin-btn" style="padding:2px 8px; font-size:12px;" onclick="moveAlbum(${idx}, 1)">↓</button>
+        <button class="admin-btn del-btn" onclick="deleteAlbum(${idx})">删除</button>
+      </h5>
+      
+      <div style="margin-bottom:10px;">
+        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">介绍文字</div>
+        <textarea rows="3" placeholder="相册介绍文字" style="width:100%; padding:6px 8px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:13px;" oninput="updateAlbum(${idx}, 'desc', this.value)">${album.desc || ''}</textarea>
+      </div>
+      
+      <div style="margin-bottom:10px;">
+        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">文字样式</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+          <select style="padding:4px 6px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:12px;" onchange="updateDescStyle(${idx}, 'fontFamily', this.value)">
+            <option value="inherit" ${style.fontFamily==='inherit'?'selected':''}>默认字体</option>
+            <option value='\"方正姚体\", \"FZYaoti\", serif' ${style.fontFamily && style.fontFamily.indexOf('方正姚体')>-1?'selected':''}>方正姚体</option>
+            <option value='\"Noto Serif SC\", serif' ${style.fontFamily && style.fontFamily.indexOf('Noto Serif')>-1?'selected':''}>思源宋体</option>
+            <option value='\"Noto Sans SC\", sans-serif' ${style.fontFamily && style.fontFamily.indexOf('Noto Sans')>-1?'selected':''}>思源黑体</option>
+          </select>
+          <input value="${style.fontSize || '15px'}" placeholder="字号" style="width:80px; padding:4px 6px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:12px;" oninput="updateDescStyle(${idx}, 'fontSize', this.value)">
+          <input type="color" value="${style.color || '#5a4c38'}" style="width:40px; height:28px; border:1px solid #b9a47c; border-radius:2px;" oninput="updateDescStyle(${idx}, 'color', this.value)">
+          <select style="padding:4px 6px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:12px;" onchange="updateDescStyle(${idx}, 'textAlign', this.value)">
+            <option value="left" ${style.textAlign==='left'?'selected':''}>左对齐</option>
+            <option value="center" ${style.textAlign==='center'?'selected':''}>居中</option>
+            <option value="right" ${style.textAlign==='right'?'selected':''}>右对齐</option>
+          </select>
+        </div>
+      </div>
+      
+      <div style="margin-bottom:10px;">
+        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">图片列表（按顺序播放）</div>
+        <div id="images-${idx}">`;
+    
+    (album.images || []).sort((a,b)=>(a.order||0)-(b.order||0)).forEach((img, imgIdx) => {
+      html += `<div class="skill-row">
+        <input value="${img.order || ''}" placeholder="排序" style="width:60px;" oninput="updateImage(${idx}, ${imgIdx}, 'order', this.value)">
+        <input value="${img.url || ''}" placeholder="图片链接" oninput="updateImage(${idx}, ${imgIdx}, 'url', this.value)">
+        <button class="admin-btn del-btn" onclick="deleteImage(${idx}, ${imgIdx})">删</button>
+      </div>`;
+    });
+    
+    html += `</div>
+        <button class="admin-btn" style="font-size:12px; padding:3px 10px;" onclick="addImage(${idx})">+ 新增图片</button>
+      </div>
+    </div>`;
+  });
+  
+  container.innerHTML = html;
+  renderGalleryDisplay();
+}
+
+// 相册操作
+function addAlbum(){
+  GALLERY_DATA.push({
+    title: "新相册",
+    anchor: "",
+    desc: "",
+    descStyle: { fontFamily:"inherit", fontSize:"15px", color:"#5a4c38", textAlign:"left" },
+    images: []
+  });
+  renderAlbumEditor();
+}
+function deleteAlbum(idx){
+  if(!confirm("确定删除这个相册？")) return;
+  GALLERY_DATA.splice(idx, 1);
+  renderAlbumEditor();
+}
+function moveAlbum(idx, dir){
+  const target = idx + dir;
+  if(target < 0 || target >= GALLERY_DATA.length) return;
+  const temp = GALLERY_DATA[idx];
+  GALLERY_DATA[idx] = GALLERY_DATA[target];
+  GALLERY_DATA[target] = temp;
+  renderAlbumEditor();
+}
+function updateAlbum(idx, field, value){
+  GALLERY_DATA[idx][field] = value;
+  renderGalleryDisplay();
+}
+function updateDescStyle(idx, field, value){
+  if(!GALLERY_DATA[idx].descStyle) GALLERY_DATA[idx].descStyle = {};
+  GALLERY_DATA[idx].descStyle[field] = value;
+  renderGalleryDisplay();
+}
+
+// 图片操作
+function addImage(albumIdx){
+  if(!GALLERY_DATA[albumIdx].images) GALLERY_DATA[albumIdx].images = [];
+  const maxOrder = Math.max(0, ...GALLERY_DATA[albumIdx].images.map(i=> i.order||0));
+  GALLERY_DATA[albumIdx].images.push({ url:"", order: maxOrder + 1 });
+  renderAlbumEditor();
+}
+function updateImage(albumIdx, imgIdx, field, value){
+  if(field === 'order') value = Number(value) || 0;
+  GALLERY_DATA[albumIdx].images[imgIdx][field] = value;
+  renderGalleryDisplay();
+}
+function deleteImage(albumIdx, imgIdx){
+  GALLERY_DATA[albumIdx].images.splice(imgIdx, 1);
+  renderAlbumEditor();
+}
+
+// ========== 页面启动 ==========
+window.onload = function(){
+  loadGalleryBin().then(function(){
+    renderGalleryDisplay();
+  });
+};
 </script>
 </body>
 </html>
