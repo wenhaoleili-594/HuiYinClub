@@ -172,6 +172,7 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
   .lead{font-size:14px;}
   .kicker{font-size:11px;letter-spacing:.28em;}
   .frame{padding:18px;}
+  .swiper{ width: 100%; }
 }
 
 /* ---------- 管理员面板样式 ---------- */
@@ -240,20 +241,30 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
   line-height:1.8;
 }
 
-/* 轮播容器 */
+/* 轮播容器 - 简约金边相框 */
 .swiper{
   position:relative;
-  width:100%;
-  border-radius:6px;
-  overflow:hidden;
-  border:1px solid var(--line-soft);
-  background:rgba(0,0,0,.02);
+  width: 70%;
+  margin: 0 auto;
+  border-radius: 4px;
+  overflow: hidden;
   aspect-ratio: 16 / 9;
+  /* 双层金边 + 内外阴影 */
+  border: 2px solid var(--gold-deep);
+  outline: 1px solid var(--gold);
+  outline-offset: 3px;
+  box-shadow: 
+    0 3px 10px rgba(0,0,0,.1),
+    inset 0 0 0 1px rgba(255,255,255,.25);
+  background: var(--paper-deep);
+  padding: 6px;
 }
 .swiper-track{
   display:flex;
   height:100%;
   transition: transform .6s ease;
+  border-radius: 2px;
+  overflow: hidden;
 }
 .swiper-slide{
   min-width:100%;
@@ -266,6 +277,7 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
   width:100%;
   height:100%;
   object-fit:cover;
+  border-radius: 2px;
 }
 .swiper-btn{
   position:absolute;
@@ -285,11 +297,11 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
   transition:.2s;
 }
 .swiper-btn:hover{ background:#fff; }
-.swiper-prev{ left:12px; }
-.swiper-next{ right:12px; }
+.swiper-prev{ left: 18px; }
+.swiper-next{ right: 18px; }
 .swiper-dots{
   position:absolute;
-  bottom:12px;
+  bottom: 16px;
   left:50%;
   transform:translateX(-50%);
   display:flex;
