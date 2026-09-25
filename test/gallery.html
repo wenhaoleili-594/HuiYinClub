@@ -309,6 +309,63 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
 .guide-build-card{
   font-family: "方正姚体", "FZYaoti", "Noto Serif SC", serif;
 }
+/* ---------- 富文本编辑器样式 ---------- */
+.desc-editor{
+  width:100%;
+  min-height:80px;
+  padding:8px 10px;
+  border:1px solid #b9a47c;
+  background:#fff;
+  border-radius:2px;
+  font-size:13px;
+  line-height:1.7;
+  margin-bottom:6px;
+  outline:none;
+}
+.desc-toolbar{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  align-items:center;
+  margin-bottom:8px;
+}
+.desc-toolbar button{
+  padding:3px 10px;
+  border:1px solid #b9a47c;
+  background:#f7f0e0;
+  color:#2b2318;
+  border-radius:2px;
+  font-size:12px;
+  cursor:pointer;
+}
+.desc-toolbar button:hover{ background:#e5d9bf; }
+.desc-toolbar select,
+.desc-toolbar input[type="color"]{
+  padding:3px 6px;
+  border:1px solid #b9a47c;
+  background:#fff;
+  border-radius:2px;
+  font-size:12px;
+  height:26px;
+}
+.upload-row{
+  display:grid;
+  grid-template-columns: 60px 1fr auto;
+  gap:6px;
+  margin-bottom:6px;
+  align-items:center;
+}
+.upload-row input[type="file"]{
+  font-size:12px;
+  color:#5a4c38;
+}
+.upload-preview{
+  width:40px;
+  height:40px;
+  border-radius:2px;
+  object-fit:cover;
+  border:1px solid #d6c7a5;
+}
 </style>
 </head>
 <body>
@@ -399,7 +456,6 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
 <script>
 // ========== 配置 ==========
 const ADMIN_PWD = "leilei666";
-// 风采展示数据 BIN_ID（建议新建一个独立的BIN）
 const GALLERY_BIN_ID = "6ab643eaac6210605af3d0ff";
 const API_KEY = "$2a$10$916yc2qjHuqVIHsTRPLYV.XQEqVu9VeBN5LrCIRbiVsi8FpXya1hu";
 
@@ -413,16 +469,14 @@ const DEFAULT_GALLERY = [
       fontFamily: "inherit",
       fontSize: "15px",
       color: "#5a4c38",
-      textAlign: "left"
+      textAlign: "left",
+      fontWeight: "normal"
     },
-    images: [
-      { url: "https://picsum.photos/id/1018/1200/675", order: 1 },
-      { url: "https://picsum.photos/id/1015/1200/675", order: 2 },
-      { url: "https://picsum.photos/id/1019/1200/675", order: 3 }
-    ]
+    images: []
   }
 ];
 let GALLERY_DATA = JSON.parse(JSON.stringify(DEFAULT_GALLERY));
+let currentEditIdx = 0;
 
 // ========== 侧边栏交互 ==========
 const navToggle = document.getElementById('navToggle');
@@ -457,6 +511,8 @@ async function loadGalleryBin(){
 }
 
 async function saveGalleryToBin(){
+  // 保存前先把当前编辑的富文本内容同步回数据
+  syncDescFromEditor();
   try{
     const resp=await fetch(`https://api.jsonbin.io/v3/b/${GALLERY_BIN_ID}`,{
       method:"PUT",
@@ -506,6 +562,7 @@ function renderGalleryDisplay(){
       font-size: ${style.fontSize || '15px'};
       color: ${style.color || '#5a4c38'};
       text-align: ${style.textAlign || 'left'};
+      font-weight: ${style.fontWeight || 'normal'};
     `;
     
     html += `<div class="gallery-item" id="${album.anchor || 'album-'+idx}">
@@ -513,7 +570,6 @@ function renderGalleryDisplay(){
       <div class="gallery-desc" style="${descStyle}">${album.desc || ''}</div>`;
     
     if(album.images && album.images.length){
-      // 按order排序
       const sortedImages = [...album.images].sort((a,b)=> (a.order||0) - (b.order||0));
       
       html += `<div class="swiper" data-idx="${idx}">
@@ -543,14 +599,12 @@ let swiperStates = {};
 let swiperTimers = {};
 
 function initAllSwipers(){
-  // 清理旧定时器
   Object.values(swiperTimers).forEach(t=> clearInterval(t));
   swiperStates = {};
   swiperTimers = {};
   
   document.querySelectorAll('.swiper').forEach((el, idx) => {
     swiperStates[idx] = 0;
-    // 自动轮播
     swiperTimers[idx] = setInterval(()=>{
       swiperNext(idx);
     }, 4000);
@@ -570,7 +624,6 @@ function swiperGoTo(idx, slideIdx){
   
   dots.forEach((d,i)=> d.classList.toggle('active', i===slideIdx));
   
-  // 重置自动播放计时
   clearInterval(swiperTimers[idx]);
   swiperTimers[idx] = setInterval(()=>{ swiperNext(idx); }, 4000);
 }
@@ -613,27 +666,34 @@ function renderAlbumEditor(){
       </h5>
       
       <div style="margin-bottom:10px;">
-        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">介绍文字</div>
-        <textarea rows="3" placeholder="相册介绍文字" style="width:100%; padding:6px 8px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:13px;" oninput="updateAlbum(${idx}, 'desc', this.value)">${album.desc || ''}</textarea>
-      </div>
-      
-      <div style="margin-bottom:10px;">
-        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">文字样式</div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
-          <select style="padding:4px 6px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:12px;" onchange="updateDescStyle(${idx}, 'fontFamily', this.value)">
-            <option value="inherit" ${style.fontFamily==='inherit'?'selected':''}>默认字体</option>
-            <option value='\"方正姚体\", \"FZYaoti\", serif' ${style.fontFamily && style.fontFamily.indexOf('方正姚体')>-1?'selected':''}>方正姚体</option>
-            <option value='\"Noto Serif SC\", serif' ${style.fontFamily && style.fontFamily.indexOf('Noto Serif')>-1?'selected':''}>思源宋体</option>
-            <option value='\"Noto Sans SC\", sans-serif' ${style.fontFamily && style.fontFamily.indexOf('Noto Sans')>-1?'selected':''}>思源黑体</option>
+        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">介绍文字（选中文字可单独设置样式）</div>
+        
+        <div class="desc-toolbar">
+          <button type="button" onclick="execFormat('bold')" title="加粗"><b>B</b></button>
+          <select onchange="execFormat('fontName', this.value)">
+            <option value="">字体</option>
+            <option value="方正姚体">方正姚体</option>
+            <option value="Noto Serif SC">思源宋体</option>
+            <option value="Noto Sans SC">思源黑体</option>
           </select>
-          <input value="${style.fontSize || '15px'}" placeholder="字号" style="width:80px; padding:4px 6px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:12px;" oninput="updateDescStyle(${idx}, 'fontSize', this.value)">
-          <input type="color" value="${style.color || '#5a4c38'}" style="width:40px; height:28px; border:1px solid #b9a47c; border-radius:2px;" oninput="updateDescStyle(${idx}, 'color', this.value)">
-          <select style="padding:4px 6px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:12px;" onchange="updateDescStyle(${idx}, 'textAlign', this.value)">
-            <option value="left" ${style.textAlign==='left'?'selected':''}>左对齐</option>
-            <option value="center" ${style.textAlign==='center'?'selected':''}>居中</option>
-            <option value="right" ${style.textAlign==='right'?'selected':''}>右对齐</option>
+          <select onchange="execFormat('fontSize', this.value)">
+            <option value="">字号</option>
+            <option value="12px">12px</option>
+            <option value="14px">14px</option>
+            <option value="15px">15px</option>
+            <option value="18px">18px</option>
+            <option value="20px">20px</option>
           </select>
+          <input type="color" value="${style.color || '#5a4c38'}" onchange="execFormat('foreColor', this.value)" title="文字颜色">
+          <select onchange="execFormat('justifyLeft')" style="display:none"></select>
+          <button type="button" onclick="execFormat('justifyLeft')" title="左对齐">左</button>
+          <button type="button" onclick="execFormat('justifyCenter')" title="居中">中</button>
+          <button type="button" onclick="execFormat('justifyRight')" title="右对齐">右</button>
         </div>
+        
+        <div class="desc-editor" id="desc-editor-${idx}" contenteditable="true" 
+          oninput="onDescInput(${idx})"
+          onfocus="currentEditIdx=${idx}">${album.desc || ''}</div>
       </div>
       
       <div style="margin-bottom:10px;">
@@ -641,9 +701,12 @@ function renderAlbumEditor(){
         <div id="images-${idx}">`;
     
     (album.images || []).sort((a,b)=>(a.order||0)-(b.order||0)).forEach((img, imgIdx) => {
-      html += `<div class="skill-row">
-        <input value="${img.order || ''}" placeholder="排序" style="width:60px;" oninput="updateImage(${idx}, ${imgIdx}, 'order', this.value)">
-        <input value="${img.url || ''}" placeholder="图片链接" oninput="updateImage(${idx}, ${imgIdx}, 'url', this.value)">
+      html += `<div class="upload-row">
+        <input value="${img.order || ''}" placeholder="排序" style="width:60px; padding:4px 6px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:12px;" oninput="updateImage(${idx}, ${imgIdx}, 'order', this.value)">
+        <div style="display:flex; gap:8px; align-items:center;">
+          ${img.url ? `<img src="${img.url}" class="upload-preview" alt="">` : ''}
+          <input type="file" accept="image/*" style="flex:1; font-size:12px;" onchange="uploadImage(${idx}, ${imgIdx}, this)">
+        </div>
         <button class="admin-btn del-btn" onclick="deleteImage(${idx}, ${imgIdx})">删</button>
       </div>`;
     });
@@ -658,22 +721,55 @@ function renderAlbumEditor(){
   renderGalleryDisplay();
 }
 
-// 相册操作
+// ========== 富文本操作 ==========
+function execFormat(cmd, value){
+  document.execCommand(cmd, false, value || '');
+  syncDescFromEditor();
+  renderGalleryDisplay();
+}
+
+function onDescInput(idx){
+  currentEditIdx = idx;
+}
+
+function syncDescFromEditor(){
+  const editor = document.getElementById(`desc-editor-${currentEditIdx}`);
+  if(editor && GALLERY_DATA[currentEditIdx]){
+    GALLERY_DATA[currentEditIdx].desc = editor.innerHTML;
+  }
+}
+
+// ========== 图片上传处理 ==========
+function uploadImage(albumIdx, imgIdx, input){
+  const file = input.files[0];
+  if(!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = function(e){
+    GALLERY_DATA[albumIdx].images[imgIdx].url = e.target.result;
+    renderAlbumEditor();
+  };
+  reader.readAsDataURL(file);
+}
+
+// ========== 相册操作 ==========
 function addAlbum(){
   GALLERY_DATA.push({
     title: "新相册",
     anchor: "",
     desc: "",
-    descStyle: { fontFamily:"inherit", fontSize:"15px", color:"#5a4c38", textAlign:"left" },
+    descStyle: { fontFamily:"inherit", fontSize:"15px", color:"#5a4c38", textAlign:"left", fontWeight:"normal" },
     images: []
   });
   renderAlbumEditor();
 }
+
 function deleteAlbum(idx){
   if(!confirm("确定删除这个相册？")) return;
   GALLERY_DATA.splice(idx, 1);
   renderAlbumEditor();
 }
+
 function moveAlbum(idx, dir){
   const target = idx + dir;
   if(target < 0 || target >= GALLERY_DATA.length) return;
@@ -682,28 +778,26 @@ function moveAlbum(idx, dir){
   GALLERY_DATA[target] = temp;
   renderAlbumEditor();
 }
+
 function updateAlbum(idx, field, value){
   GALLERY_DATA[idx][field] = value;
   renderGalleryDisplay();
 }
-function updateDescStyle(idx, field, value){
-  if(!GALLERY_DATA[idx].descStyle) GALLERY_DATA[idx].descStyle = {};
-  GALLERY_DATA[idx].descStyle[field] = value;
-  renderGalleryDisplay();
-}
 
-// 图片操作
+// ========== 图片操作 ==========
 function addImage(albumIdx){
   if(!GALLERY_DATA[albumIdx].images) GALLERY_DATA[albumIdx].images = [];
   const maxOrder = Math.max(0, ...GALLERY_DATA[albumIdx].images.map(i=> i.order||0));
   GALLERY_DATA[albumIdx].images.push({ url:"", order: maxOrder + 1 });
   renderAlbumEditor();
 }
+
 function updateImage(albumIdx, imgIdx, field, value){
   if(field === 'order') value = Number(value) || 0;
   GALLERY_DATA[albumIdx].images[imgIdx][field] = value;
   renderGalleryDisplay();
 }
+
 function deleteImage(albumIdx, imgIdx){
   GALLERY_DATA[albumIdx].images.splice(imgIdx, 1);
   renderAlbumEditor();
