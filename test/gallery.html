@@ -458,7 +458,7 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
 const ADMIN_PWD = "leilei666";
 const GALLERY_BIN_ID = "6ab643eaac6210605af3d0ff";
 const API_KEY = "$2a$10$916yc2qjHuqVIHsTRPLYV.XQEqVu9VeBN5LrCIRbiVsi8FpXya1hu";
-const MAX_SAVE_SIZE = 2 * 1024 * 1024; // 保存上限 2MB
+const MAX_SAVE_SIZE = 2 * 1024 * 1024; // 2MB 上限
 
 // 默认空数据
 const DEFAULT_GALLERY = [
@@ -499,45 +499,55 @@ navMask.addEventListener('click', ()=> toggleNav(false));
 async function loadGalleryBin(){
   try{
     const res = await fetch(`https://api.jsonbin.io/v3/b/${GALLERY_BIN_ID}/latest`,{
-      headers:{"X-Master-Key":API_KEY}
+      method: "GET",
+      headers: {
+        "X-Master-Key": API_KEY,
+        "Content-Type": "application/json"
+      },
+      mode: "cors"
     });
+    if(!res.ok) throw new Error("HTTP "+res.status);
     const json=await res.json();
-    const data = json.record;
-    if(data && Array.isArray(data)){
-      GALLERY_DATA = data;
+    if(json.record && Array.isArray(json.record)){
+      GALLERY_DATA = json.record;
     }
   }catch(e){
-    console.warn("风采数据读取失败，使用默认数据",e);
+    console.warn("风采数据读取失败，使用默认数据", e);
   }
 }
 
 async function saveGalleryToBin(){
   syncDescFromEditor();
   
-  // 检测数据大小
   const dataStr = JSON.stringify(GALLERY_DATA);
+  
+  // 大小检测
   if(dataStr.length > MAX_SAVE_SIZE){
-    alert("⚠️ 数据过大，保存失败\n\n建议：\n1. 减少图片数量或压缩图片\n2. 大图改用图床链接形式");
+    alert("⚠️ 数据过大，无法保存\n\n当前大小："+(dataStr.length/1024/1024).toFixed(2)+" MB\n上限：2 MB\n\n建议：减少图片数量，或改用图床链接");
     return;
   }
   
   try{
-    const resp=await fetch(`https://api.jsonbin.io/v3/b/${GALLERY_BIN_ID}`,{
-      method:"PUT",
+    const resp = await fetch(`https://api.jsonbin.io/v3/b/${GALLERY_BIN_ID}`,{
+      method: "PUT",
+      mode: "cors",
       headers:{
-        "X-Master-Key":API_KEY,
-        "Content-Type":"application/json"
+        "X-Master-Key": API_KEY,
+        "Content-Type": "application/json"
       },
       body: dataStr
     });
+    
     if(resp.ok){
       alert("✅保存成功！刷新页面即可看到更新");
       renderGalleryDisplay();
     }else{
-      alert("❌保存失败，请检查BIN_ID是否正确");
+      const errText = await resp.text();
+      alert("❌保存失败\n\n状态码："+resp.status+"\n"+errText.slice(0,100));
     }
   }catch(err){
-    alert("网络异常：保存失败，请稍后重试\n" + err.message);
+    alert("❌ 网络请求失败\n\n错误信息："+err.message+"\n\n可能原因：\n1. 网络不稳定\n2. 跨域拦截\n3. API密钥无效");
+    console.error(err);
   }
 }
 
@@ -737,24 +747,19 @@ function execFormat(cmd, value){
 
 function setFontSize(px){
   if(!px) return;
-  // 用 span 包裹选中文字，精确设置像素字号
   const selection = window.getSelection();
-  if(selection.rangeCount === 0) return;
+  if(selection.rangeCount === 0 || selection.getRangeAt(0).collapsed) return;
   
   const range = selection.getRangeAt(0);
-  if(range.collapsed) return;
-  
   const span = document.createElement('span');
   span.style.fontSize = px;
   
   try{
     range.surroundContents(span);
   }catch(e){
-    // 跨节点选中时降级处理
+    // 跨节点时降级处理
     document.execCommand('styleWithCSS', false, true);
     document.execCommand('fontSize', false, '3');
-    // 修正为像素值
-    const font = document.queryCommandValue('fontSize');
   }
   
   syncDescFromEditor();
@@ -777,7 +782,6 @@ function uploadImage(albumIdx, imgIdx, input){
   const file = input.files[0];
   if(!file) return;
   
-  // 超过 1MB 自动压缩
   if(file.size > 1024 * 1024){
     compressImage(file, 1200, 0.8).then(base64=>{
       GALLERY_DATA[albumIdx].images[imgIdx].url = base64;
@@ -793,7 +797,6 @@ function uploadImage(albumIdx, imgIdx, input){
   }
 }
 
-// 图片压缩函数
 function compressImage(file, maxWidth, quality){
   return new Promise((resolve)=>{
     const img = new Image();
@@ -874,7 +877,6 @@ function deleteImage(albumIdx, imgIdx){
 
 // ========== 页面启动 ==========
 window.onload = function(){
-  // 开启富文本样式模式
   document.execCommand('styleWithCSS', false, true);
   loadGalleryBin().then(function(){
     renderGalleryDisplay();
