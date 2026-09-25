@@ -458,7 +458,7 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
 const ADMIN_PWD = "leilei666";
 const GALLERY_BIN_ID = "6ab643eaac6210605af3d0ff";
 const API_KEY = "$2a$10$916yc2qjHuqVIHsTRPLYV.XQEqVu9VeBN5LrCIRbiVsi8FpXya1hu";
-const MAX_SAVE_SIZE = 2 * 1024 * 1024; // 2MB 上限
+const MAX_SAVE_SIZE = 1.5 * 1024 * 1024; // 1.5MB 安全上限
 
 // 默认空数据
 const DEFAULT_GALLERY = [
@@ -503,8 +503,7 @@ async function loadGalleryBin(){
       headers: {
         "X-Master-Key": API_KEY,
         "Content-Type": "application/json"
-      },
-      mode: "cors"
+      }
     });
     if(!res.ok) throw new Error("HTTP "+res.status);
     const json=await res.json();
@@ -520,17 +519,16 @@ async function saveGalleryToBin(){
   syncDescFromEditor();
   
   const dataStr = JSON.stringify(GALLERY_DATA);
+  const sizeKB = (dataStr.length / 1024).toFixed(1);
   
-  // 大小检测
   if(dataStr.length > MAX_SAVE_SIZE){
-    alert("⚠️ 数据过大，无法保存\n\n当前大小："+(dataStr.length/1024/1024).toFixed(2)+" MB\n上限：2 MB\n\n建议：减少图片数量，或改用图床链接");
+    alert("⚠️ 数据过大，保存失败\n\n当前大小："+sizeKB+" KB\n上限：约 1500 KB\n\n建议：\n1. 减少图片数量\n2. 正式环境请改用图床链接");
     return;
   }
   
   try{
     const resp = await fetch(`https://api.jsonbin.io/v3/b/${GALLERY_BIN_ID}`,{
       method: "PUT",
-      mode: "cors",
       headers:{
         "X-Master-Key": API_KEY,
         "Content-Type": "application/json"
@@ -539,14 +537,14 @@ async function saveGalleryToBin(){
     });
     
     if(resp.ok){
-      alert("✅保存成功！刷新页面即可看到更新");
+      alert("✅保存成功！当前数据大小："+sizeKB+" KB");
       renderGalleryDisplay();
     }else{
       const errText = await resp.text();
-      alert("❌保存失败\n\n状态码："+resp.status+"\n"+errText.slice(0,100));
+      alert("❌保存失败\n状态码："+resp.status+"\n"+errText.slice(0,120));
     }
   }catch(err){
-    alert("❌ 网络请求失败\n\n错误信息："+err.message+"\n\n可能原因：\n1. 网络不稳定\n2. 跨域拦截\n3. API密钥无效");
+    alert("❌ 请求失败\n"+err.message);
     console.error(err);
   }
 }
@@ -714,7 +712,7 @@ function renderAlbumEditor(){
       </div>
       
       <div style="margin-bottom:10px;">
-        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">图片列表（按顺序播放，支持本地上传）</div>
+        <div style="font-size:12px; color:#5a4c38; margin-bottom:4px;">图片列表（推荐用图床链接，本地上传会自动压缩）</div>
         <div id="images-${idx}">`;
     
     (album.images || []).sort((a,b)=>(a.order||0)-(b.order||0)).forEach((img, imgIdx) => {
@@ -722,7 +720,10 @@ function renderAlbumEditor(){
         <input value="${img.order || ''}" placeholder="排序" style="width:60px; padding:4px 6px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:12px;" oninput="updateImage(${idx}, ${imgIdx}, 'order', this.value)">
         <div style="display:flex; gap:8px; align-items:center; flex:1;">
           ${img.url ? `<img src="${img.url}" class="upload-preview" alt="">` : ''}
-          <input type="file" accept="image/*" style="flex:1; font-size:12px;" onchange="uploadImage(${idx}, ${imgIdx}, this)">
+          <div style="display:flex; flex-direction:column; gap:4px; flex:1;">
+            <input value="${img.url || ''}" placeholder="图片链接（推荐）" style="width:100%; padding:4px 6px; border:1px solid #b9a47c; background:#fff; border-radius:2px; font-size:12px;" oninput="updateImage(${idx}, ${imgIdx}, 'url', this.value)">
+            <input type="file" accept="image/*" style="width:100%; font-size:12px;" onchange="uploadImage(${idx}, ${imgIdx}, this)">
+          </div>
         </div>
         <button class="admin-btn del-btn" onclick="deleteImage(${idx}, ${imgIdx})">删</button>
       </div>`;
@@ -757,7 +758,6 @@ function setFontSize(px){
   try{
     range.surroundContents(span);
   }catch(e){
-    // 跨节点时降级处理
     document.execCommand('styleWithCSS', false, true);
     document.execCommand('fontSize', false, '3');
   }
@@ -777,24 +777,16 @@ function syncDescFromEditor(){
   }
 }
 
-// ========== 图片上传+压缩 ==========
+// ========== 图片上传+强压缩 ==========
 function uploadImage(albumIdx, imgIdx, input){
   const file = input.files[0];
   if(!file) return;
   
-  if(file.size > 1024 * 1024){
-    compressImage(file, 1200, 0.8).then(base64=>{
-      GALLERY_DATA[albumIdx].images[imgIdx].url = base64;
-      renderAlbumEditor();
-    });
-  }else{
-    const reader = new FileReader();
-    reader.onload = function(e){
-      GALLERY_DATA[albumIdx].images[imgIdx].url = e.target.result;
-      renderAlbumEditor();
-    };
-    reader.readAsDataURL(file);
-  }
+  // 强制压缩：最大宽 800px，质量 0.7
+  compressImage(file, 800, 0.7).then(base64=>{
+    GALLERY_DATA[albumIdx].images[imgIdx].url = base64;
+    renderAlbumEditor();
+  });
 }
 
 function compressImage(file, maxWidth, quality){
