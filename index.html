@@ -1194,7 +1194,7 @@ function calcPower(current, doubleRef, fullRef, avgPower, overThreshold) {
     let raw;
     if (current < doubleRef) {
         // 低于双团：90%平均战力
-        raw = avgPower * 0.9;
+        raw = avgPower;
     } else if (current < fullRef) {
         // 双团~满员之间：线性插值
         raw = avgPower * (1 + (current - doubleRef) / fullRef);
