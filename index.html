@@ -781,8 +781,8 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
     <div class="org" style="margin-top:30px">
       <div class="org-row">
         <div class="org-box captain">
-          <div class="t">会长</div>
-          <div class="d" id="org-会长">小小的蕾蕾</div>
+          <div class="t">主会长</div>
+          <div class="d" id="org-主会长">小小的蕾蕾</div>
           <div>
             <span class="badge green">管理体系调整</span>
             <span class="badge green">管理人员任免</span>
@@ -933,7 +933,7 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
         <button class="admin-btn" onclick="downloadBackup()">📥导出备份JSON</button>
         <button class="admin-btn" onclick="reloadFromBin()">🔄重新拉取云端数据</button>
       </div>
-      <p style="font-size:12px;color:#5a4c38;margin:8px 0;">提示：多个职务用 | 分隔，例如「会长|战指组长」；缺席次数自动统计，无需手动填写</p>
+      <p style="font-size:12px;color:#5a4c38;margin:8px 0;">提示：多个职务用 | 分隔，例如「主会长|战指组长」；缺席次数自动统计，无需手动填写</p>
       <!-- 俱乐部数据编辑区域 -->
       <div class="club-edit-box">
         <h4>📊 俱乐部数据编辑</h4>
@@ -1225,7 +1225,7 @@ function calcUrgent(currentCount, singleRef) {
 
 // 职务优先级
 const rankMap = {
-    "会长": 1,
+    "主会长": 1,
     "外交官": 2,
     "理事（GVG）": 3,
     "理事（途径攻略）": 4,
@@ -1243,7 +1243,7 @@ const rankMap = {
 };
 // 管理架构职务映射
 const orgPostMap = {
-    "org-会长": "会长",
+    "org-主会长": "主会长",
     "org-外交官": "外交官",
     "org-理事GVG": "理事（GVG）",
     "org-理事途径": "理事（途径攻略）",
@@ -1440,7 +1440,7 @@ const DEFAULT_MEMBERS=[
 ["陨星辰","歌颂","",1,"-","-","-","-","-"],
 ["潇潇雨未歇","歌颂","",1,"-","-","-","-","-"],
 ["团战观光客","歌颂","",1,"-","-","-","-","-"],
-["小小的蕾蕾","窥秘","会长|战指组长",1,"-","-","-","-","-"],
+["小小的蕾蕾","窥秘","主会长|战指组长",1,"-","-","-","-","-"],
 ["玛莉塞拉","窥秘","外交官",1,"-","-","-","-","-"],
 ["啊鋮","窥秘","副指组长",1,"-","-","-","-","-"],
 ["记封","窥秘","理事（数据）",1,"-","-","-","-","-"],
