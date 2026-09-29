@@ -1322,12 +1322,19 @@ function renderStats() {
     const totalPower = CLUB_POWER["回音"] + CLUB_POWER["回声"];
     const totalAvgPower = totalMember > 0 ? Math.round(totalPower / totalMember) : 0;
     
-    // 分会别统计
-    const huiyinCount = getCurrentCount("回音").reduce((sum, num) => sum + num, 0);
+// 更新顶部统计与职业表格（双会别）
+function renderStats() {
+    const totalMember = MEMBERS.length;
+    const managers = countManagers();
+    const totalPower = CLUB_POWER["回音"] + CLUB_POWER["回声"];
+    const totalAvgPower = totalMember > 0 ? Math.round(totalPower / totalMember) : 0;
+    
+    // 分会别统计（对象转数组后再reduce求和）
+    const huiyinCount = Object.values(getCurrentCount("回音")).reduce((sum, num) => sum + num, 0);
     const huiyinPower = CLUB_POWER["回音"];
     const huiyinAvg = huiyinCount > 0 ? Math.round(huiyinPower / huiyinCount) : 0;
     
-    const huishengCount = getCurrentCount("回声").reduce((sum, num) => sum + num, 0);
+    const huishengCount = Object.values(getCurrentCount("回声")).reduce((sum, num) => sum + num, 0);
     const huishengPower = CLUB_POWER["回声"];
     const huishengAvg = huishengCount > 0 ? Math.round(huishengPower / huishengCount) : "-";
     
@@ -1347,7 +1354,7 @@ function renderStats() {
     ["回音", "回声"].forEach(huibie => {
         const currentCount = getCurrentCount(huibie);
         const fullRef = calcFullRef(SINGLE_REF[huibie], FULL_TOTAL[huibie]);
-        const totalHui = currentCount.reduce((sum, num) => sum + num, 0);
+        const totalHui = Object.values(currentCount).reduce((sum, num) => sum + num, 0);
         const avgPowerHui = totalHui > 0 ? Math.round(CLUB_POWER[huibie] / totalHui) : 0;
         
         document.getElementById("path-合计-" + huibie).textContent = totalHui;
@@ -1394,6 +1401,7 @@ function renderStats() {
         }
     });
 }
+
 // 渲染管理架构人员
 function renderOrg() {
     for (const [domId, postName] of Object.entries(orgPostMap)) {
