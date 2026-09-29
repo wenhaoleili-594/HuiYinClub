@@ -1847,10 +1847,11 @@ function renderWeekly() {
     if(dateEl) dateEl.textContent = WEEKLY.dateRange ? "· " + WEEKLY.dateRange : "";
     const tbody = document.getElementById("weeklyBody");
     if(!tbody) return;
+    // 按时间分组，按星期分列
     const timeMap = {};
     WEEKLY.activities.forEach(act => {
         const t = act.time;
-        if(!timeMap[t]) timeMap[t] = [[],[],[],[],[],[]];
+        if(!timeMap[t]) timeMap[t] = [[],[],[],[],[],[],[],[]]; // 修复为7个空数组，对应周一~周日
         timeMap[t][act.weekday].push({
             name: act.name,
             color: act.color,
@@ -1867,18 +1868,19 @@ function renderWeekly() {
             for(let w = 0; w < 7; w++){
                 const items = timeMap[time][w];
                 let cell = "";
-items.forEach(item => {
-    cell += `<div class="weekly-item w-${item.color}">
-        <div>${item.name}</div>
-        ${item.allMember ? '<div class="all-tag">全员参加</div>' : ''}
-    </div>`;
-});
+                items.forEach(item => {
+                    cell += `<div class="weekly-item w-${item.color}">
+                        <div>${item.name}</div>
+                        ${item.allMember ? '<div class="all-tag">全员参加</div>' : ''}
+                    </div>`;
+                });
                 html += `<td>${cell}</td>`;
             }
             html += `</tr>`;
         });
     }
     tbody.innerHTML = html;
+    // 注释渲染
     const noteBox = document.getElementById("weeklyNote");
     const noteText = document.getElementById("weeklyNoteText");
     if(WEEKLY.note && noteBox && noteText){
