@@ -78,8 +78,10 @@ h2{
   max-width:56ch;font-weight:300;
 }
 .hero-cols{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:18px;margin-top:44px;
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:18px;
+  margin-top:44px;
 }
 .stat{
   background:var(--card);border:1px solid var(--line-soft);
@@ -93,7 +95,7 @@ h2{
   font-family:"Noto Serif SC",serif;font-size:19px;font-weight:700;
   color:var(--ink);margin-bottom:6px;
 }
-.overview-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:26px;align-items:stretch}
+.overview-grid{display:grid;grid-template-columns: 0.9fr 1.2fr;gap:26px;align-items:stretch}
 .chart-card{position:relative;min-height:380px}
 #chart{width:100%;height:340px}
 .path-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px}
@@ -359,7 +361,7 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
   .hero{padding:48px 0 36px;}
   .hero h1{font-size:36px;}
   .hero-sub{font-size:14px;}
-  .hero-cols{grid-template-columns:1fr 1fr;gap:12px;margin-top:28px;}
+  .hero-cols{grid-template-columns: repeat(2, 1fr);gap:12px;margin-top:28px;}
   .stat{padding:12px 14px;border-left-width:2px;}
   .stat .num{font-size:20px;}
   .stat .lbl{font-size:11px;}
@@ -662,10 +664,16 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
     <h1>回音<span class="amp">俱乐部</span></h1>
     <p class="hero-sub">非凡之路上，总有一群人不合时宜地守在一起。<br>这里是《回音》，敬每一位仍在聆听的同行者。</p>
     <div class="hero-cols">
-      <div class="stat"><div class="num" id="stat-memberCount">70</div><div class="lbl">在册成员</div></div>
-      <div class="stat"><div class="num" id="stat-clubPower">6,933,128</div><div class="lbl">俱乐部总战力</div></div>
-      <div class="stat"><div class="num" id="stat-avgPower">100,480</div><div class="lbl">平均战力</div></div>
+      <!-- 第一行 -->
+      <div class="stat"><div class="num" id="stat-totalMember">70</div><div class="lbl">成员总数</div></div>
       <div class="stat"><div class="num" id="stat-managerCount">7</div><div class="lbl">管理人员</div></div>
+      <div class="stat"><div class="num" id="stat-totalPower">6,933,128</div><div class="lbl">全员战力总和</div></div>
+      <div class="stat"><div class="num" id="stat-totalAvgPower">100,480</div><div class="lbl">总平均战力</div></div>
+      <!-- 第二行 -->
+      <div class="stat"><div class="num" id="stat-huiyinPower">6,933,128</div><div class="lbl">回音总战力</div></div>
+      <div class="stat"><div class="num" id="stat-huiyinAvgPower">100,480</div><div class="lbl">回音平均战力</div></div>
+      <div class="stat"><div class="num" id="stat-huishengPower">0</div><div class="lbl">回声总战力</div></div>
+      <div class="stat"><div class="num" id="stat-huishengAvgPower">-</div><div class="lbl">回声平均战力</div></div>
     </div>
   </div>
 </header>
@@ -678,7 +686,7 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
       <div class="frame chart-card">
         <div class="frame-title">各途径成员数量（合计）</div>
         <div id="chart"></div>
-        <p class="note">数据口径：名单表在册 <span id="note-memberCount">70</span> 人，按途径分组统计。</p>
+        <p class="note">数据口径：名单表在册共 <span id="note-memberCount">70</span> 人，按途径分组统计。</p>
       </div>
       <div class="frame">
         <div class="frame-title">现有成员数量及招新参考</div>
@@ -719,7 +727,7 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
               <td class="cnt" id="path-窥秘-回音">23</td>
               <td id="power-窥秘-回音" class="hot">不招</td>
               <td class="cnt" id="path-窥秘-回声">0</td>
-              <td id="power-窥秘-回声" class="hot">不招</td>
+              <td id="power-窥秘-回声">-</td>
             </tr>
             <tr>
               <td>占卜</td>
@@ -740,7 +748,7 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
               <td class="cnt" id="path-合计-回音">70</td>
               <td class="hot" id="urgent-text-回音">急招 · 歌颂 3 人</td>
               <td class="cnt" id="path-合计-回声">0</td>
-              <td class="hot" id="urgent-text-回声">人员已满</td>
+              <td id="urgent-text-回声">-</td>
             </tr>
           </tbody>
         </table>
@@ -1177,12 +1185,10 @@ let SINGLE_REF = {
 };
 // 当前编辑会别
 let CURRENT_EDIT_HUIBIE = "回音";
-
 // 数字千分位格式化
 function formatNumber(num) {
     return Math.round(Number(num) || 0).toLocaleString('en-US');
 }
-
 // 计算满员各职业人数
 function calcFullRef(singleRef, fullTotal) {
     let singleTotal = 0;
@@ -1204,7 +1210,6 @@ function calcFullRef(singleRef, fullTotal) {
     }
     return result;
 }
-
 // 计算单个职业战力要求
 function calcPower(current, doubleRef, fullRef, avgPower, overThreshold) {
     if (current - fullRef >= overThreshold) {
@@ -1221,7 +1226,6 @@ function calcPower(current, doubleRef, fullRef, avgPower, overThreshold) {
     let rounded = Math.round(raw / 1000) * 1000;
     return formatNumber(rounded);
 }
-
 // 计算急招
 function calcUrgent(currentCount, singleRef) {
     let maxGap = 0;
@@ -1237,7 +1241,6 @@ function calcUrgent(currentCount, singleRef) {
     if (maxGap <= 0) return "";
     return `急招 · ${maxPath} ${maxGap} 人`;
 }
-
 // 职务优先级
 const rankMap = {
     "回音会长": 1,
@@ -1256,7 +1259,6 @@ const rankMap = {
     "战研": 14,
     "途径": 15,
 };
-
 // 管理架构职务映射
 const orgPostMap = {
     "org-回音会长": "回音会长",
@@ -1271,7 +1273,6 @@ const orgPostMap = {
     "org-副指组长": "副指组长",
     "org-途径组长": "途径组长"
 };
-
 const pathOrder = {
     "战士": 1,
     "观众": 2,
@@ -1280,7 +1281,6 @@ const pathOrder = {
     "占卜": 5,
     "学徒": 6
 };
-
 // 计算单名成员的总缺席次数
 function calcAbsent(member) {
     let count = 0;
@@ -1289,7 +1289,6 @@ function calcAbsent(member) {
     }
     return count;
 }
-
 // 统计管理人员数量
 function countManagers() {
     const allPosts = Object.values(orgPostMap);
@@ -1305,7 +1304,6 @@ function countManagers() {
     });
     return nameSet.size;
 }
-
 // 统计各职业当前人数（支持按会别筛选）
 function getCurrentCount(huibie) {
     const count = {};
@@ -1317,56 +1315,85 @@ function getCurrentCount(huibie) {
     });
     return count;
 }
-
 // 更新顶部统计与职业表格（双会别）
 function renderStats() {
-    const total = MEMBERS.length;
+    const totalMember = MEMBERS.length;
     const managers = countManagers();
     const totalPower = CLUB_POWER["回音"] + CLUB_POWER["回声"];
-    const avgPower = total > 0 ? Math.round(totalPower / total) : 0;
-
-    document.getElementById("stat-memberCount").textContent = total;
-    document.getElementById("stat-clubPower").textContent = formatNumber(totalPower);
-    document.getElementById("stat-avgPower").textContent = formatNumber(avgPower);
+    const totalAvgPower = totalMember > 0 ? Math.round(totalPower / totalMember) : 0;
+    
+    // 分会别统计
+    const huiyinCount = getCurrentCount("回音").reduce((sum, num) => sum + num, 0);
+    const huiyinPower = CLUB_POWER["回音"];
+    const huiyinAvg = huiyinCount > 0 ? Math.round(huiyinPower / huiyinCount) : 0;
+    
+    const huishengCount = getCurrentCount("回声").reduce((sum, num) => sum + num, 0);
+    const huishengPower = CLUB_POWER["回声"];
+    const huishengAvg = huishengCount > 0 ? Math.round(huishengPower / huishengCount) : "-";
+    
+    // 顶部统计赋值
+    document.getElementById("stat-totalMember").textContent = totalMember;
     document.getElementById("stat-managerCount").textContent = managers;
-    document.getElementById("note-memberCount").textContent = total;
-
+    document.getElementById("stat-totalPower").textContent = formatNumber(totalPower);
+    document.getElementById("stat-totalAvgPower").textContent = formatNumber(totalAvgPower);
+    document.getElementById("stat-huiyinPower").textContent = formatNumber(huiyinPower);
+    document.getElementById("stat-huiyinAvgPower").textContent = formatNumber(huiyinAvg);
+    document.getElementById("stat-huishengPower").textContent = formatNumber(huishengPower);
+    document.getElementById("stat-huishengAvgPower").textContent = huishengAvg === "-" ? "-" : formatNumber(huishengAvg);
+    
+    document.getElementById("note-memberCount").textContent = totalMember;
+    
     // 分会别渲染表格
     ["回音", "回声"].forEach(huibie => {
         const currentCount = getCurrentCount(huibie);
         const fullRef = calcFullRef(SINGLE_REF[huibie], FULL_TOTAL[huibie]);
         const totalHui = currentCount.reduce((sum, num) => sum + num, 0);
         const avgPowerHui = totalHui > 0 ? Math.round(CLUB_POWER[huibie] / totalHui) : 0;
-
+        
         document.getElementById("path-合计-" + huibie).textContent = totalHui;
-
+        
         PATHS.forEach(p => {
             const cntEl = document.getElementById("path-" + p + "-" + huibie);
             const powEl = document.getElementById("power-" + p + "-" + huibie);
             if (cntEl) cntEl.textContent = currentCount[p];
             if (powEl) {
-                const doubleRef = SINGLE_REF[huibie][p] * 2;
-                const power = totalHui > 0 ? calcPower(
-                    currentCount[p],
-                    doubleRef,
-                    fullRef[p],
-                    avgPowerHui,
-                    OVER_THRESHOLD[p]
-                ) : "-";
-                powEl.textContent = power;
-                if (power === "不招") {
-                    powEl.classList.add("hot");
-                } else {
+                if (totalHui === 0) {
+                    powEl.textContent = "-";
                     powEl.classList.remove("hot");
+                } else {
+                    const doubleRef = SINGLE_REF[huibie][p] * 2;
+                    const power = calcPower(
+                        currentCount[p],
+                        doubleRef,
+                        fullRef[p],
+                        avgPowerHui,
+                        OVER_THRESHOLD[p]
+                    );
+                    powEl.textContent = power;
+                    if (power === "不招") {
+                        powEl.classList.add("hot");
+                    } else {
+                        powEl.classList.remove("hot");
+                    }
                 }
             }
         });
-
-        const urgent = calcUrgent(currentCount, SINGLE_REF[huibie]);
-        document.getElementById("urgent-text-" + huibie).textContent = urgent || "人员已满";
+        
+        const urgentEl = document.getElementById("urgent-text-" + huibie);
+        if (totalHui === 0) {
+            urgentEl.textContent = "-";
+            urgentEl.classList.remove("hot");
+        } else {
+            const urgent = calcUrgent(currentCount, SINGLE_REF[huibie]);
+            urgentEl.textContent = urgent || "人员已满";
+            if (urgent) {
+                urgentEl.classList.add("hot");
+            } else {
+                urgentEl.classList.remove("hot");
+            }
+        }
     });
 }
-
 // 渲染管理架构人员
 function renderOrg() {
     for (const [domId, postName] of Object.entries(orgPostMap)) {
@@ -1380,7 +1407,6 @@ function renderOrg() {
         el.textContent = member ? member[0] : "暂缺";
     }
 }
-
 // 切换管理面板编辑会别
 function switchHuiBieEdit() {
     const huibie = document.getElementById("clubHuiBie").value;
@@ -1392,7 +1418,6 @@ function switchHuiBieEdit() {
     });
     updatePreview();
 }
-
 // 管理员面板实时预览更新
 function updatePreview() {
     const huibie = CURRENT_EDIT_HUIBIE;
@@ -1428,7 +1453,6 @@ function updatePreview() {
     });
     tbody.innerHTML = html;
 }
-
 // 批量设置出勤状态
 function batchSetStatus(selectIdx, value) {
     if (!value) return;
@@ -1440,7 +1464,6 @@ function batchSetStatus(selectIdx, value) {
         }
     });
 }
-
 // 初始兜底数据（已插入会别字段，默认回音）
 const DEFAULT_MEMBERS=[
 ["哈伯之盾","战士","回音","",1,"-","-","-","-","-"],
@@ -1515,7 +1538,6 @@ const DEFAULT_MEMBERS=[
 ];
 let MEMBERS = [...DEFAULT_MEMBERS];
 var PER=15,page=1;
-
 //======== JSONBin 网络函数 =========
 async function loadBin(){
   try{
@@ -1573,7 +1595,6 @@ async function loadBin(){
     console.warn("云端读取失败，使用本地默认数据",e);
   }
 }
-
 async function saveToBin(){
   const huibie = CURRENT_EDIT_HUIBIE;
   CLUB_POWER[huibie] = Number(document.getElementById("clubPowerInput").value.trim()) || 0;
@@ -1633,7 +1654,6 @@ async function saveToBin(){
     alert("网络异常："+err.message);
   }
 }
-
 async function reloadFromBin(){
   await loadBin();
   renderAdminTable();
@@ -1657,7 +1677,6 @@ async function reloadFromBin(){
   }
   alert("已重新拉取云端数据");
 }
-
 //==== 管理员登录与编辑表格 ====
 function adminLogin(){
   const inputPwd=document.getElementById("adminPwdInput").value;
@@ -1678,7 +1697,6 @@ function adminLogin(){
     alert("密码错误");
   }
 }
-
 function renderAdminTable(){
   const tbody=document.getElementById("adminTbody");
   tbody.innerHTML="";
@@ -1686,7 +1704,6 @@ function renderAdminTable(){
     tbody.appendChild(buildAdminTr(row,idx));
   })
 }
-
 function buildAdminTr(arr,idx){
   const tr=document.createElement("tr");
   tr.innerHTML=`
@@ -1703,8 +1720,8 @@ function buildAdminTr(arr,idx){
     </td>
     <td>
       <select>
-        <option value="回音" ${arr[2]==="回音"?"selected":""}>回音</option>
-        <option value="回声" ${arr[2]==="回声"?"selected":""}>回声</option>
+        <option value="回音" ${arr[2]=="回音"?"selected":""}>回音</option>
+        <option value="回声" ${arr[2]=="回声"?"selected":""}>回声</option>
       </select>
     </td>
     <td><input value="${arr[3]||''}" placeholder="多个职务用|分隔"></td>
@@ -1758,13 +1775,11 @@ function buildAdminTr(arr,idx){
   `;
   return tr;
 }
-
 function addAdminRow(){
   const tbody=document.getElementById("adminTbody");
   const emptyRow = buildAdminTr(["","战士","回音","",1,"-","-","-","-","-"],-1);
   tbody.appendChild(emptyRow);
 }
-
 function downloadBackup(){
   const table=document.getElementById("adminTbody");
   const rows=Array.from(table.querySelectorAll("tr"));
@@ -1797,7 +1812,6 @@ function downloadBackup(){
   a.download="回音俱乐部_成员备份.json";
   a.click();
 }
-
 //======== 浏览页面渲染逻辑 ========
 function getSortedList(){
     return MEMBERS
@@ -1824,14 +1838,12 @@ function getSortedList(){
         return pA - pB;
     })
 }
-
 function stClass(s){
   if(s==="出席")return "done";
   if(s==="已请假")return "leave";
   if(s==="缺席")return "abs";
   return "";
 }
-
 function render(){
   var kw=(document.getElementById("search").value||"").trim().toLowerCase();
   var fp=document.getElementById("fPath").value;
@@ -1887,7 +1899,6 @@ function render(){
   document.getElementById("tbody").innerHTML=html;
   renderPager(pages);
 }
-
 function renderPager(pages){
   var p=document.getElementById("pager");
   var h='<button '+(page===1?"disabled":"")+' onclick="goPage('+(page-1)+')">‹ 上一页</button>';
@@ -1898,7 +1909,6 @@ function renderPager(pages){
   h+='<button '+(page>=pages?"disabled":"")+' onclick="goPage('+(page+1)+')">下一页 ›</button>';
   p.innerHTML=h;
 }
-
 function goPage(n){page=n;render();}
 document.getElementById("search").addEventListener("input",function(){page=1;render();});
 document.getElementById("fPath").addEventListener("change",function(){page=1;render();});
@@ -2091,3 +2101,4 @@ window.addEventListener('resize', ()=>{
 </script>
 </body>
 </html>
+
