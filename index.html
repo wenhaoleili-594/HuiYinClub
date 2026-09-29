@@ -97,7 +97,7 @@ h2{
 .chart-card{position:relative;min-height:380px}
 #chart{width:100%;height:340px}
 .path-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px}
-.path-table th,.path-table td{padding:8px 6px;text-align:center;border-bottom:1px solid var(--line-soft)}
+.path-table th,.path-table td{padding:8px 10px;text-align:center;border-bottom:1px solid var(--line-soft)}
 .path-table th{font-size:12px;color:var(--ink-mute);letter-spacing:.06em;font-weight:500}
 .path-table td:first-child{text-align:left}
 .path-table .cnt{font-family:"Noto Serif SC",serif;font-weight:700}
@@ -686,26 +686,18 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
           <thead>
             <tr>
               <th>途径</th>
-              <th>人数（回音）</th>
-              <th>战力要求（回音）</th>
-              <th>人数（回声）</th>
-              <th>战力要求（回声）</th>
+              <th>人数</th>
+              <th>战力要求</th>
             </tr>
           </thead>
           <tbody>
-            <tr><td>战士</td><td class="cnt" id="path-战士-回音">0</td><td id="power-战士-回音">-</td><td class="cnt" id="path-战士-回声">0</td><td id="power-战士-回声">-</td></tr>
-            <tr><td>观众</td><td class="cnt" id="path-观众-回音">0</td><td id="power-观众-回音">-</td><td class="cnt" id="path-观众-回声">0</td><td id="power-观众-回声">-</td></tr>
-            <tr><td>歌颂</td><td class="cnt" id="path-歌颂-回音">0</td><td id="power-歌颂-回音">-</td><td class="cnt" id="path-歌颂-回声">0</td><td id="power-歌颂-回声">-</td></tr>
-            <tr><td>窥秘</td><td class="cnt" id="path-窥秘-回音">0</td><td id="power-窥秘-回音" class="hot">-</td><td class="cnt" id="path-窥秘-回声">0</td><td id="power-窥秘-回声" class="hot">-</td></tr>
-            <tr><td>占卜</td><td class="cnt" id="path-占卜-回音">0</td><td id="power-占卜-回音">-</td><td class="cnt" id="path-占卜-回声">0</td><td id="power-占卜-回声">-</td></tr>
-            <tr><td>学徒</td><td class="cnt" id="path-学徒-回音">0</td><td id="power-学徒-回音">-</td><td class="cnt" id="path-学徒-回声">0</td><td id="power-学徒-回声">-</td></tr>
-            <tr>
-              <td><b>合计</b></td>
-              <td class="cnt" id="path-合计-回音">0</td>
-              <td class="hot" id="urgent-text-回音">-</td>
-              <td class="cnt" id="path-合计-回声">0</td>
-              <td class="hot" id="urgent-text-回声">-</td>
-            </tr>
+            <tr><td>战士</td><td class="cnt" id="path-战士">13</td><td id="power-战士">106,000</td></tr>
+            <tr><td>观众</td><td class="cnt" id="path-观众">13</td><td id="power-观众">100,000</td></tr>
+            <tr><td>歌颂</td><td class="cnt" id="path-歌颂">8</td><td id="power-歌颂">90,000</td></tr>
+            <tr><td>窥秘</td><td class="cnt" id="path-窥秘">23</td><td id="power-窥秘" class="hot">不招</td></tr>
+            <tr><td>占卜</td><td class="cnt" id="path-占卜">3</td><td id="power-占卜">90,000</td></tr>
+            <tr><td>学徒</td><td class="cnt" id="path-学徒">10</td><td id="power-学徒">114,000</td></tr>
+            <tr><td><b>合计</b></td><td class="cnt" id="path-合计">70</td><td class="hot" id="urgent-text">急招 · 歌颂 3 人</td></tr>
           </tbody>
         </table>
       </div>
@@ -908,14 +900,6 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
       <!-- 俱乐部数据编辑区域 -->
       <div class="club-edit-box">
         <h4>📊 俱乐部数据编辑</h4>
-        <div class="club-edit-row">
-          <label>编辑会别：</label>
-          <select id="editClubSelect" onchange="switchEditClub()">
-            <option value="回音">回音</option>
-            <option value="回声">回声</option>
-          </select>
-          <span class="tip">切换编辑对应分会的配置参数</span>
-        </div>
         <div class="club-edit-row">
           <label>俱乐部战力：</label>
           <input id="clubPowerInput" type="number" placeholder="请输入纯数字" oninput="updatePreview()">
@@ -1132,21 +1116,9 @@ const DEFAULT_FULL_TOTAL = 72;
 const DEFAULT_SINGLE_REF = {
     "战士": 6, "观众": 6, "歌颂": 6, "窥秘": 6, "占卜": 3, "学徒": 3
 };
-
-// 双会别独立配置
-const CLUB_DATA = {
-    "回音": {
-        clubPower: DEFAULT_CLUB_POWER,
-        fullTotal: DEFAULT_FULL_TOTAL,
-        singleRef: {...DEFAULT_SINGLE_REF}
-    },
-    "回声": {
-        clubPower: DEFAULT_CLUB_POWER,
-        fullTotal: DEFAULT_FULL_TOTAL,
-        singleRef: {...DEFAULT_SINGLE_REF}
-    }
-};
-let currentEditClub = "回音";
+let CLUB_POWER = DEFAULT_CLUB_POWER;
+let FULL_TOTAL = DEFAULT_FULL_TOTAL;
+let SINGLE_REF = {...DEFAULT_SINGLE_REF};
 
 // 数字千分位格式化
 function formatNumber(num) {
@@ -1276,12 +1248,12 @@ function countManagers() {
     return nameSet.size;
 }
 
-// 统计各职业当前人数（按会别）
-function getCurrentCount(club) {
+// 统计各职业当前人数
+function getCurrentCount() {
     const count = {};
     PATHS.forEach(p => count[p] = 0);
     MEMBERS.forEach(m => {
-        if (m[2] === club && count[m[1]] !== undefined) count[m[1]]++;
+        if (count[m[1]] !== undefined) count[m[1]]++;
     });
     return count;
 }
@@ -1290,50 +1262,41 @@ function getCurrentCount(club) {
 function renderStats() {
     const total = MEMBERS.length;
     const managers = countManagers();
-    const totalPower = CLUB_DATA["回音"].clubPower + CLUB_DATA["回声"].clubPower;
-    const avgPower = total > 0 ? Math.round(totalPower / total) : 0;
+    const avgPower = total > 0 ? Math.round(CLUB_POWER / total) : 0;
+    const currentCount = getCurrentCount();
+    const fullRef = calcFullRef(SINGLE_REF, FULL_TOTAL);
 
-    // 顶部总统计
     document.getElementById("stat-memberCount").textContent = total;
-    document.getElementById("stat-clubPower").textContent = formatNumber(totalPower);
+    document.getElementById("stat-clubPower").textContent = formatNumber(CLUB_POWER);
     document.getElementById("stat-avgPower").textContent = formatNumber(avgPower);
     document.getElementById("stat-managerCount").textContent = managers;
     document.getElementById("note-memberCount").textContent = total;
+    document.getElementById("path-合计").textContent = total;
 
-    // 分回合计
-    ["回音", "回声"].forEach(club => {
-        const currentCount = getCurrentCount(club);
-        const fullRef = calcFullRef(CLUB_DATA[club].singleRef, CLUB_DATA[club].fullTotal);
-        const clubTotal = currentCount.reduce((sum, num) => sum + num, 0);
-        const avg = clubTotal > 0 ? Math.round(CLUB_DATA[club].clubPower / clubTotal) : 0;
-
-        document.getElementById(`path-合计-${club}`).textContent = clubTotal;
-
-        PATHS.forEach(p => {
-            const cntEl = document.getElementById(`path-${p}-${club}`);
-            const powEl = document.getElementById(`power-${p}-${club}`);
-            if (cntEl) cntEl.textContent = currentCount[p];
-            if (powEl) {
-                const doubleRef = CLUB_DATA[club].singleRef[p] * 2;
-                const power = calcPower(
-                    currentCount[p],
-                    doubleRef,
-                    fullRef[p],
-                    avg,
-                    OVER_THRESHOLD[p]
-                );
-                powEl.textContent = power;
-                if (power === "不招") {
-                    powEl.classList.add("hot");
-                } else {
-                    powEl.classList.remove("hot");
-                }
+    PATHS.forEach(p => {
+        const cntEl = document.getElementById("path-" + p);
+        const powEl = document.getElementById("power-" + p);
+        if (cntEl) cntEl.textContent = currentCount[p];
+        if (powEl) {
+            const doubleRef = SINGLE_REF[p] * 2;
+            const power = calcPower(
+                currentCount[p],
+                doubleRef,
+                fullRef[p],
+                avgPower,
+                OVER_THRESHOLD[p]
+            );
+            powEl.textContent = power;
+            if (power === "不招") {
+                powEl.classList.add("hot");
+            } else {
+                powEl.classList.remove("hot");
             }
-        });
-
-        const urgent = calcUrgent(currentCount, CLUB_DATA[club].singleRef);
-        document.getElementById(`urgent-text-${club}`).textContent = urgent || "人员已满";
+        }
     });
+
+    const urgent = calcUrgent(currentCount, SINGLE_REF);
+    document.getElementById("urgent-text").textContent = urgent || "人员已满";
 }
 
 // 渲染管理架构人员
@@ -1350,37 +1313,18 @@ function renderOrg() {
     }
 }
 
-// 切换编辑会别
-function switchEditClub() {
-    currentEditClub = document.getElementById("editClubSelect").value;
-    const data = CLUB_DATA[currentEditClub];
-    document.getElementById("clubPowerInput").value = data.clubPower;
-    document.getElementById("fullTotalInput").value = data.fullTotal;
-    PATHS.forEach(p => {
-        document.getElementById(`single-${p}`).value = data.singleRef[p];
-    });
-    updatePreview();
-}
-
 // 管理员面板实时预览更新
 function updatePreview() {
-    const club = currentEditClub;
-    const clubPower = Number(document.getElementById("clubPowerInput").value) || CLUB_DATA[club].clubPower;
-    const fullTotal = Number(document.getElementById("fullTotalInput").value) || CLUB_DATA[club].fullTotal;
+    const clubPower = Number(document.getElementById("clubPowerInput").value) || CLUB_POWER;
+    const fullTotal = Number(document.getElementById("fullTotalInput").value) || FULL_TOTAL;
     const singleRef = {};
     PATHS.forEach(p => {
-        singleRef[p] = Number(document.getElementById(`single-${p}`).value) || CLUB_DATA[club].singleRef[p];
+        singleRef[p] = Number(document.getElementById("single-" + p).value) || SINGLE_REF[p];
     });
-
-    // 同步到当前配置
-    CLUB_DATA[club].clubPower = clubPower;
-    CLUB_DATA[club].fullTotal = fullTotal;
-    CLUB_DATA[club].singleRef = singleRef;
-
-    const currentCount = getCurrentCount(club);
-    const total = currentCount.reduce((sum, num) => sum + num, 0);
+    const total = MEMBERS.length;
     const avgPower = total > 0 ? Math.round(clubPower / total) : 0;
     const fullRef = calcFullRef(singleRef, fullTotal);
+    const currentCount = getCurrentCount();
 
     const tbody = document.querySelector("#configPreview tbody");
     let html = "";
@@ -1514,11 +1458,9 @@ async function loadBin(){
         }
         return item;
       });
-      // 读取双会别配置
-      if(data.clubData) {
-        if(data.clubData["回音"]) CLUB_DATA["回音"] = {...CLUB_DATA["回音"], ...data.clubData["回音"]};
-        if(data.clubData["回声"]) CLUB_DATA["回声"] = {...CLUB_DATA["回声"], ...data.clubData["回声"]};
-      }
+      if(data.clubPower != null) CLUB_POWER = Number(data.clubPower) || DEFAULT_CLUB_POWER;
+      if(data.fullTotal != null) FULL_TOTAL = Number(data.fullTotal) || DEFAULT_FULL_TOTAL;
+      if(data.singleRef) SINGLE_REF = {...DEFAULT_SINGLE_REF, ...data.singleRef};
       if(data.weeklyActivity) WEEKLY = {...DEFAULT_WEEKLY, ...data.weeklyActivity};
     }
   }catch(e){
@@ -1527,13 +1469,10 @@ async function loadBin(){
 }
 
 async function saveToBin(){
-  // 同步输入框数据到配置
-  ["回音", "回声"].forEach(club => {
-    CLUB_DATA[club].clubPower = Number(document.getElementById("clubPowerInput").value) || CLUB_DATA[club].clubPower;
-    CLUB_DATA[club].fullTotal = Number(document.getElementById("fullTotalInput").value) || CLUB_DATA[club].fullTotal;
-    PATHS.forEach(p => {
-        CLUB_DATA[club].singleRef[p] = Number(document.getElementById(`single-${p}`).value) || CLUB_DATA[club].singleRef[p];
-    });
+  CLUB_POWER = Number(document.getElementById("clubPowerInput").value.trim()) || 0;
+  FULL_TOTAL = Number(document.getElementById("fullTotalInput").value.trim()) || DEFAULT_FULL_TOTAL;
+  PATHS.forEach(p => {
+      SINGLE_REF[p] = Number(document.getElementById("single-" + p).value) || DEFAULT_SINGLE_REF[p];
   });
 
   const table=document.getElementById("adminTbody");
@@ -1565,7 +1504,9 @@ async function saveToBin(){
       },
       body:JSON.stringify({
         members: newData,
-        clubData: CLUB_DATA,
+        clubPower: CLUB_POWER,
+        fullTotal: FULL_TOTAL,
+        singleRef: SINGLE_REF,
         weeklyActivity: WEEKLY
       })
     });
@@ -1595,8 +1536,12 @@ async function reloadFromBin(){
   renderStats();
   const panel = document.getElementById("adminPanel");
   if(panel.classList.contains("show")){
-    document.getElementById("editClubSelect").value = currentEditClub;
-    switchEditClub();
+    document.getElementById("clubPowerInput").value = CLUB_POWER;
+    document.getElementById("fullTotalInput").value = FULL_TOTAL;
+    PATHS.forEach(p => {
+        document.getElementById("single-" + p).value = SINGLE_REF[p];
+    });
+    updatePreview();
     document.getElementById("weeklyDateInput").value = WEEKLY.dateRange;
     document.getElementById("weeklyNoteInput").value = WEEKLY.note;
     renderAdminActivityList();
@@ -1609,9 +1554,13 @@ function adminLogin(){
   const inputPwd=document.getElementById("adminPwdInput").value;
   if(inputPwd===ADMIN_PWD){
     document.getElementById("adminPanel").classList.add("show");
-    document.getElementById("editClubSelect").value = "回音";
-    currentEditClub = "回音";
-    switchEditClub();
+    document.getElementById("clubPowerInput").value = CLUB_POWER;
+    document.getElementById("fullTotalInput").value = FULL_TOTAL;
+    PATHS.forEach(p => {
+        document.getElementById("single-" + p).value = SINGLE_REF[p];
+    });
+    renderAdminTable();
+    updatePreview();
     document.getElementById("weeklyDateInput").value = WEEKLY.dateRange;
     document.getElementById("weeklyNoteInput").value = WEEKLY.note;
     renderAdminActivityList();
@@ -1645,7 +1594,7 @@ function buildAdminTr(arr,idx){
     <td>
       <select>
         <option value="回音" ${arr[2]==="回音"?"selected":""}>回音</option>
-        <option value="回声" ${arr[2]==="回声"?"selected":""}>回声</option>
+        <option value="二会" ${arr[2]=="二会"?"selected":""}>回声</option>
       </select>
     </td>
     <td><input value="${arr[3]||''}" placeholder="多个职务用|分隔"></td>
@@ -1729,7 +1678,9 @@ function downloadBackup(){
   }
   const blob=new Blob([JSON.stringify({
     members: exportArr,
-    clubData: CLUB_DATA
+    clubPower: CLUB_POWER,
+    fullTotal: FULL_TOTAL,
+    singleRef: SINGLE_REF
   },null,2)],{type:"application/json"});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
@@ -1900,7 +1851,7 @@ function renderWeekly() {
     const timeMap = {};
     WEEKLY.activities.forEach(act => {
         const t = act.time;
-        if(!timeMap[t]) timeMap[t] = [[],[],[],[],[],[],[],[]];
+        if(!timeMap[t]) timeMap[t] = [[],[],[],[],[],[],[],[]]; // 修复为7个空数组，对应周一~周日
         timeMap[t][act.weekday].push({
             name: act.name,
             color: act.color,
