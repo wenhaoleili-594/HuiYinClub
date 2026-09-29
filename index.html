@@ -816,6 +816,17 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
             <span class="badge blue">PVE指挥</span>
           </div>
         </div>
+        <div class="org-box captain">
+          <div class="t">回响会长</div>
+          <div class="d" id="org-回响会长">暂缺</div>
+          <div>
+            <span class="badge green">管理体系调整</span>
+            <span class="badge green">管理人员任免</span>
+            <span class="badge yellow">外联与敌对</span>
+            <span class="badge red">GVG指挥</span>
+            <span class="badge blue">PVE指挥</span>
+          </div>
+        </div>
       </div>
       <div class="org-branch">
         <div class="org-box">
@@ -1245,24 +1256,26 @@ function calcUrgent(currentCount, singleRef) {
 const rankMap = {
     "回音会长": 1,
     "外交官": 2,
-    "理事（GVG）": 3,
-    "理事（途径攻略）": 4,
-    "理事（数据）": 5,
-    "俱乐部之星1": 6,
-    "俱乐部之星2": 7,
-    "战指组长": 8,
-    "副指组长": 9,
-    "战研组长": 10,
-    "途径组长": 11,
-    "战指": 12,
-    "副指": 13,
-    "战研": 14,
-    "途径": 15,
+    "回响会长": 3,
+    "理事（GVG）": 4,
+    "理事（途径攻略）": 5,
+    "理事（数据）": 6,
+    "俱乐部之星1": 7,
+    "俱乐部之星2": 8,
+    "战指组长": 9,
+    "副指组长": 10,
+    "战研组长": 11,
+    "途径组长": 12,
+    "战指": 13,
+    "副指": 14,
+    "战研": 15,
+    "途径": 16,
 };
 // 管理架构职务映射
 const orgPostMap = {
     "org-回音会长": "回音会长",
     "org-外交官": "外交官",
+    "org-回响会长": "回响会长",
     "org-理事GVG": "理事（GVG）",
     "org-理事途径": "理事（途径攻略）",
     "org-理事数据": "理事（数据）",
