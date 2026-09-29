@@ -269,7 +269,7 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
   font-size:12px;
   color:var(--ink-soft);
   letter-spacing:.06em;
-  font-weight:500;
+  font-weight:50;
 }
 .weekly-table td:first-child{
   width:90px;
@@ -663,7 +663,7 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
     <p class="hero-sub">非凡之路上，总有一群人不合时宜地守在一起。<br>这里是《回音》，敬每一位仍在聆听的同行者。</p>
     <div class="hero-cols">
       <div class="stat"><div class="num" id="stat-memberCount">70</div><div class="lbl">在册成员</div></div>
-      <div class="stat"><div class="num" id="stat-clubPower">6,933,128</div><div class="lbl">俱乐部战力</div></div>
+      <div class="stat"><div class="num" id="stat-clubPower">6,933,128</div><div class="lbl">俱乐部总战力</div></div>
       <div class="stat"><div class="num" id="stat-avgPower">100,480</div><div class="lbl">平均战力</div></div>
       <div class="stat"><div class="num" id="stat-managerCount">7</div><div class="lbl">管理人员</div></div>
     </div>
@@ -673,10 +673,10 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
   <div class="wrap">
     <span class="kicker">名册概览</span>
     <h2>成员概览</h2>
-    <p class="lead">下方为当前在册成员的职业分布，以及各途径的战力要求。</p>
+    <p class="lead">下方为当前在册成员的职业分布，以及各途径的战力要求，分会别统计。</p>
     <div class="overview-grid" style="margin-top:30px">
       <div class="frame chart-card">
-        <div class="frame-title">各途径成员数量</div>
+        <div class="frame-title">各途径成员数量（合计）</div>
         <div id="chart"></div>
         <p class="note">数据口径：名单表在册 <span id="note-memberCount">70</span> 人，按途径分组统计。</p>
       </div>
@@ -686,18 +686,62 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
           <thead>
             <tr>
               <th>途径</th>
-              <th>人数</th>
-              <th>战力要求</th>
+              <th>人数（回音）</th>
+              <th>战力要求（回音）</th>
+              <th>人数（回声）</th>
+              <th>战力要求（回声）</th>
             </tr>
           </thead>
           <tbody>
-            <tr><td>战士</td><td class="cnt" id="path-战士">13</td><td id="power-战士">106,000</td></tr>
-            <tr><td>观众</td><td class="cnt" id="path-观众">13</td><td id="power-观众">100,000</td></tr>
-            <tr><td>歌颂</td><td class="cnt" id="path-歌颂">8</td><td id="power-歌颂">90,000</td></tr>
-            <tr><td>窥秘</td><td class="cnt" id="path-窥秘">23</td><td id="power-窥秘" class="hot">不招</td></tr>
-            <tr><td>占卜</td><td class="cnt" id="path-占卜">3</td><td id="power-占卜">90,000</td></tr>
-            <tr><td>学徒</td><td class="cnt" id="path-学徒">10</td><td id="power-学徒">114,000</td></tr>
-            <tr><td><b>合计</b></td><td class="cnt" id="path-合计">70</td><td class="hot" id="urgent-text">急招 · 歌颂 3 人</td></tr>
+            <tr>
+              <td>战士</td>
+              <td class="cnt" id="path-战士-回音">13</td>
+              <td id="power-战士-回音">106,000</td>
+              <td class="cnt" id="path-战士-回声">0</td>
+              <td id="power-战士-回声">-</td>
+            </tr>
+            <tr>
+              <td>观众</td>
+              <td class="cnt" id="path-观众-回音">13</td>
+              <td id="power-观众-回音">100,000</td>
+              <td class="cnt" id="path-观众-回声">0</td>
+              <td id="power-观众-回声">-</td>
+            </tr>
+            <tr>
+              <td>歌颂</td>
+              <td class="cnt" id="path-歌颂-回音">8</td>
+              <td id="power-歌颂-回音">90,000</td>
+              <td class="cnt" id="path-歌颂-回声">0</td>
+              <td id="power-歌颂-回声">-</td>
+            </tr>
+            <tr>
+              <td>窥秘</td>
+              <td class="cnt" id="path-窥秘-回音">23</td>
+              <td id="power-窥秘-回音" class="hot">不招</td>
+              <td class="cnt" id="path-窥秘-回声">0</td>
+              <td id="power-窥秘-回声" class="hot">不招</td>
+            </tr>
+            <tr>
+              <td>占卜</td>
+              <td class="cnt" id="path-占卜-回音">3</td>
+              <td id="power-占卜-回音">90,000</td>
+              <td class="cnt" id="path-占卜-回声">0</td>
+              <td id="power-占卜-回声">-</td>
+            </tr>
+            <tr>
+              <td>学徒</td>
+              <td class="cnt" id="path-学徒-回音">10</td>
+              <td id="power-学徒-回音">114,000</td>
+              <td class="cnt" id="path-学徒-回声">0</td>
+              <td id="power-学徒-回声">-</td>
+            </tr>
+            <tr>
+              <td><b>合计</b></td>
+              <td class="cnt" id="path-合计-回音">70</td>
+              <td class="hot" id="urgent-text-回音">急招 · 歌颂 3 人</td>
+              <td class="cnt" id="path-合计-回声">0</td>
+              <td class="hot" id="urgent-text-回声">人员已满</td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -900,6 +944,14 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
       <!-- 俱乐部数据编辑区域 -->
       <div class="club-edit-box">
         <h4>📊 俱乐部数据编辑</h4>
+        <div class="club-edit-row">
+          <label>当前编辑会别：</label>
+          <select id="clubHuiBie" onchange="switchHuiBieEdit()">
+            <option value="回音">回音</option>
+            <option value="回声">回声</option>
+          </select>
+          <span class="tip">切换会别独立编辑对应配置</span>
+        </div>
         <div class="club-edit-row">
           <label>俱乐部战力：</label>
           <input id="clubPowerInput" type="number" placeholder="请输入纯数字" oninput="updatePreview()">
@@ -1110,15 +1162,21 @@ const OVER_THRESHOLD = {
 };
 // 出勤状态列索引偏移
 const STATUS_OFFSET = 5;
-// 默认配置
-const DEFAULT_CLUB_POWER = 6933128;
-const DEFAULT_FULL_TOTAL = 72;
+// 默认配置（双会别独立）
+const DEFAULT_CLUB_POWER = { "回音": 6933128, "回声": 0 };
+const DEFAULT_FULL_TOTAL = { "回音": 72, "回声": 72 };
 const DEFAULT_SINGLE_REF = {
-    "战士": 6, "观众": 6, "歌颂": 6, "窥秘": 6, "占卜": 3, "学徒": 3
+    "回音": {"战士": 6, "观众": 6, "歌颂": 6, "窥秘": 6, "占卜": 3, "学徒": 3},
+    "回声": {"战士": 6, "观众": 6, "歌颂": 6, "窥秘": 6, "占卜": 3, "学徒": 3}
 };
-let CLUB_POWER = DEFAULT_CLUB_POWER;
-let FULL_TOTAL = DEFAULT_FULL_TOTAL;
-let SINGLE_REF = {...DEFAULT_SINGLE_REF};
+let CLUB_POWER = {...DEFAULT_CLUB_POWER};
+let FULL_TOTAL = {...DEFAULT_FULL_TOTAL};
+let SINGLE_REF = {
+    "回音": {...DEFAULT_SINGLE_REF["回音"]},
+    "回声": {...DEFAULT_SINGLE_REF["回声"]}
+};
+// 当前编辑会别
+let CURRENT_EDIT_HUIBIE = "回音";
 
 // 数字千分位格式化
 function formatNumber(num) {
@@ -1248,55 +1306,65 @@ function countManagers() {
     return nameSet.size;
 }
 
-// 统计各职业当前人数
-function getCurrentCount() {
+// 统计各职业当前人数（支持按会别筛选）
+function getCurrentCount(huibie) {
     const count = {};
     PATHS.forEach(p => count[p] = 0);
     MEMBERS.forEach(m => {
-        if (count[m[1]] !== undefined) count[m[1]]++;
+        if (count[m[1]] !== undefined) {
+            if (!huibie || m[2] === huibie) count[m[1]]++;
+        }
     });
     return count;
 }
 
-// 更新顶部统计与职业表格
+// 更新顶部统计与职业表格（双会别）
 function renderStats() {
     const total = MEMBERS.length;
     const managers = countManagers();
-    const avgPower = total > 0 ? Math.round(CLUB_POWER / total) : 0;
-    const currentCount = getCurrentCount();
-    const fullRef = calcFullRef(SINGLE_REF, FULL_TOTAL);
+    const totalPower = CLUB_POWER["回音"] + CLUB_POWER["回声"];
+    const avgPower = total > 0 ? Math.round(totalPower / total) : 0;
 
     document.getElementById("stat-memberCount").textContent = total;
-    document.getElementById("stat-clubPower").textContent = formatNumber(CLUB_POWER);
+    document.getElementById("stat-clubPower").textContent = formatNumber(totalPower);
     document.getElementById("stat-avgPower").textContent = formatNumber(avgPower);
     document.getElementById("stat-managerCount").textContent = managers;
     document.getElementById("note-memberCount").textContent = total;
-    document.getElementById("path-合计").textContent = total;
 
-    PATHS.forEach(p => {
-        const cntEl = document.getElementById("path-" + p);
-        const powEl = document.getElementById("power-" + p);
-        if (cntEl) cntEl.textContent = currentCount[p];
-        if (powEl) {
-            const doubleRef = SINGLE_REF[p] * 2;
-            const power = calcPower(
-                currentCount[p],
-                doubleRef,
-                fullRef[p],
-                avgPower,
-                OVER_THRESHOLD[p]
-            );
-            powEl.textContent = power;
-            if (power === "不招") {
-                powEl.classList.add("hot");
-            } else {
-                powEl.classList.remove("hot");
+    // 分会别渲染表格
+    ["回音", "回声"].forEach(huibie => {
+        const currentCount = getCurrentCount(huibie);
+        const fullRef = calcFullRef(SINGLE_REF[huibie], FULL_TOTAL[huibie]);
+        const totalHui = currentCount.reduce((sum, num) => sum + num, 0);
+        const avgPowerHui = totalHui > 0 ? Math.round(CLUB_POWER[huibie] / totalHui) : 0;
+
+        document.getElementById("path-合计-" + huibie).textContent = totalHui;
+
+        PATHS.forEach(p => {
+            const cntEl = document.getElementById("path-" + p + "-" + huibie);
+            const powEl = document.getElementById("power-" + p + "-" + huibie);
+            if (cntEl) cntEl.textContent = currentCount[p];
+            if (powEl) {
+                const doubleRef = SINGLE_REF[huibie][p] * 2;
+                const power = totalHui > 0 ? calcPower(
+                    currentCount[p],
+                    doubleRef,
+                    fullRef[p],
+                    avgPowerHui,
+                    OVER_THRESHOLD[p]
+                ) : "-";
+                powEl.textContent = power;
+                if (power === "不招") {
+                    powEl.classList.add("hot");
+                } else {
+                    powEl.classList.remove("hot");
+                }
             }
-        }
-    });
+        });
 
-    const urgent = calcUrgent(currentCount, SINGLE_REF);
-    document.getElementById("urgent-text").textContent = urgent || "人员已满";
+        const urgent = calcUrgent(currentCount, SINGLE_REF[huibie]);
+        document.getElementById("urgent-text-" + huibie).textContent = urgent || "人员已满";
+    });
 }
 
 // 渲染管理架构人员
@@ -1313,30 +1381,43 @@ function renderOrg() {
     }
 }
 
+// 切换管理面板编辑会别
+function switchHuiBieEdit() {
+    const huibie = document.getElementById("clubHuiBie").value;
+    CURRENT_EDIT_HUIBIE = huibie;
+    document.getElementById("clubPowerInput").value = CLUB_POWER[huibie];
+    document.getElementById("fullTotalInput").value = FULL_TOTAL[huibie];
+    PATHS.forEach(p => {
+        document.getElementById("single-" + p).value = SINGLE_REF[huibie][p];
+    });
+    updatePreview();
+}
+
 // 管理员面板实时预览更新
 function updatePreview() {
-    const clubPower = Number(document.getElementById("clubPowerInput").value) || CLUB_POWER;
-    const fullTotal = Number(document.getElementById("fullTotalInput").value) || FULL_TOTAL;
+    const huibie = CURRENT_EDIT_HUIBIE;
+    const clubPower = Number(document.getElementById("clubPowerInput").value) || CLUB_POWER[huibie];
+    const fullTotal = Number(document.getElementById("fullTotalInput").value) || FULL_TOTAL[huibie];
     const singleRef = {};
     PATHS.forEach(p => {
-        singleRef[p] = Number(document.getElementById("single-" + p).value) || SINGLE_REF[p];
+        singleRef[p] = Number(document.getElementById("single-" + p).value) || SINGLE_REF[huibie][p];
     });
-    const total = MEMBERS.length;
+    const total = MEMBERS.filter(m => m[2] === huibie).length;
     const avgPower = total > 0 ? Math.round(clubPower / total) : 0;
     const fullRef = calcFullRef(singleRef, fullTotal);
-    const currentCount = getCurrentCount();
+    const currentCount = getCurrentCount(huibie);
 
     const tbody = document.querySelector("#configPreview tbody");
     let html = "";
     PATHS.forEach(p => {
         const doubleRef = singleRef[p] * 2;
-        const power = calcPower(
+        const power = total > 0 ? calcPower(
             currentCount[p],
             doubleRef,
             fullRef[p],
             avgPower,
             OVER_THRESHOLD[p]
-        );
+        ) : "-";
         html += `<tr>
             <td>${p}</td>
             <td>${singleRef[p]}</td>
@@ -1458,9 +1539,34 @@ async function loadBin(){
         }
         return item;
       });
-      if(data.clubPower != null) CLUB_POWER = Number(data.clubPower) || DEFAULT_CLUB_POWER;
-      if(data.fullTotal != null) FULL_TOTAL = Number(data.fullTotal) || DEFAULT_FULL_TOTAL;
-      if(data.singleRef) SINGLE_REF = {...DEFAULT_SINGLE_REF, ...data.singleRef};
+      // 兼容旧版单会别配置
+      if(data.clubPower != null) {
+          if(typeof data.clubPower === "object") {
+              CLUB_POWER = {...DEFAULT_CLUB_POWER, ...data.clubPower};
+          } else {
+              CLUB_POWER = {...DEFAULT_CLUB_POWER, "回音": Number(data.clubPower) || DEFAULT_CLUB_POWER["回音"]};
+          }
+      }
+      if(data.fullTotal != null) {
+          if(typeof data.fullTotal === "object") {
+              FULL_TOTAL = {...DEFAULT_FULL_TOTAL, ...data.fullTotal};
+          } else {
+              FULL_TOTAL = {...DEFAULT_FULL_TOTAL, "回音": Number(data.fullTotal) || DEFAULT_FULL_TOTAL["回音"]};
+          }
+      }
+      if(data.singleRef) {
+          if(data.singleRef["回音"]) {
+              SINGLE_REF = {
+                  "回音": {...DEFAULT_SINGLE_REF["回音"], ...data.singleRef["回音"]},
+                  "回声": {...DEFAULT_SINGLE_REF["回声"], ...data.singleRef["回声"]}
+              };
+          } else {
+              SINGLE_REF = {
+                  "回音": {...DEFAULT_SINGLE_REF["回音"], ...data.singleRef},
+                  "回声": {...DEFAULT_SINGLE_REF["回声"]}
+              };
+          }
+      }
       if(data.weeklyActivity) WEEKLY = {...DEFAULT_WEEKLY, ...data.weeklyActivity};
     }
   }catch(e){
@@ -1469,10 +1575,11 @@ async function loadBin(){
 }
 
 async function saveToBin(){
-  CLUB_POWER = Number(document.getElementById("clubPowerInput").value.trim()) || 0;
-  FULL_TOTAL = Number(document.getElementById("fullTotalInput").value.trim()) || DEFAULT_FULL_TOTAL;
+  const huibie = CURRENT_EDIT_HUIBIE;
+  CLUB_POWER[huibie] = Number(document.getElementById("clubPowerInput").value.trim()) || 0;
+  FULL_TOTAL[huibie] = Number(document.getElementById("fullTotalInput").value.trim()) || DEFAULT_FULL_TOTAL[huibie];
   PATHS.forEach(p => {
-      SINGLE_REF[p] = Number(document.getElementById("single-" + p).value) || DEFAULT_SINGLE_REF[p];
+      SINGLE_REF[huibie][p] = Number(document.getElementById("single-" + p).value) || DEFAULT_SINGLE_REF[huibie][p];
   });
 
   const table=document.getElementById("adminTbody");
@@ -1536,10 +1643,12 @@ async function reloadFromBin(){
   renderStats();
   const panel = document.getElementById("adminPanel");
   if(panel.classList.contains("show")){
-    document.getElementById("clubPowerInput").value = CLUB_POWER;
-    document.getElementById("fullTotalInput").value = FULL_TOTAL;
+    const huibie = CURRENT_EDIT_HUIBIE;
+    document.getElementById("clubHuiBie").value = huibie;
+    document.getElementById("clubPowerInput").value = CLUB_POWER[huibie];
+    document.getElementById("fullTotalInput").value = FULL_TOTAL[huibie];
     PATHS.forEach(p => {
-        document.getElementById("single-" + p).value = SINGLE_REF[p];
+        document.getElementById("single-" + p).value = SINGLE_REF[huibie][p];
     });
     updatePreview();
     document.getElementById("weeklyDateInput").value = WEEKLY.dateRange;
@@ -1554,10 +1663,11 @@ function adminLogin(){
   const inputPwd=document.getElementById("adminPwdInput").value;
   if(inputPwd===ADMIN_PWD){
     document.getElementById("adminPanel").classList.add("show");
-    document.getElementById("clubPowerInput").value = CLUB_POWER;
-    document.getElementById("fullTotalInput").value = FULL_TOTAL;
+    document.getElementById("clubHuiBie").value = CURRENT_EDIT_HUIBIE;
+    document.getElementById("clubPowerInput").value = CLUB_POWER[CURRENT_EDIT_HUIBIE];
+    document.getElementById("fullTotalInput").value = FULL_TOTAL[CURRENT_EDIT_HUIBIE];
     PATHS.forEach(p => {
-        document.getElementById("single-" + p).value = SINGLE_REF[p];
+        document.getElementById("single-" + p).value = SINGLE_REF[CURRENT_EDIT_HUIBIE][p];
     });
     renderAdminTable();
     updatePreview();
@@ -1594,7 +1704,7 @@ function buildAdminTr(arr,idx){
     <td>
       <select>
         <option value="回音" ${arr[2]==="回音"?"selected":""}>回音</option>
-        <option value="二会" ${arr[2]=="二会"?"selected":""}>回声</option>
+        <option value="回声" ${arr[2]==="回声"?"selected":""}>回声</option>
       </select>
     </td>
     <td><input value="${arr[3]||''}" placeholder="多个职务用|分隔"></td>
