@@ -1176,6 +1176,7 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
 </footer>
 <script>
 //====================【已填入你的配置】====================
+const ADMIN_PWD = "leilei666";
 const BIN_ID = "6ab35b97ac6210605aebb7db";
 const API_KEY = "$2a$10$916yc2qjHuqVIHsTRPLYV.XQEqVu9VeBN5LrCIRbiVsi8FpXya1hu";
 //=========================================================
@@ -1703,74 +1704,25 @@ async function reloadFromBin(){
   }
   alert("已重新拉取云端数据");
 }
-// ==================== 管理员密码配置（加盐SHA256哈希，不可逆）====================
-const PWD_SALT = "huiyin_admin_salt";
-const ADMIN_PWD_HASH = "d25533b88d89a7c4a9f8a7d3d8c0a4f1d7c6b7c8e0c8d3b7a2b2c8a7d3e4c1";
-// 连续输错5次锁定10分钟
-const LOGIN_LOCK_MAX = 5;
-const LOGIN_LOCK_TIME = 10 * 60 * 1000;
-
-// 内置SHA256实现，无需引入额外库
-async function sha256(str) {
-    const buf = new TextEncoder().encode(str);
-    const hash = await crypto.subtle.digest("SHA-256", buf);
-    return Array.from(new Uint8Array(hash))
-        .map(b => b.toString(16).padStart(2, "0"))
-        .join("");
-}
-
-function getLockInfo() {
-    const raw = localStorage.getItem("admin_lock_info");
-    if (!raw) return { count: 0, lockUntil: 0 };
-    try { return JSON.parse(raw); } catch { return { count: 0, lockUntil: 0 }; }
-}
-
-function setLockInfo(info) {
-    localStorage.setItem("admin_lock_info", JSON.stringify(info));
-}
-
 //==== 管理员登录与编辑表格 ====
-async function adminLogin() {
-    const lockInfo = getLockInfo();
-    const now = Date.now();
-
-    // 锁定判断
-    if (lockInfo.lockUntil > now) {
-        const remain = Math.ceil((lockInfo.lockUntil - now) / 60000);
-        alert(`密码错误次数过多，已临时锁定\n请 ${remain} 分钟后再试`);
-        return;
-    }
-
-    const inputPwd = document.getElementById("adminPwdInput").value;
-    const inputHash = await sha256(PWD_SALT + inputPwd);
-
-    if (inputHash === ADMIN_PWD_HASH) {
-        // 登录成功，重置错误计数
-        setLockInfo({ count: 0, lockUntil: 0 });
-
-        document.getElementById("adminPanel").classList.add("show");
-        document.getElementById("clubHuiBie").value = CURRENT_EDIT_HUIBIE;
-        document.getElementById("clubPowerInput").value = CLUB_POWER[CURRENT_EDIT_HUIBIE];
-        document.getElementById("fullTotalInput").value = FULL_TOTAL[CURRENT_EDIT_HUIBIE];
-        PATHS.forEach(p => {
-            document.getElementById("single-" + p).value = SINGLE_REF[CURRENT_EDIT_HUIBIE][p];
-        });
-        renderAdminTable();
-        updatePreview();
-        document.getElementById("weeklyDateInput").value = WEEKLY.dateRange;
-        document.getElementById("weeklyNoteInput").value = WEEKLY.note;
-        renderAdminActivityList();
-    } else {
-        // 登录失败，计数+1
-        lockInfo.count += 1;
-        if (lockInfo.count >= LOGIN_LOCK_MAX) {
-            lockInfo.lockUntil = now + LOGIN_LOCK_TIME;
-            alert(`密码错误，已连续输错 ${lockInfo.count} 次\n系统已临时锁定 ${LOGIN_LOCK_TIME/60000} 分钟`);
-        } else {
-            alert(`密码错误，已输错 ${lockInfo.count} 次\n累计 ${LOGIN_LOCK_MAX} 次将锁定`);
-        }
-        setLockInfo(lockInfo);
-    }
+function adminLogin(){
+  const inputPwd=document.getElementById("adminPwdInput").value;
+  if(inputPwd===ADMIN_PWD){
+    document.getElementById("adminPanel").classList.add("show");
+    document.getElementById("clubHuiBie").value = CURRENT_EDIT_HUIBIE;
+    document.getElementById("clubPowerInput").value = CLUB_POWER[CURRENT_EDIT_HUIBIE];
+    document.getElementById("fullTotalInput").value = FULL_TOTAL[CURRENT_EDIT_HUIBIE];
+    PATHS.forEach(p => {
+        document.getElementById("single-" + p).value = SINGLE_REF[CURRENT_EDIT_HUIBIE][p];
+    });
+    renderAdminTable();
+    updatePreview();
+    document.getElementById("weeklyDateInput").value = WEEKLY.dateRange;
+    document.getElementById("weeklyNoteInput").value = WEEKLY.note;
+    renderAdminActivityList();
+  }else{
+    alert("密码错误");
+  }
 }
 function renderAdminTable(){
   const tbody=document.getElementById("adminTbody");
