@@ -967,13 +967,6 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
     <!--管理员编辑面板，登录后显示-->
     <div class="admin-panel" id="adminPanel">
       <h3>📝成员数据编辑（修改后点保存到云端，所有人刷新页面生效）</h3>
-      <div>
-        <button class="admin-btn" onclick="addAdminRow()">新增一行成员</button>
-        <button class="admin-btn" onclick="saveToBin()">💾保存到云端JSONBin</button>
-        <button class="admin-btn" onclick="downloadBackup()">📥导出备份JSON</button>
-        <button class="admin-btn" onclick="reloadFromBin()">🔄重新拉取云端数据</button>
-      </div>
-      <p style="font-size:12px;color:#5a4c38;margin:8px 0;">提示：多个职务用 | 分隔，例如「会长|战指组长」；缺席次数自动统计，无需手动填写</p>
       <!-- 俱乐部数据编辑区域 -->
       <div class="club-edit-box">
         <h4>📊 俱乐部数据编辑</h4>
@@ -1044,7 +1037,6 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
     <input id="weeklyDateInput" type="text" placeholder="例如：09.21-09.27" style="width:160px;" oninput="updateWeeklyPreview()">
     <span class="tip">展示在公共页标题旁的日期标识</span>
   </div>
-
   <div style="margin-top:12px;">
     <div style="font-size:13px;color:#5a4c38;margin-bottom:6px;">新增活动</div>
     <div class="club-edit-row" style="gap:6px;flex-wrap:wrap;">
@@ -1087,19 +1079,27 @@ footer .seal{font-family:"Noto Serif SC",serif;font-size:15px;color:var(--gold-d
       <button class="admin-btn" style="padding:4px 10px;font-size:12px;" onclick="addActivity()">添加</button>
     </div>
   </div>
-
   <div style="margin-top:12px;">
     <div style="font-size:13px;color:#5a4c38;margin-bottom:6px;">活动列表（按时间排序，点击删除）</div>
     <div class="activity-list" id="adminActivityList">
       <div style="padding:12px;text-align:center;color:var(--ink-mute);font-size:12px;">暂无活动</div>
     </div>
   </div>
-
   <div style="margin-top:12px;">
     <div style="font-size:13px;color:#5a4c38;margin-bottom:6px;">注释说明</div>
     <textarea id="weeklyNoteInput" rows="4" style="width:100%;background:#f7f0e0;border:1px solid #b9a47c;color:#2b2318;padding:6px;border-radius:2px;font-family:inherit;font-size:13px;resize:vertical;" placeholder="输入注释内容，支持换行" oninput="updateWeeklyPreview()"></textarea>
   </div>
 </div>
+
+      <!-- 成员表格操作按钮 -->
+      <div style="margin-top: 12px;">
+        <button class="admin-btn" onclick="addAdminRow()">新增一行成员</button>
+        <button class="admin-btn" onclick="saveToBin()">💾保存到云端JSONBin</button>
+        <button class="admin-btn" onclick="downloadBackup()">📥导出备份JSON</button>
+        <button class="admin-btn" onclick="reloadFromBin()">🔄重新拉取云端数据</button>
+      </div>
+      <p style="font-size:12px;color:#5a4c38;margin:8px 0;">提示：多个职务用 | 分隔，例如「会长|战指组长」；缺席次数自动统计，无需手动填写</p>
+
       <div style="overflow-x:auto;">
         <table class="admin-table" id="adminEditTable">
           <thead>
@@ -1805,7 +1805,7 @@ function buildAdminTr(arr,idx){
 function addAdminRow(){
   const tbody=document.getElementById("adminTbody");
   const emptyRow = buildAdminTr(["","战士","回音","",1,"-","-","-","-","-"],-1);
-  tbody.appendChild(emptyRow);
+  tbody.insertBefore(emptyRow, tbody.firstChild);
 }
 function downloadBackup(){
   const table=document.getElementById("adminTbody");
