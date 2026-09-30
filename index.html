@@ -1927,19 +1927,58 @@ function render(){
   renderPager(pages);
 }
 function renderPager(pages){
-  var p=document.getElementById("pager");
-  var h='<button '+(page===1?"disabled":"")+' onclick="goPage('+(page-1)+')">‹ 上一页</button>';
-  var lo=Math.max(1,page-2),hi=Math.min(pages,page+2);
-  if(lo>1){h+='<button onclick="goPage(1)">1</button>';if(lo>2)h+='<span style="color:var(--ink-mute);padding:0 4px">…</span>';}
-  for(var i=lo;i<=hi;i++)h+='<button class="'+(i===page?"on":"")+' onclick="goPage('+i+')">'+i+'</button>';
-  if(hi<pages){if(hi<pages-1)h+='<span style="color:var(--ink-mute);padding:0 4px">…</span>';h+='<button onclick="goPage('+pages+')">'+pages+'</button>';}
-  h+='<button '+(page>=pages?"disabled":"")+' onclick="goPage('+(page+1)+')">下一页 ›</button>';
-  p.innerHTML=h;
+  var p = document.getElementById("pager");
+  var h = '';
+  
+  // 上一页按钮
+  h += '<button ' + (page <= 1 ? 'disabled' : '') + ' onclick="goPage(' + (page - 1) + ')">‹ 上一页</button>';
+
+  var lo = Math.max(1, page - 2);
+  var hi = Math.min(pages, page + 2);
+
+  // 开头省略号 + 第1页
+  if (lo > 1) {
+    h += '<button onclick="goPage(1)">1</button>';
+    if (lo > 2) {
+      h += '<span style="color:var(--ink-mute);padding:0 4px">…</span>';
+    }
+  }
+
+  // 中间页码
+  for (var i = lo; i <= hi; i++) {
+    if (i === page) {
+      h += '<button class="on" disabled>' + i + '</button>';
+    } else {
+      h += '<button onclick="goPage(' + i + ')">' + i + '</button>';
+    }
+  }
+
+  // 结尾省略号 + 最后1页
+  if (hi < pages) {
+    if (hi < pages - 1) {
+      h += '<span style="color:var(--ink-mute);padding:0 4px">…</span>';
+    }
+    h += '<button onclick="goPage(' + pages + ')">' + pages + '</button>';
+  }
+
+  // 下一页按钮
+  h += '<button ' + (page >= pages ? 'disabled' : '') + ' onclick="goPage(' + (page + 1) + ')">下一页 ›</button>';
+
+  p.innerHTML = h;
 }
-function goPage(n){page=n;render();}
-document.getElementById("search").addEventListener("input",function(){page=1;render();});
-document.getElementById("fPath").addEventListener("change",function(){page=1;render();});
-document.getElementById("fStatus").addEventListener("change",function(){page=1;render();});
+
+function goPage(n){
+  // 边界拦截，防止超出 1 ~ 总页数范围
+  if (n < 1 || n > Math.max(1, Math.ceil(MEMBERS.length / PER))) return;
+  page = n;
+  render();
+  // 可选：翻页后滚动到列表顶部
+  // document.getElementById('roster').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+document.getElementById("search").addEventListener("input", function(){ page = 1; render(); });
+document.getElementById("fPath").addEventListener("change", function(){ page = 1; render(); });
+document.getElementById("fStatus").addEventListener("change", function(){ page = 1; render(); });
 
 let chartIns=null;
 function drawChart(){
